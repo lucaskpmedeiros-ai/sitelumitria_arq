@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
-  <!-- Pannellum CDN -->
+  <!-- Pannellum CDN — preconnect acelera o DNS lookup -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
 
   <style>
@@ -357,6 +359,7 @@ var viewer = pannellum.viewer('pano', {
     scene0: {
       type:     'equirectangular',
       panorama: 'assets/images/Panorama1.jpg',
+      preview:  'assets/images/Panorama1_preview.jpg',
       hotSpots: [
         {
           pitch: 0, yaw: 80,
@@ -371,6 +374,7 @@ var viewer = pannellum.viewer('pano', {
     scene1: {
       type:     'equirectangular',
       panorama: 'assets/images/Panorama2.jpg',
+      preview:  'assets/images/Panorama2_preview.jpg',
       hotSpots: [
         {
           pitch: 0, yaw: -90,
@@ -392,6 +396,7 @@ var viewer = pannellum.viewer('pano', {
     scene2: {
       type:     'equirectangular',
       panorama: 'assets/images/Panorama3.jpg',
+      preview:  'assets/images/Panorama3_preview.jpg',
       hotSpots: [
         {
           pitch: 0, yaw: 180,
