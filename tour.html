@@ -15,149 +15,198 @@
       --text-2: #8CA0BC; --text-dim: #4D637D;
       --border: rgba(255,255,255,0.08);
     }
-    html, body { width:100%; height:100%; overflow:hidden; background:var(--dark);
-      font-family:'Inter',system-ui,sans-serif; color:var(--text);
-      -webkit-font-smoothing:antialiased; user-select:none; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: var(--dark); font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text); -webkit-font-smoothing: antialiased; user-select: none;
+    }
 
     /* ── Canvas ── */
-    #pano { position:fixed; inset:0; width:100%; height:100%;
-      cursor:grab; display:block; background:#000; }
-    #pano:active { cursor:grabbing; }
+    #pano {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      cursor: grab; display: block; background: #000;
+      transition: opacity 0.35s ease;
+    }
+    #pano:active { cursor: grabbing; }
 
     /* ── Loading ── */
-    #loadScreen { position:fixed; inset:0; z-index:500; background:var(--dark);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:18px; transition:opacity 0.7s ease; }
-    #loadScreen.gone { opacity:0; pointer-events:none; }
-    #loadScreen img { width:54px; height:54px; border-radius:50%;
-      border:1px solid rgba(0,207,255,0.3); box-shadow:0 0 20px rgba(0,207,255,0.15); }
-    .bar-track { width:190px; height:2px; background:rgba(255,255,255,0.08);
-      border-radius:2px; overflow:hidden; }
-    #loadBar { height:100%; width:0%; border-radius:2px;
-      background:linear-gradient(90deg,var(--cyan),#0098CC);
-      box-shadow:0 0 8px var(--cyan-glow); transition:width 0.25s ease; }
-    .load-txt { font-size:0.76rem; color:var(--text-dim); letter-spacing:0.05em; }
+    #loadScreen {
+      position: fixed; inset: 0; z-index: 500; background: var(--dark);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 18px; transition: opacity 0.7s ease;
+    }
+    #loadScreen.gone { opacity: 0; pointer-events: none; }
+    #loadScreen img {
+      width: 54px; height: 54px; border-radius: 50%;
+      border: 1px solid rgba(0,207,255,0.3);
+      box-shadow: 0 0 20px rgba(0,207,255,0.15);
+    }
+    .bar-track {
+      width: 190px; height: 2px; background: rgba(255,255,255,0.08);
+      border-radius: 2px; overflow: hidden;
+    }
+    #loadBar {
+      height: 100%; width: 0%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--cyan), #0098CC);
+      box-shadow: 0 0 8px var(--cyan-glow); transition: width 0.25s ease;
+    }
+    .load-txt { font-size: 0.76rem; color: var(--text-dim); letter-spacing: 0.05em; }
 
     /* ── Header ── */
-    #topBar { position:fixed; top:0; left:0; right:0; z-index:200;
-      display:flex; align-items:center; justify-content:space-between; padding:16px 28px;
-      background:linear-gradient(to bottom,rgba(6,8,15,0.92) 0%,transparent 100%);
-      pointer-events:none; }
-    #topBar > * { pointer-events:all; }
-    .logo-lnk { display:flex; align-items:center; text-decoration:none; }
-    .logo-lnk img { width:44px; height:44px; border-radius:50%; object-fit:cover;
-      border:1px solid rgba(0,207,255,0.25); box-shadow:0 0 14px rgba(0,207,255,0.12); }
-    #sceneLabel { display:flex; align-items:center; gap:8px; font-size:0.76rem;
-      font-weight:500; color:var(--text-2); background:rgba(6,8,15,0.75);
-      border:1px solid var(--border); padding:7px 16px; border-radius:100px;
-      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
-    .ldot { width:6px; height:6px; border-radius:50%; background:var(--cyan);
-      box-shadow:0 0 8px var(--cyan-glow); flex-shrink:0;
-      animation:blink 2.4s ease-in-out infinite; }
-    #backBtn { display:flex; align-items:center; gap:7px; background:rgba(6,8,15,0.75);
-      border:1px solid var(--border); color:var(--text-2); font-size:0.78rem;
-      font-weight:500; padding:7px 16px; border-radius:100px; cursor:pointer;
-      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-      text-decoration:none; transition:color 0.2s,border-color 0.2s; }
-    #backBtn:hover { color:var(--text); border-color:rgba(0,207,255,0.3); }
+    #topBar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px;
+      background: linear-gradient(to bottom, rgba(6,8,15,0.92) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    #topBar > * { pointer-events: all; }
+    .logo-lnk { display: flex; align-items: center; text-decoration: none; }
+    .logo-lnk img {
+      width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
+      border: 1px solid rgba(0,207,255,0.25); box-shadow: 0 0 14px rgba(0,207,255,0.12);
+    }
+    #sceneLabel {
+      display: flex; align-items: center; gap: 8px; font-size: 0.76rem;
+      font-weight: 500; color: var(--text-2); background: rgba(6,8,15,0.75);
+      border: 1px solid var(--border); padding: 7px 16px; border-radius: 100px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+    .ldot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan-glow); flex-shrink: 0;
+      animation: blink 2.4s ease-in-out infinite;
+    }
+    #backBtn {
+      display: flex; align-items: center; gap: 7px; background: rgba(6,8,15,0.75);
+      border: 1px solid var(--border); color: var(--text-2); font-size: 0.78rem;
+      font-weight: 500; padding: 7px 16px; border-radius: 100px; cursor: pointer;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      text-decoration: none; transition: color 0.2s, border-color 0.2s;
+    }
+    #backBtn:hover { color: var(--text); border-color: rgba(0,207,255,0.3); }
 
     /* ── Hotspots ── */
-    .hs { position:fixed; transform:translate(-50%,-50%); z-index:150;
-      display:flex; flex-direction:column; align-items:center; gap:9px;
-      background:none; border:none; padding:0; cursor:pointer;
-      opacity:0; pointer-events:none;
-      transition:opacity 0.5s; }
-    .hs.show { opacity:1; pointer-events:all; }
-
-    /* Anel pulsante externo */
+    .hs {
+      position: fixed; transform: translate(-50%, -50%); z-index: 150;
+      display: flex; flex-direction: column; align-items: center; gap: 9px;
+      background: none; border: none; padding: 0; cursor: pointer;
+      opacity: 0; pointer-events: none; transition: opacity 0.5s;
+    }
+    .hs.show { opacity: 1; pointer-events: all; }
     .hs-ring {
-      width:62px; height:62px; border-radius:50%;
-      border:2px solid rgba(0,207,255,0.55);
-      box-shadow:0 0 18px rgba(0,207,255,0.25);
-      animation:hs-pulse 2.2s ease-in-out infinite;
-      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      pointer-events:none; }
-    /* Círculo central */
+      width: 62px; height: 62px; border-radius: 50%;
+      border: 2px solid rgba(0,207,255,0.55);
+      box-shadow: 0 0 18px rgba(0,207,255,0.25);
+      animation: hs-pulse 2.2s ease-in-out infinite;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); pointer-events: none;
+    }
     .hs-dot {
-      width:44px; height:44px; border-radius:50%;
-      background:rgba(0,207,255,0.18);
-      border:2px solid rgba(0,207,255,0.8);
-      box-shadow:0 0 24px rgba(0,207,255,0.4),inset 0 0 12px rgba(0,207,255,0.15);
-      display:flex; align-items:center; justify-content:center;
-      position:relative; transition:transform 0.22s,background 0.22s; }
-    .hs:hover .hs-dot {
-      transform:scale(1.12);
-      background:rgba(0,207,255,0.32); }
-    /* Seta dentro do círculo */
-    .hs-dot svg { color:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-    /* Label abaixo */
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,207,255,0.18);
+      border: 2px solid rgba(0,207,255,0.8);
+      box-shadow: 0 0 24px rgba(0,207,255,0.4), inset 0 0 12px rgba(0,207,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; transition: transform 0.22s, background 0.22s;
+    }
+    .hs:hover .hs-dot { transform: scale(1.12); background: rgba(0,207,255,0.32); }
+    .hs-dot svg { color: var(--cyan); filter: drop-shadow(0 0 4px var(--cyan)); }
     .hs-label {
-      font-family:'Inter',sans-serif; font-size:0.68rem; font-weight:600;
-      color:rgba(255,255,255,0.9); letter-spacing:0.06em; text-transform:uppercase;
-      background:rgba(6,8,15,0.72); border:1px solid rgba(0,207,255,0.25);
-      padding:4px 12px; border-radius:100px; white-space:nowrap;
-      backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-      margin-top:6px; }
-
+      font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.9);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: rgba(6,8,15,0.72); border: 1px solid rgba(0,207,255,0.25);
+      padding: 4px 12px; border-radius: 100px; white-space: nowrap;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); margin-top: 6px;
+    }
     @keyframes hs-pulse {
-      0%   { transform:translate(-50%,-50%) scale(1);   opacity:0.7; }
-      60%  { transform:translate(-50%,-50%) scale(1.45); opacity:0; }
-      100% { transform:translate(-50%,-50%) scale(1);   opacity:0; }
+      0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.7; }
+      60%  { transform: translate(-50%,-50%) scale(1.45); opacity: 0; }
+      100% { transform: translate(-50%,-50%) scale(1);    opacity: 0; }
     }
 
     /* ── Nav ── */
-    #sceneNav { position:fixed; bottom:26px; left:50%; transform:translateX(-50%);
-      z-index:200; display:flex; align-items:center; gap:18px;
-      background:rgba(6,8,15,0.78); border:1px solid var(--border);
-      padding:13px 26px; border-radius:100px; backdrop-filter:blur(20px);
-      -webkit-backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.4); }
-    .sbtn { display:flex; flex-direction:column; align-items:center; gap:5px;
-      cursor:pointer; opacity:0.38; transition:opacity 0.3s;
-      background:none; border:none; padding:2px 6px; color:inherit; }
-    .sbtn:hover { opacity:0.72; } .sbtn.on { opacity:1; }
-    .pip { width:7px; height:7px; border-radius:50%; background:var(--text-2);
-      transition:background 0.3s,box-shadow 0.3s,transform 0.3s; }
-    .sbtn.on .pip { background:var(--cyan); box-shadow:0 0 10px var(--cyan-glow);
-      transform:scale(1.3); }
-    .plbl { font-size:0.60rem; font-weight:600; color:var(--text-2);
-      letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;
-      transition:color 0.3s; }
-    .sbtn.on .plbl { color:var(--cyan); }
-    .ndiv { width:24px; height:1px; background:var(--border); flex-shrink:0; }
+    #sceneNav {
+      position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+      z-index: 200; display: flex; align-items: center; gap: 18px;
+      background: rgba(6,8,15,0.78); border: 1px solid var(--border);
+      padding: 13px 26px; border-radius: 100px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .sbtn {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: pointer; opacity: 0.38; transition: opacity 0.3s;
+      background: none; border: none; padding: 2px 6px; color: inherit;
+    }
+    .sbtn:hover { opacity: 0.72; }
+    .sbtn.on { opacity: 1; }
+    .pip {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--text-2);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .sbtn.on .pip {
+      background: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); transform: scale(1.3);
+    }
+    .plbl {
+      font-size: 0.60rem; font-weight: 600; color: var(--text-2);
+      letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
+      transition: color 0.3s;
+    }
+    .sbtn.on .plbl { color: var(--cyan); }
+    .ndiv { width: 24px; height: 1px; background: var(--border); flex-shrink: 0; }
 
     /* ── Hint ── */
-    #hint { position:fixed; bottom:90px; left:50%; transform:translateX(-50%);
-      z-index:200; display:flex; align-items:center; gap:6px; font-size:0.70rem;
-      color:var(--text-dim); pointer-events:none; transition:opacity 1.2s; }
-    #hint.gone { opacity:0; }
+    #hint {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      z-index: 200; display: flex; align-items: center; gap: 6px;
+      font-size: 0.70rem; color: var(--text-dim); pointer-events: none;
+      transition: opacity 1.2s;
+    }
+    #hint.gone { opacity: 0; }
 
     /* ── Overlay ── */
-    #overlay { position:fixed; inset:0; z-index:300; display:flex;
-      flex-direction:column; align-items:center; justify-content:center;
-      background:rgba(6,8,15,0.94); backdrop-filter:blur(24px);
-      -webkit-backdrop-filter:blur(24px); transition:opacity 0.9s; padding:24px;
-      text-align:center; }
-    #overlay.gone { opacity:0; pointer-events:none; }
-    .ov-tag { display:inline-flex; align-items:center; gap:7px; font-size:0.68rem;
-      font-weight:600; color:var(--cyan); border:1px solid rgba(0,207,255,0.22);
-      padding:5px 14px; border-radius:100px; margin-bottom:26px;
-      letter-spacing:0.12em; text-transform:uppercase; background:rgba(0,207,255,0.07); }
-    #overlay h1 { font-family:'Syne',sans-serif; font-size:clamp(2rem,5vw,3.4rem);
-      font-weight:800; line-height:1.12; letter-spacing:-0.025em; color:var(--text);
-      margin-bottom:16px; max-width:560px; }
-    #overlay h1 em { font-style:normal; color:var(--cyan); }
-    #overlay p { font-size:0.98rem; color:var(--text-2); max-width:440px;
-      line-height:1.72; margin-bottom:38px; }
-    #startBtn { display:inline-flex; align-items:center; gap:10px;
-      background:linear-gradient(135deg,#00CFFF 0%,#0098CC 100%); color:#020D14;
-      font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:700;
-      padding:14px 32px; border-radius:12px; border:none; cursor:pointer;
-      box-shadow:0 0 28px rgba(0,207,255,0.38),0 8px 28px rgba(0,0,0,0.4);
-      transition:transform 0.22s,box-shadow 0.22s; }
-    #startBtn:hover { transform:translateY(-2px);
-      box-shadow:0 0 44px rgba(0,207,255,0.55),0 12px 36px rgba(0,0,0,0.45); }
-    .ov-hint { margin-top:18px; font-size:0.70rem; color:var(--text-dim);
-      display:flex; align-items:center; justify-content:center; gap:6px; }
+    #overlay {
+      position: fixed; inset: 0; z-index: 300;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center;
+      background: rgba(6,8,15,0.94); backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px); transition: opacity 0.9s;
+      padding: 24px; text-align: center;
+    }
+    #overlay.gone { opacity: 0; pointer-events: none; }
+    .ov-tag {
+      display: inline-flex; align-items: center; gap: 7px; font-size: 0.68rem;
+      font-weight: 600; color: var(--cyan); border: 1px solid rgba(0,207,255,0.22);
+      padding: 5px 14px; border-radius: 100px; margin-bottom: 26px;
+      letter-spacing: 0.12em; text-transform: uppercase; background: rgba(0,207,255,0.07);
+    }
+    #overlay h1 {
+      font-family: 'Syne', sans-serif; font-size: clamp(2rem,5vw,3.4rem);
+      font-weight: 800; line-height: 1.12; letter-spacing: -0.025em; color: var(--text);
+      margin-bottom: 16px; max-width: 560px;
+    }
+    #overlay h1 em { font-style: normal; color: var(--cyan); }
+    #overlay p {
+      font-size: 0.98rem; color: var(--text-2); max-width: 440px;
+      line-height: 1.72; margin-bottom: 38px;
+    }
+    #startBtn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, #00CFFF 0%, #0098CC 100%); color: #020D14;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
+      padding: 14px 32px; border-radius: 12px; border: none; cursor: pointer;
+      box-shadow: 0 0 28px rgba(0,207,255,0.38), 0 8px 28px rgba(0,0,0,0.4);
+      transition: transform 0.22s, box-shadow 0.22s;
+    }
+    #startBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 44px rgba(0,207,255,0.55), 0 12px 36px rgba(0,0,0,0.45);
+    }
+    .ov-hint {
+      margin-top: 18px; font-size: 0.70rem; color: var(--text-dim);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
   </style>
@@ -246,181 +295,325 @@
    CENAS
 ══════════════════════════════════════ */
 var SCENES = [
-  { name:'Ambiente 1', src:'assets/images/Panorama1.png',
-    hotspots:[{ lon:80, lat:0, label:'Entrar no ambiente', fwd:true, to:1 }] },
-  { name:'Ambiente 2', src:'assets/images/Panorama2.png',
-    hotspots:[
-      { lon:-90, lat:0, label:'Voltar',          fwd:false, to:0 },
-      { lon:80,  lat:0, label:'Explorar espaço', fwd:true,  to:2 }
-    ]},
-  { name:'Ambiente 3', src:'assets/images/Panorama3.png',
-    hotspots:[{ lon:180, lat:0, label:'Avançar', fwd:false, to:1 }] }
+  {
+    name: 'Ambiente 1',
+    src:  'assets/images/Panorama1.png',
+    hotspots: [{ lon: 80,  lat: 0, label: 'Próximo ambiente', to: 1 }]
+  },
+  {
+    name: 'Ambiente 2',
+    src:  'assets/images/Panorama2.png',
+    hotspots: [
+      { lon: -90, lat: 0, label: 'Voltar',           to: 0 },
+      { lon:  80, lat: 0, label: 'Próximo ambiente',  to: 2 }
+    ]
+  },
+  {
+    name: 'Ambiente 3',
+    src:  'assets/images/Panorama3.png',
+    hotspots: [{ lon: 180, lat: 0, label: 'Voltar', to: 1 }]
+  }
 ];
 
 /* ══════════════════════════════════════
-   CANVAS 2D
+   WEBGL — INIT
 ══════════════════════════════════════ */
 var canvas = document.getElementById('pano');
-var ctx    = canvas.getContext('2d');
-var W, H;
+var gl = canvas.getContext('webgl', { antialias: true, alpha: false })
+      || canvas.getContext('experimental-webgl', { antialias: true, alpha: false });
+
+if (!gl) {
+  document.getElementById('loadScreen').innerHTML =
+    '<p style="color:#8CA0BC;font-size:1rem;padding:40px;text-align:center">'+
+    'Seu navegador não suporta WebGL.<br>Tente Chrome ou Firefox.</p>';
+  throw new Error('WebGL not supported');
+}
+
+/* ── Shaders ──
+   Vertex: full-screen quad (−1..1).
+   Fragment: for each pixel, cast a ray through the virtual sphere,
+   map it to equirectangular UV, sample the panorama texture.         */
+var VS = [
+  'attribute vec2 aPos;',
+  'void main() { gl_Position = vec4(aPos, 0.0, 1.0); }'
+].join('\n');
+
+var FS = [
+  'precision highp float;',
+  '',
+  'uniform sampler2D uTex;',
+  'uniform float uLon;',   /* yaw   — degrees, camera heading */
+  'uniform float uLat;',   /* pitch — degrees, camera tilt    */
+  'uniform float uFov;',   /* horizontal field of view, degrees */
+  'uniform vec2  uRes;',   /* canvas pixel size                 */
+  '',
+  'const float PI  = 3.14159265358979;',
+  'const float TAU = 6.28318530717959;',
+  '',
+  'void main() {',
+  /* NDC: −1..1 in both axes, +Y up */
+  '  vec2 ndc = (gl_FragCoord.xy / uRes) * 2.0 - 1.0;',
+  '  ndc.y = -ndc.y;',   /* flip Y so +Y is up in camera space */
+  '',
+  /* Build a ray through this pixel in camera space.
+     Camera looks down −Z; X is right; Y is up.             */
+  '  float aspect   = uRes.x / uRes.y;',
+  '  float tanHalf  = tan(uFov * 0.5 * PI / 180.0);',
+  '  vec3  ray = normalize(vec3(ndc.x * aspect * tanHalf,',
+  '                             ndc.y * tanHalf,',
+  '                             -1.0));',
+  '',
+  /* Rotate ray by camera orientation.
+     1. Pitch (rotate around X by −lat, because positive lat = look up) */
+  '  float cl = cos(-uLat * PI / 180.0);',
+  '  float sl = sin(-uLat * PI / 180.0);',
+  '  vec3 r1 = vec3(ray.x,',
+  '                 ray.y * cl - ray.z * sl,',
+  '                 ray.y * sl + ray.z * cl);',
+  '',
+  /* 2. Yaw (rotate around Y by lon) */
+  '  float cy = cos(uLon * PI / 180.0);',
+  '  float sy = sin(uLon * PI / 180.0);',
+  '  vec3 r2 = vec3( r1.x * cy + r1.z * sy,',
+  '                  r1.y,',
+  '                 -r1.x * sy + r1.z * cy);',
+  '',
+  /* Map sphere ray → equirectangular UV
+     U: atan2(x, −z) normalised 0..1 (left→right = west→east)
+     V: asin(y)      normalised 0..1 (bottom→top  = south→north / nadir→zenith) */
+  '  float u = atan(r2.x, -r2.z) / TAU + 0.5;',
+  '  float v = asin(clamp(r2.y, -1.0, 1.0)) / PI + 0.5;',
+  '',
+  '  gl_FragColor = texture2D(uTex, vec2(u, v));',
+  '}'
+].join('\n');
+
+function compileShader(type, src) {
+  var s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+    throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+var prog = gl.createProgram();
+gl.attachShader(prog, compileShader(gl.VERTEX_SHADER,   VS));
+gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, FS));
+gl.linkProgram(prog);
+if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+  throw new Error(gl.getProgramInfoLog(prog));
+
+var loc = {
+  aPos: gl.getAttribLocation(prog,  'aPos'),
+  uTex: gl.getUniformLocation(prog, 'uTex'),
+  uLon: gl.getUniformLocation(prog, 'uLon'),
+  uLat: gl.getUniformLocation(prog, 'uLat'),
+  uFov: gl.getUniformLocation(prog, 'uFov'),
+  uRes: gl.getUniformLocation(prog, 'uRes')
+};
+
+/* Full-screen quad: two triangles as a TRIANGLE_STRIP */
+var quadBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+gl.bufferData(gl.ARRAY_BUFFER,
+  new Float32Array([-1,-1,  1,-1,  -1,1,  1,1]),
+  gl.STATIC_DRAW);
+
+/* ══════════════════════════════════════
+   CANVAS / VIEWPORT — hi-DPI aware
+══════════════════════════════════════ */
+var W = 1, H = 1, dpr = 1;
 
 function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
+  dpr = Math.min(window.devicePixelRatio || 1, 2); /* cap at 2× to avoid OOM */
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  canvas.width  = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  gl.viewport(0, 0, canvas.width, canvas.height);
 }
 resize();
 window.addEventListener('resize', resize);
 
 /* ══════════════════════════════════════
-   IMAGENS
+   TEXTURES
 ══════════════════════════════════════ */
-var imgs      = new Array(SCENES.length).fill(null);
-var curIdx    = 0;
-var lon  = 0, lat  = 0;
-var tLon = 0, tLat = 0;
-var fov  = 80;       /* graus visíveis horizontalmente */
-var autoRot = 0.014; /* graus/frame de rotação automática */
-var dragging = false;
+var textures = new Array(SCENES.length).fill(null);
+var maxTex   = gl.getParameter(gl.MAX_TEXTURE_SIZE); /* e.g. 8192 or 16384 */
 
-function loadScene(idx, cb) {
-  if (imgs[idx]) { cb(imgs[idx]); return; }
+function uploadTexture(source) {
+  /* source can be HTMLImageElement or HTMLCanvasElement */
+  var tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+
+  /* Keep image orientation as stored in file (sky = row 0 = top).
+     With UNPACK_FLIP_Y = true WebGL flips the image so texV=1 is the TOP,
+     which matches our shader formula where v=1 → north pole (sky).       */
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
+
+  /* Power-of-2 dimensions → full mipmap chain for best quality at any zoom */
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);          /* horizontal wrap */
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);   /* no pole wrap    */
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+  /* Anisotropic filtering — if available — improves oblique/horizon sharpness */
+  var af = gl.getExtension('EXT_texture_filter_anisotropic')
+        || gl.getExtension('MOZ_EXT_texture_filter_anisotropic')
+        || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
+  if (af) {
+    var maxAF = gl.getParameter(af.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+    gl.texParameterf(gl.TEXTURE_2D, af.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAF, 16));
+  }
+
+  gl.generateMipmap(gl.TEXTURE_2D);
+  return tex;
+}
+
+function loadSceneTex(idx, cb) {
+  if (textures[idx]) { cb(textures[idx]); return; }
+
   var img = new Image();
-  img.onload  = function() { imgs[idx] = img; cb(img); };
+  img.onload = function() {
+    /* Downscale if image exceeds GPU limit (rare on modern devices) */
+    if (img.naturalWidth > maxTex || img.naturalHeight > maxTex) {
+      var scale = maxTex / Math.max(img.naturalWidth, img.naturalHeight);
+      var tc = document.createElement('canvas');
+      tc.width  = Math.floor(img.naturalWidth  * scale);
+      tc.height = Math.floor(img.naturalHeight * scale);
+      tc.getContext('2d').drawImage(img, 0, 0, tc.width, tc.height);
+      textures[idx] = uploadTexture(tc);
+    } else {
+      textures[idx] = uploadTexture(img);
+    }
+    cb(textures[idx]);
+  };
   img.onerror = function() { cb(null); };
   img.src = SCENES[idx].src;
 }
 
 /* ══════════════════════════════════════
-   LOADING
+   CAMERA STATE
 ══════════════════════════════════════ */
-var loadBar = document.getElementById('loadBar');
-var loadTxt = document.getElementById('loadTxt');
-var barW = 0;
-var barPhase = 0; /* 0=fast ramp, 1=slow crawl */
-var barIv = setInterval(function() {
-  if (barPhase === 0) {
-    barW = Math.min(barW + Math.random() * 5, 68);
-    if (barW >= 68) barPhase = 1;
-  } else {
-    /* Fase lenta: avança muito devagar para mostrar que está ativo */
-    barW = Math.min(barW + 0.08, 93);
-  }
-  loadBar.style.width = barW + '%';
-}, 120);
-
-/* Mensagens animadas enquanto aguarda */
-var loadMsgs = ['Carregando experiência…','Preparando panoramas…','Quase pronto…'];
-var lmIdx = 0;
-var loadMsgIv = setInterval(function() {
-  lmIdx = (lmIdx + 1) % loadMsgs.length;
-  loadTxt.textContent = loadMsgs[lmIdx];
-}, 2800);
-
-loadScene(0, function(img) {
-  clearInterval(barIv);
-  clearInterval(loadMsgIv);
-  loadBar.style.width = '100%';
-  loadTxt.textContent = 'Pronto!';
-  setTimeout(function() {
-    var ls = document.getElementById('loadScreen');
-    ls.classList.add('gone');
-    setTimeout(function() { ls.style.display = 'none'; }, 750);
-    setScene(0);
-    /* Carrega restantes em background */
-    for (var i = 1; i < SCENES.length; i++) {
-      (function(n) { loadScene(n, function(){}); })(i);
-    }
-  }, 300);
-});
+var curIdx  = 0;
+var lon  = 0, lat  = 0;   /* rendered position   */
+var tLon = 0, tLat = 0;   /* target (eased into) */
+var fov     = 75;          /* horizontal FOV, degrees */
+var autoRot = 0.012;       /* degrees per frame auto-rotation */
+var dragging = false;
+var currentTex = null;
 
 /* ══════════════════════════════════════
-   DESENHO PANORÂMICO (Canvas 2D)
+   DRAW FRAME
 ══════════════════════════════════════ */
-function drawFrame(img) {
-  if (!img || !img.naturalWidth) { ctx.clearRect(0,0,W,H); return; }
-
-  var iw = img.naturalWidth;
-  var ih = img.naturalHeight;
-
-  /* Largura da fatia da imagem baseada no FOV */
-  var srcW = (fov / 360) * iw;
-  /* Altura: fórmula correta para qualquer aspect ratio equirectangular */
-  var vFov = fov * (H / W);
-  var srcH = Math.min((vFov / 180) * ih, ih);
-
-  /* Normaliza longitude 0–360 */
-  var nLon = ((lon % 360) + 360) % 360;
-  /* Latitude: centro da imagem = 90° (equador) */
-  var nLat = Math.max(-75, Math.min(75, lat));
-
-  var cx = (nLon / 360) * iw;
-  /* lat=0→centro, lat>0→cima (topo da imagem=céu), lat<0→baixo */
-  var cy = ((90 - nLat) / 180) * ih;
-
-  var sx = cx - srcW / 2;
-  var sy = Math.max(0, Math.min(ih - srcH, cy - srcH / 2));
-
-  /* Normaliza sx para wrapping horizontal */
-  sx = ((sx % iw) + iw) % iw;
-
-  ctx.clearRect(0, 0, W, H);
-
-  if (sx + srcW <= iw) {
-    /* Sem wrap */
-    ctx.drawImage(img, sx, sy, srcW, srcH, 0, 0, W, H);
-  } else {
-    /* Wrap horizontal — divide em dois segmentos */
-    var firstW = iw - sx;
-    var ratio  = firstW / srcW;
-    ctx.drawImage(img, sx, sy, firstW,        srcH, 0,         0, W * ratio,       H);
-    ctx.drawImage(img, 0,  sy, srcW - firstW, srcH, W * ratio, 0, W * (1 - ratio), H);
-  }
+function drawFrame() {
+  if (!currentTex) return;
+  gl.useProgram(prog);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, currentTex);
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+  gl.enableVertexAttribArray(loc.aPos);
+  gl.vertexAttribPointer(loc.aPos, 2, gl.FLOAT, false, 0, 0);
+  gl.uniform1i(loc.uTex, 0);
+  gl.uniform1f(loc.uLon, lon);
+  gl.uniform1f(loc.uLat, lat);
+  gl.uniform1f(loc.uFov, fov);
+  gl.uniform2f(loc.uRes, canvas.width, canvas.height);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
 /* ══════════════════════════════════════
-   LOOP
+   MAIN LOOP
 ══════════════════════════════════════ */
-var currentImg = null;
-
 function loop() {
   requestAnimationFrame(loop);
   if (!dragging) tLon += autoRot;
   lon += (tLon - lon) * 0.07;
   lat += (tLat - lat) * 0.07;
-  drawFrame(currentImg);
+  lat  = Math.max(-85, Math.min(85, lat));
+  drawFrame();
   updateHotspots();
 }
 loop();
 
 /* ══════════════════════════════════════
-   TROCA DE CENA
+   SCENE TRANSITIONS
 ══════════════════════════════════════ */
 function setScene(idx) {
   curIdx = idx;
   document.getElementById('sceneName').textContent = SCENES[idx].name;
   updateNav(idx);
 
-  /* Fade escuro */
-  canvas.style.transition = 'opacity 0.3s';
   canvas.style.opacity = '0';
-  loadScene(idx, function(img) {
-    currentImg = img;
+  loadSceneTex(idx, function(tex) {
+    currentTex = tex;
     setTimeout(function() {
       canvas.style.opacity = '1';
       buildHotspots(idx);
-    }, 320);
+    }, 350);
   });
 }
 
 function goTo(idx) {
   if (idx === curIdx) return;
-  tLon = lon; /* mantém posição ao trocar */
+  tLon = lon; /* keep heading on scene change */
   clearHotspots();
   setScene(idx);
 }
 
 /* ══════════════════════════════════════
-   HOTSPOTS
+   HOTSPOT 3-D → 2-D PROJECTION
+   Mirrors the vertex transform in the fragment shader.
+══════════════════════════════════════ */
+function projectHotspot(hsLon, hsLat) {
+  var PI = Math.PI;
+  var hsLonR = hsLon * PI / 180;
+  var hsLatR = hsLat * PI / 180;
+
+  /* World-space unit-sphere point for this hotspot (same convention as shader) */
+  var px =  Math.cos(hsLatR) * Math.sin(hsLonR);
+  var py =  Math.sin(hsLatR);
+  var pz = -Math.cos(hsLatR) * Math.cos(hsLonR);
+
+  /* Undo camera yaw (−lon) */
+  var lonR = lon * PI / 180;
+  var cy = Math.cos(-lonR), sy = Math.sin(-lonR);
+  var r1x =  px * cy + pz * sy;
+  var r1y =  py;
+  var r1z = -px * sy + pz * cy;
+
+  /* Undo camera pitch (−(−lat) = lat) */
+  var latR = lat * PI / 180;
+  var cl = Math.cos(latR), sl = Math.sin(latR);
+  var r2x = r1x;
+  var r2y = r1y * cl - r1z * sl;
+  var r2z = r1y * sl + r1z * cl;
+
+  /* Behind camera → hide */
+  if (r2z >= 0) return null;
+
+  var tanHalf = Math.tan(fov * 0.5 * PI / 180);
+  var aspect  = W / H;
+
+  /* Normalised device coordinates */
+  var nx = r2x / (-r2z) / (aspect * tanHalf);
+  var ny = r2y / (-r2z) / tanHalf;
+
+  /* Off-screen → hide */
+  if (Math.abs(nx) > 1.2 || Math.abs(ny) > 1.2) return null;
+
+  return {
+    x: (nx  + 1) * 0.5 * W,
+    y: (-ny + 1) * 0.5 * H
+  };
+}
+
+/* ══════════════════════════════════════
+   HOTSPOT DOM
 ══════════════════════════════════════ */
 function clearHotspots() {
   document.getElementById('hsLayer').innerHTML = '';
@@ -436,10 +629,11 @@ function buildHotspots(idx) {
       '<div class="hs-ring"></div>' +
       '<div class="hs-dot">' +
         '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
-          '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor" stroke-width="2.2"' +
+          ' stroke-linecap="round" stroke-linejoin="round"/>' +
         '</svg>' +
       '</div>' +
-      '<span class="hs-label">Clique e siga o caminho</span>';
+      '<span class="hs-label">' + hs.label + '</span>';
     btn.dataset.lon = hs.lon;
     btn.dataset.lat = hs.lat;
     btn.addEventListener('click', function() { goTo(hs.to); });
@@ -452,71 +646,95 @@ function buildHotspots(idx) {
 
 function updateHotspots() {
   document.querySelectorAll('.hs').forEach(function(btn) {
-    var hsLon = parseFloat(btn.dataset.lon);
-    var hsLat = parseFloat(btn.dataset.lat);
-
-    /* Diferença angular entre hotspot e centro da visão */
-    var dLon = hsLon - lon;
-    /* Normaliza -180..180 */
-    dLon = ((dLon + 180) % 360 + 360) % 360 - 180;
-    var dLat = hsLat - lat;
-
-    /* Fora do FOV → esconde */
-    if (Math.abs(dLon) > fov / 2 + 10 || Math.abs(dLat) > fov * (H/W) / 2 + 10) {
-      btn.style.pointerEvents = 'none';
+    var pos = projectHotspot(
+      parseFloat(btn.dataset.lon),
+      parseFloat(btn.dataset.lat)
+    );
+    if (!pos) {
       btn.style.opacity = '0';
-      return;
+      btn.style.pointerEvents = 'none';
+    } else {
+      btn.style.left = pos.x + 'px';
+      btn.style.top  = pos.y + 'px';
+      btn.style.opacity = btn.classList.contains('show') ? '1' : '0';
+      btn.style.pointerEvents = btn.classList.contains('show') ? 'all' : 'none';
     }
-
-    /* Converte para posição na tela */
-    var x = W / 2 + (dLon / fov) * W;
-    var y = H / 2 - (dLat / (fov * H/W)) * H;
-
-    btn.style.left = x + 'px';
-    btn.style.top  = y + 'px';
-    btn.style.opacity = '1';
-    btn.style.pointerEvents = 'all';
   });
 }
 
 /* ══════════════════════════════════════
-   MOUSE / TOUCH
+   INPUT — Mouse
 ══════════════════════════════════════ */
 var mX = 0, mY = 0, mLon = 0, mLat = 0;
 
 canvas.addEventListener('mousedown', function(e) {
   dragging = true;
-  mX = e.clientX; mY = e.clientY; mLon = lon; mLat = lat;
+  mX = e.clientX; mY = e.clientY;
+  mLon = lon; mLat = lat;
   document.getElementById('hint').classList.add('gone');
 });
 window.addEventListener('mousemove', function(e) {
   if (!dragging) return;
-  tLon = mLon + (e.clientX - mX) * 0.20;
-  tLat = mLat - (e.clientY - mY) * 0.12;
-  tLat = Math.max(-75, Math.min(75, tLat));
+  /* Sensitivity scales inversely with FOV so movement feels consistent */
+  var sens = fov / 75;
+  tLon = mLon - (e.clientX - mX) * 0.20 * sens;
+  tLat = mLat + (e.clientY - mY) * 0.12 * sens;
+  tLat = Math.max(-85, Math.min(85, tLat));
 });
 window.addEventListener('mouseup', function() { dragging = false; });
 
-canvas.addEventListener('touchstart', function(e) {
-  dragging = true;
-  mX = e.touches[0].clientX; mY = e.touches[0].clientY;
-  mLon = lon; mLat = lat;
-}, { passive:true });
-window.addEventListener('touchmove', function(e) {
-  if (!dragging) return;
-  tLon = mLon + (e.touches[0].clientX - mX) * 0.20;
-  tLat = mLat - (e.touches[0].clientY - mY) * 0.12;
-  tLat = Math.max(-75, Math.min(75, tLat));
-}, { passive:true });
-window.addEventListener('touchend', function() { dragging = false; });
+/* ══════════════════════════════════════
+   INPUT — Touch
+══════════════════════════════════════ */
+var prevPinchDist = 0;
 
-/* Zoom com scroll */
-canvas.addEventListener('wheel', function(e) {
-  fov = Math.max(40, Math.min(130, fov + e.deltaY * 0.05));
-}, { passive:true });
+canvas.addEventListener('touchstart', function(e) {
+  if (e.touches.length === 1) {
+    dragging = true;
+    mX = e.touches[0].clientX; mY = e.touches[0].clientY;
+    mLon = lon; mLat = lat;
+    document.getElementById('hint').classList.add('gone');
+  } else if (e.touches.length === 2) {
+    prevPinchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+  }
+}, { passive: true });
+
+window.addEventListener('touchmove', function(e) {
+  if (e.touches.length === 1 && dragging) {
+    var sens = fov / 75;
+    tLon = mLon - (e.touches[0].clientX - mX) * 0.20 * sens;
+    tLat = mLat + (e.touches[0].clientY - mY) * 0.12 * sens;
+    tLat = Math.max(-85, Math.min(85, tLat));
+  } else if (e.touches.length === 2) {
+    var d = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    if (prevPinchDist > 0) {
+      fov *= prevPinchDist / d;
+      fov  = Math.max(30, Math.min(120, fov));
+    }
+    prevPinchDist = d;
+  }
+}, { passive: true });
+
+window.addEventListener('touchend', function() {
+  dragging = false;
+  prevPinchDist = 0;
+});
 
 /* ══════════════════════════════════════
-   UI
+   INPUT — Scroll / Pinch zoom
+══════════════════════════════════════ */
+canvas.addEventListener('wheel', function(e) {
+  fov = Math.max(30, Math.min(120, fov + e.deltaY * 0.04));
+}, { passive: true });
+
+/* ══════════════════════════════════════
+   UI HELPERS
 ══════════════════════════════════════ */
 function updateNav(idx) {
   document.querySelectorAll('.sbtn').forEach(function(b, i) {
@@ -530,6 +748,47 @@ function startTour() {
   setTimeout(function() { ov.style.display = 'none'; }, 950);
   setTimeout(function() { document.getElementById('hint').classList.add('gone'); }, 7000);
 }
+
+/* ══════════════════════════════════════
+   BOOT — LOADING SEQUENCE
+══════════════════════════════════════ */
+var loadBar = document.getElementById('loadBar');
+var loadTxt = document.getElementById('loadTxt');
+var barW = 0, barPhase = 0;
+var barIv = setInterval(function() {
+  if (barPhase === 0) {
+    barW = Math.min(barW + Math.random() * 5, 68);
+    if (barW >= 68) barPhase = 1;
+  } else {
+    barW = Math.min(barW + 0.08, 93);
+  }
+  loadBar.style.width = barW + '%';
+}, 120);
+
+var loadMsgs = ['Carregando experiência…', 'Preparando panoramas…', 'Quase pronto…'];
+var lmIdx = 0;
+var loadMsgIv = setInterval(function() {
+  lmIdx = (lmIdx + 1) % loadMsgs.length;
+  loadTxt.textContent = loadMsgs[lmIdx];
+}, 2800);
+
+loadSceneTex(0, function(tex) {
+  clearInterval(barIv);
+  clearInterval(loadMsgIv);
+  loadBar.style.width = '100%';
+  loadTxt.textContent = 'Pronto!';
+  setTimeout(function() {
+    var ls = document.getElementById('loadScreen');
+    ls.classList.add('gone');
+    setTimeout(function() { ls.style.display = 'none'; }, 750);
+    currentTex = tex;
+    setScene(0);
+    /* Load remaining scenes in background */
+    for (var i = 1; i < SCENES.length; i++) {
+      (function(n) { loadSceneTex(n, function(){}); })(i);
+    }
+  }, 300);
+});
 </script>
 </body>
 </html>
