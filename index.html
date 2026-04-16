@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A Lumitria transforma projetos arquitetônicos em experiências interativas que eliminam dúvidas, aceleram decisões e aumentam conversão — para loteadoras, construtoras e arquitetos.">
+  <title>Lumitria — Transforme projetos em experiências que vendem</title>
+  <link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="para-vriaricone.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- ====================================================
+       HEADER
+  ==================================================== -->
+  <header id="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <img src="assets/images/logo-lumitria.png" alt="Lumitria" class="logo-img">
+      </a>
+
+      <nav class="nav" id="nav">
+        <ul class="nav-list">
+          <li><a href="#solucoes" class="nav-link">O que Fazemos</a></li>
+          <li><a href="#demo" class="nav-link">Na Prática</a></li>
+          <li><a href="#diferenciais" class="nav-link">Para quem é</a></li>
+          <li><a href="#processo" class="nav-link">Como Funciona</a></li>
+          <li><a href="#tecnologia" class="nav-link">Benefícios</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#contato" class="btn btn-nav">Solicitar demonstração</a>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================================================
+       HERO
+  ==================================================== -->
+  <section id="hero" class="hero">
+    <canvas id="galaxyCanvas" aria-hidden="true"></canvas>
+    <div class="container hero-inner">
+
+      <div class="hero-content fade-in">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Tecnologia 3D interativa para construtoras e loteadoras
+        </div>
+
+        <h1 class="hero-title">
+          Transforme seu projeto em uma experiência interativa que<br><em><span id="heroRotate" class="hero-rotate">facilita decisões e acelera vendas.</span></em>
+        </h1>
+
+        <p class="hero-subtitle">
+          Apresentações 3D em tempo real para loteamentos, empreendimentos e projetos residenciais.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contato" class="btn btn-primary">Quero apresentar meu projeto assim</a>
+          <a href="#demo" class="btn btn-ghost">Ver demonstração <span class="arrow">→</span></a>
+        </div>
+
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <div class="visual-rings">
+          <div class="vring vring-1"></div>
+          <div class="vring vring-2"></div>
+          <div class="vring vring-3"></div>
+        </div>
+
+        <!-- Logo clicável -->
+        <div class="visual-core" id="logoCore">
+          <img src="assets/images/logo-lumitria.png" alt="Lumitria" class="visual-logo">
+        </div>
+
+        <!-- Pulso de indicação (fora do core) -->
+        <div class="logo-pulse-hint" id="logoHint">
+          <span class="lph-dot"></span>
+          Toque para explorar
+        </div>
+
+        <!-- Painel de opções — aparece ao clicar/hover -->
+        <div class="logo-options-panel" id="logoPanel">
+          <a href="#contato" class="lopt-card" id="logoOpt1">
+            <div class="lopt-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="lopt-card-body">
+              <span class="lopt-card-tag">Loteamentos &amp; Incorporadoras</span>
+              <strong class="lopt-card-title">Venda antes de construir</strong>
+              <span class="lopt-card-cta">Falar com especialista →</span>
+            </div>
+          </a>
+
+          <a href="#contato" class="lopt-card" id="logoOpt2">
+            <div class="lopt-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+                <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="lopt-card-body">
+              <span class="lopt-card-tag">Residencial &amp; Comercial</span>
+              <strong class="lopt-card-title">Apresente com clareza</strong>
+              <span class="lopt-card-cta">Falar com especialista →</span>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       PROBLEMA
+  ==================================================== -->
+  <section id="problema" class="section section-problema">
+    <div class="container">
+      <div class="problema-inner reveal">
+        <div class="problema-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2 class="problema-title">Seu cliente realmente entende seu projeto?</h2>
+        <p class="problema-desc">Plantas e imagens estáticas nem sempre transmitem a real dimensão de um projeto.<br>Isso gera dúvidas, insegurança e retrabalho.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       SOLUÇÕES
+  ==================================================== -->
+  <section id="solucoes" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">O que fazemos</span>
+        <h2 class="section-title">Transformamos projetos em<br>experiências que o cliente aprova.</h2>
+        <p class="section-desc">Trabalhamos com loteamentos, projetos residenciais e empreendimentos comerciais — entregando uma forma completamente diferente de apresentar e fechar negócios.</p>
+      </div>
+
+      <div class="solutions-grid">
+
+        <div class="sol-card reveal">
+          <div class="sol-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Visualização real do projeto</h3>
+          <p>O cliente navega pelo espaço, entende volumes e proporções e visualiza o projeto como se já estivesse pronto — antes da primeira pedra ser assentada.</p>
+        </div>
+
+        <div class="sol-card reveal">
+          <div class="sol-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Experiência imersiva</h3>
+          <p>Uma navegação completa pelo espaço — explorando cada ambiente, rua ou lote com liberdade, em qualquer dispositivo, sem instalar nada.</p>
+        </div>
+
+        <div class="sol-card reveal">
+          <div class="sol-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+              <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M9 6h6M9 10h4M12 18h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Apresentação em qualquer lugar</h3>
+          <p>O projeto na palma da mão do cliente. Ideal para visitas externas, feiras e reuniões onde a impressão precisa ser imediata e a apresentação, impecável.</p>
+        </div>
+
+        <div class="sol-card reveal">
+          <div class="sol-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+              <path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Dados sobre o que importa</h3>
+          <p>Entenda o que chama atenção, o que gera dúvidas e o que convence. Inteligência aplicada diretamente à tomada de decisão comercial.</p>
+        </div>
+
+        <div class="sol-card reveal">
+          <div class="sol-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+              <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Apresentação adaptada ao cliente</h3>
+          <p>O projeto se comunica de acordo com o que cada cliente valoriza — seja área, localização, infraestrutura ou acabamento. Clareza que convence.</p>
+        </div>
+
+        <div class="sol-card reveal">
+          <div class="sol-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+              <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Funciona em qualquer tela</h3>
+          <p>Do celular ao totem de estande, a experiência é consistente e de alto nível — garantindo o mesmo impacto em qualquer ponto de contato com o cliente.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       VÍDEO / DEMO
+  ==================================================== -->
+  <section id="demo" class="section section-video">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Na prática</span>
+        <h2 class="section-title">Experimente um projeto<br>interativo agora mesmo.</h2>
+        <p class="section-desc">Navegue por um ambiente real em 360°, explore cada detalhe e sinta como seu cliente vai experimentar o projeto antes de aprovar.</p>
+      </div>
+
+      <div class="tour-preview-wrap">
+        <div class="tour-preview-card">
+
+          <!-- Imagem de preview da panorama -->
+          <div class="tour-preview-bg" style="background-image: url('assets/images/Panorama1.png')"></div>
+
+          <!-- Overlay escuro gradiente -->
+          <div class="tour-preview-overlay"></div>
+
+          <!-- Pills flutuantes decorativas -->
+          <div class="tour-pill tour-pill-tl">360° Interativo</div>
+          <div class="tour-pill tour-pill-tr">3 Ambientes</div>
+
+          <!-- CTA central -->
+          <div class="tour-preview-cta">
+            <div class="tour-play-ring">
+              <div class="tour-play-btn" onclick="window.location.href='tour.html'">
+                <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+                  <path d="M5 3l14 9-14 9V3z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <p class="tour-preview-label">Iniciar tour interativo</p>
+          </div>
+
+          <!-- Barra inferior -->
+          <div class="tour-preview-bar">
+            <div class="tour-preview-bar-left">
+              <span class="live-badge">
+                <span class="live-dot-small"></span>
+                Ao vivo
+              </span>
+              <span class="tour-preview-title">Projeto em Demonstração</span>
+            </div>
+            <a href="tour.html" class="btn-tour-open">
+              Entrar na experiência
+              <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+        <p class="video-caption">
+          Experiência real entregue pela Lumitria. Clique e explore o projeto em 360° — navegação, visualização e clareza do jeito que o cliente precisa.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       PARA QUEM É — duas trilhas
+  ==================================================== -->
+  <section id="diferenciais" class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Para quem é</span>
+        <h2 class="section-title">Escolha a trilha do seu negócio</h2>
+        <p class="section-desc">A Lumitria atende quem tem um projeto sério e quer apresentá-lo com a mesma seriedade.</p>
+      </div>
+
+      <div class="trilhas-grid">
+
+        <!-- Trilha 1 -->
+        <div class="trilha-card reveal">
+          <div class="trilha-header">
+            <div class="trilha-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="trilha-badge">Loteamentos &amp; Incorporadoras</span>
+          </div>
+          <h3 class="trilha-title">Venda antes mesmo de construir</h3>
+          <p class="trilha-desc">Apresente seu empreendimento com clareza, reduza dúvidas e acelere o processo de decisão dos clientes.</p>
+          <ul class="trilha-benefits">
+            <li><span class="trilha-check">✔</span> Mais velocidade nas vendas</li>
+            <li><span class="trilha-check">✔</span> Redução de retrabalho</li>
+            <li><span class="trilha-check">✔</span> Maior percepção de valor</li>
+            <li><span class="trilha-check">✔</span> Apresentações mais impactantes</li>
+          </ul>
+          <a href="#contato" class="btn btn-trilha">Ver solução para loteamentos <span class="arrow">→</span></a>
+        </div>
+
+        <!-- Trilha 2 -->
+        <div class="trilha-card reveal">
+          <div class="trilha-header">
+            <div class="trilha-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                <path d="M1 22V8l11-6 11 6v14" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M9 22v-6h6v6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M1 12h22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="trilha-badge">Projetos Residenciais</span>
+          </div>
+          <h3 class="trilha-title">Entenda seu projeto antes de construir</h3>
+          <p class="trilha-desc">Permita que seu cliente visualize e percorra o projeto, garantindo decisões mais seguras e menos alterações na obra.</p>
+          <ul class="trilha-benefits">
+            <li><span class="trilha-check">✔</span> Melhor entendimento do espaço</li>
+            <li><span class="trilha-check">✔</span> Menos mudanças durante a obra</li>
+            <li><span class="trilha-check">✔</span> Mais confiança do cliente</li>
+            <li><span class="trilha-check">✔</span> Apresentação mais profissional</li>
+          </ul>
+          <a href="#contato" class="btn btn-trilha">Ver solução residencial <span class="arrow">→</span></a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       COMO FUNCIONA
+  ==================================================== -->
+  <section id="processo" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Como funciona</span>
+        <h2 class="section-title">Da entrega do projeto<br>à experiência pronta.</h2>
+        <p class="section-desc">Um processo direto, com etapas claras e prazos reais. Você nos entrega o projeto. Nós entregamos a experiência.</p>
+      </div>
+
+      <div class="process-steps">
+
+        <div class="process-step reveal">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3>Você nos envia o projeto</h3>
+            <p>Plantas, arquivos CAD, renders ou qualquer material que represente o projeto. Quanto mais contexto, mais fiel o resultado.</p>
+          </div>
+        </div>
+
+        <div class="process-step reveal">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3>Criamos a experiência</h3>
+            <p>Nossa equipe constrói o ambiente baseado no seu projeto — com fidelidade visual, navegação fluida e foco no que importa para quem vai comprar.</p>
+          </div>
+        </div>
+
+        <div class="process-step reveal">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3>Validamos juntos</h3>
+            <p>Você revisa, sugere ajustes e aprovamos cada detalhe antes da entrega final. O resultado é exatamente o que foi combinado — sem surpresas.</p>
+          </div>
+        </div>
+
+        <div class="process-step reveal">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h3>Você apresenta e vende</h3>
+            <p>A experiência fica disponível para uso imediato — no estande, na reunião ou no celular do cliente. Com suporte sempre que precisar.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       TECNOLOGIA
+  ==================================================== -->
+  <section id="tecnologia" class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Benefícios</span>
+        <h2 class="section-title">O que muda quando o cliente<br>entende de verdade.</h2>
+        <p class="section-desc">Não é sobre tecnologia. É sobre resultado. Veja o que acontece quando o projeto passa a ser apresentado com clareza.</p>
+      </div>
+
+      <div class="tech-grid">
+
+        <div class="tech-item reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+              <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Menos dúvidas, mais decisão</h3>
+            <p>Quando o cliente vê e entende o projeto de verdade, as perguntas diminuem e a confiança para decidir aumenta.</p>
+            <div class="tech-tags">
+              <span>Clareza visual</span><span>Confiança na compra</span><span>Menos objeções</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+              <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Apresentações que impressionam</h3>
+            <p>Do stand de vendas à tela do cliente, cada visualização transmite sofisticação e eleva o valor percebido do empreendimento.</p>
+            <div class="tech-tags">
+              <span>Alto padrão visual</span><span>Diferencial competitivo</span><span>Marca forte</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+              <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Vendas que fecham mais rápido</h3>
+            <p>Incorporadoras que usam a Lumitria relatam ciclos de venda mais curtos — o cliente decide sem precisar imaginar.</p>
+            <div class="tech-tags">
+              <span>Ciclo de venda menor</span><span>Mais conversão</span><span>Decisão acelerada</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item reveal">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Um ativo que se reutiliza</h3>
+            <p>A experiência criada para um empreendimento continua gerando valor: feiras, redes sociais, apresentações executivas e treinamento de equipe.</p>
+            <div class="tech-tags">
+              <span>Multicanal</span><span>Reaproveitamento total</span><span>ROI contínuo</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       RESULTADOS
+  ==================================================== -->
+  <section id="beneficios" class="section section-stats">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Impacto Real</span>
+        <h2 class="section-title">Resultados que transformam<br>o processo de vendas</h2>
+      </div>
+
+      <div class="stats-grid">
+
+        <div class="stat-card reveal">
+          <span class="stat-value"><span class="counter" data-target="300" data-suffix="+">0+</span></span>
+          <span class="stat-label">Projetos entregues</span>
+          <p class="stat-desc">Empreendimentos apresentados com nossas soluções no Brasil e exterior.</p>
+        </div>
+
+        <div class="stat-card reveal">
+          <span class="stat-value"><span class="counter" data-target="87" data-suffix="%">0%</span></span>
+          <span class="stat-label">Aumento em conversão</span>
+          <p class="stat-desc">Crescimento médio nas taxas de venda reportado pelos nossos clientes.</p>
+        </div>
+
+        <div class="stat-card reveal">
+          <span class="stat-value"><span class="counter" data-target="45" data-suffix="M+">0M+</span></span>
+          <span class="stat-label">Visualizações geradas</span>
+          <p class="stat-desc">Acessos às experiências digitais criadas pela Lumitria.</p>
+        </div>
+
+        <div class="stat-card reveal">
+          <span class="stat-value">4.9<span class="stat-sub">/5</span></span>
+          <span class="stat-label">Avaliação dos clientes</span>
+          <p class="stat-desc">Nota média atribuída por incorporadoras parceiras após o projeto.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       DIFERENCIAL
+  ==================================================== -->
+  <section id="diferencial" class="section section-diferencial">
+    <div class="container">
+      <div class="diferencial-inner reveal">
+        <div class="diferencial-label">
+          <span class="badge-dot"></span>
+          Nosso diferencial
+        </div>
+        <h2 class="diferencial-title">Não entregamos apenas imagens</h2>
+        <p class="diferencial-desc">Entregamos uma nova forma de entender e apresentar projetos,<br>utilizando tecnologia interativa em tempo real.</p>
+        <a href="#contato" class="btn btn-primary">Conheça a solução completa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       CONTATO
+  ==================================================== -->
+  <section id="contato" class="section section-contact">
+    <div class="container">
+      <div class="contact-inner">
+
+        <div class="contact-content">
+          <span class="section-tag">Contato</span>
+          <h2 class="section-title">Leve seu projeto<br>para outro nível</h2>
+          <p class="section-desc">Transforme a forma como você apresenta e vende seus projetos.</p>
+
+          <ul class="contact-info">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              lumitriaexperience@gmail.com
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.9 10.8 19.79 19.79 0 01.85 2.18 2 2 0 012.82 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.6a16 16 0 006.29 6.29l.96-.96a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              +55 (11) 9 0000-0000
+            </li>
+          </ul>
+
+          <div class="contact-note">
+            <span class="badge-dot"></span>
+            Respondemos em até 24 horas úteis
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Nome</label>
+              <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+            </div>
+            <div class="form-group">
+              <label for="company">Empresa</label>
+              <input type="text" id="company" name="company" placeholder="Nome da incorporadora">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com.br" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Mensagem</label>
+            <textarea id="message" name="message" rows="4" placeholder="Descreva brevemente seu projeto ou dúvida..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Falar com especialista</button>
+          <p class="form-note">Seus dados estão seguros. Não compartilhamos informações com terceiros.</p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       FOOTER
+  ==================================================== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <img src="assets/images/logo-lumitria.png" alt="Lumitria" class="logo-img">
+        </a>
+        <p>Arquitetura digital e interatividade imersiva para loteamentos, projetos residenciais e empreendimentos comerciais.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn" class="social-link">
+            <svg viewBox="0 0 24 24" fill="none" width="17" height="17">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/lumitria_app" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-link">
+            <svg viewBox="0 0 24 24" fill="none" width="17" height="17">
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M17.5 6.5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="YouTube" class="social-link">
+            <svg viewBox="0 0 24 24" fill="none" width="17" height="17">
+              <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z" stroke="currentColor" stroke-width="1.5"/>
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Soluções</h4>
+        <ul>
+          <li><a href="#solucoes">Visualização do projeto</a></li>
+          <li><a href="#solucoes">Experiência imersiva</a></li>
+          <li><a href="#solucoes">Apresentação interativa</a></li>
+          <li><a href="#solucoes">Personalização de espaços</a></li>
+          <li><a href="#solucoes">Plataforma de vendas</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#diferenciais">Sobre a Lumitria</a></li>
+          <li><a href="#processo">Como Funciona</a></li>
+          <li><a href="#tecnologia">Benefícios</a></li>
+          <li><a href="#beneficios">Resultados</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="#contato">Falar com especialista</a></li>
+          <li><a href="mailto:lumitriaexperience@gmail.com">lumitriaexperience@gmail.com</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2025 Lumitria. Todos os direitos reservados.</p>
+        <p class="footer-tagline">O futuro do espaço. Hoje.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
