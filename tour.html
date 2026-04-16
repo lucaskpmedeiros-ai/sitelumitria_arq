@@ -7,6 +7,10 @@
   <link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Pannellum CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -21,15 +25,69 @@
       color: var(--text); -webkit-font-smoothing: antialiased; user-select: none;
     }
 
-    /* ── Canvas ── */
+    /* ── Pannellum container ── */
     #pano {
       position: fixed; inset: 0; width: 100%; height: 100%;
-      cursor: grab; display: block; background: #000;
-      transition: opacity 0.35s ease;
     }
-    #pano:active { cursor: grabbing; }
+    /* Override Pannellum internals to match dark theme */
+    .pnlm-container { background: var(--dark) !important; }
+    .pnlm-grab      { cursor: grab    !important; }
+    .pnlm-grabbing  { cursor: grabbing !important; }
+    /* Hide Pannellum's own UI — we use custom controls */
+    .pnlm-controls-container,
+    .pnlm-load-button,
+    .pnlm-lbox { display: none !important; }
 
-    /* ── Loading ── */
+    /* ── Custom Pannellum hotspot — reset sprite, apply our design ── */
+    div.pnlm-hotspot.hs-pnlm {
+      width: auto !important; height: auto !important;
+      background-image: none !important; background-color: transparent !important;
+      border: none !important; display: flex !important;
+      flex-direction: column !important; align-items: center !important;
+      overflow: visible !important;
+    }
+    /* Inner wrapper keeps the ring positioned correctly */
+    .hs-inner {
+      position: relative; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Pulsing outer ring */
+    .hs-ring {
+      width: 62px; height: 62px; border-radius: 50%;
+      border: 2px solid rgba(0,207,255,0.55);
+      box-shadow: 0 0 18px rgba(0,207,255,0.25);
+      animation: hs-pulse 2.2s ease-in-out infinite;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); pointer-events: none;
+    }
+    /* Filled centre dot */
+    .hs-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,207,255,0.18); border: 2px solid rgba(0,207,255,0.8);
+      box-shadow: 0 0 24px rgba(0,207,255,0.4), inset 0 0 12px rgba(0,207,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.22s, background 0.22s; position: relative;
+      color: var(--cyan); filter: drop-shadow(0 0 4px var(--cyan));
+    }
+    div.pnlm-hotspot.hs-pnlm:hover .hs-dot {
+      transform: scale(1.12); background: rgba(0,207,255,0.32);
+    }
+    /* Label below */
+    .hs-label {
+      font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.9);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: rgba(6,8,15,0.72); border: 1px solid rgba(0,207,255,0.25);
+      padding: 4px 12px; border-radius: 100px; white-space: nowrap;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      margin-top: 8px; display: block;
+    }
+    @keyframes hs-pulse {
+      0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.7; }
+      60%  { transform: translate(-50%,-50%) scale(1.45); opacity: 0;   }
+      100% { transform: translate(-50%,-50%) scale(1);    opacity: 0;   }
+    }
+
+    /* ── Loading screen ── */
     #loadScreen {
       position: fixed; inset: 0; z-index: 500; background: var(--dark);
       display: flex; flex-direction: column; align-items: center;
@@ -38,8 +96,7 @@
     #loadScreen.gone { opacity: 0; pointer-events: none; }
     #loadScreen img {
       width: 54px; height: 54px; border-radius: 50%;
-      border: 1px solid rgba(0,207,255,0.3);
-      box-shadow: 0 0 20px rgba(0,207,255,0.15);
+      border: 1px solid rgba(0,207,255,0.3); box-shadow: 0 0 20px rgba(0,207,255,0.15);
     }
     .bar-track {
       width: 190px; height: 2px; background: rgba(255,255,255,0.08);
@@ -86,46 +143,7 @@
     }
     #backBtn:hover { color: var(--text); border-color: rgba(0,207,255,0.3); }
 
-    /* ── Hotspots ── */
-    .hs {
-      position: fixed; transform: translate(-50%, -50%); z-index: 150;
-      display: flex; flex-direction: column; align-items: center; gap: 9px;
-      background: none; border: none; padding: 0; cursor: pointer;
-      opacity: 0; pointer-events: none; transition: opacity 0.5s;
-    }
-    .hs.show { opacity: 1; pointer-events: all; }
-    .hs-ring {
-      width: 62px; height: 62px; border-radius: 50%;
-      border: 2px solid rgba(0,207,255,0.55);
-      box-shadow: 0 0 18px rgba(0,207,255,0.25);
-      animation: hs-pulse 2.2s ease-in-out infinite;
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%); pointer-events: none;
-    }
-    .hs-dot {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(0,207,255,0.18);
-      border: 2px solid rgba(0,207,255,0.8);
-      box-shadow: 0 0 24px rgba(0,207,255,0.4), inset 0 0 12px rgba(0,207,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; transition: transform 0.22s, background 0.22s;
-    }
-    .hs:hover .hs-dot { transform: scale(1.12); background: rgba(0,207,255,0.32); }
-    .hs-dot svg { color: var(--cyan); filter: drop-shadow(0 0 4px var(--cyan)); }
-    .hs-label {
-      font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.9);
-      letter-spacing: 0.06em; text-transform: uppercase;
-      background: rgba(6,8,15,0.72); border: 1px solid rgba(0,207,255,0.25);
-      padding: 4px 12px; border-radius: 100px; white-space: nowrap;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); margin-top: 6px;
-    }
-    @keyframes hs-pulse {
-      0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.7; }
-      60%  { transform: translate(-50%,-50%) scale(1.45); opacity: 0; }
-      100% { transform: translate(-50%,-50%) scale(1);    opacity: 0; }
-    }
-
-    /* ── Nav ── */
+    /* ── Bottom nav ── */
     #sceneNav {
       position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
       z-index: 200; display: flex; align-items: center; gap: 18px;
@@ -145,9 +163,7 @@
       width: 7px; height: 7px; border-radius: 50%; background: var(--text-2);
       transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
     }
-    .sbtn.on .pip {
-      background: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); transform: scale(1.3);
-    }
+    .sbtn.on .pip { background: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); transform: scale(1.3); }
     .plbl {
       font-size: 0.60rem; font-weight: 600; color: var(--text-2);
       letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
@@ -156,7 +172,7 @@
     .sbtn.on .plbl { color: var(--cyan); }
     .ndiv { width: 24px; height: 1px; background: var(--border); flex-shrink: 0; }
 
-    /* ── Hint ── */
+    /* ── Drag hint ── */
     #hint {
       position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
       z-index: 200; display: flex; align-items: center; gap: 6px;
@@ -165,11 +181,10 @@
     }
     #hint.gone { opacity: 0; }
 
-    /* ── Overlay ── */
+    /* ── Intro overlay ── */
     #overlay {
       position: fixed; inset: 0; z-index: 300;
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       background: rgba(6,8,15,0.94); backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px); transition: opacity 0.9s;
       padding: 24px; text-align: center;
@@ -213,9 +228,10 @@
 </head>
 <body>
 
-<canvas id="pano"></canvas>
+<!-- Pannellum viewer container -->
+<div id="pano"></div>
 
-<!-- Loading -->
+<!-- Loading screen -->
 <div id="loadScreen">
   <img src="assets/images/logo-lumitria.png" alt="Lumitria">
   <div class="bar-track"><div id="loadBar"></div></div>
@@ -240,10 +256,7 @@
   </a>
 </header>
 
-<!-- Hotspots -->
-<div id="hsLayer"></div>
-
-<!-- Hint -->
+<!-- Drag hint -->
 <div id="hint">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
     <path d="M15 3a9 9 0 11-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -253,7 +266,7 @@
   Clique e arraste para explorar
 </div>
 
-<!-- Nav -->
+<!-- Bottom nav -->
 <nav id="sceneNav">
   <button class="sbtn on" id="d0" onclick="goTo(0)">
     <div class="pip"></div><span class="plbl">Ambiente 1</span>
@@ -268,7 +281,7 @@
   </button>
 </nav>
 
-<!-- Overlay -->
+<!-- Intro overlay -->
 <div id="overlay">
   <div class="ov-tag"><span class="ldot"></span>Tour Interativo 360°</div>
   <h1>Explore o projeto<br><em>como nunca antes.</em></h1>
@@ -288,473 +301,120 @@
   </p>
 </div>
 
+<!-- Pannellum JS -->
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 <script>
 'use strict';
 
 /* ══════════════════════════════════════
-   CENAS
+   NOMES DAS CENAS
 ══════════════════════════════════════ */
-var SCENES = [
-  {
-    name: 'Ambiente 1',
-    src:  'assets/images/Panorama1.png',
-    hotspots: [{ lon: 80,  lat: 0, label: 'Próximo ambiente', to: 1 }]
-  },
-  {
-    name: 'Ambiente 2',
-    src:  'assets/images/Panorama2.png',
-    hotspots: [
-      { lon: -90, lat: 0, label: 'Voltar',           to: 0 },
-      { lon:  80, lat: 0, label: 'Próximo ambiente',  to: 2 }
-    ]
-  },
-  {
-    name: 'Ambiente 3',
-    src:  'assets/images/Panorama3.png',
-    hotspots: [{ lon: 180, lat: 0, label: 'Voltar', to: 1 }]
-  }
-];
+var SCENE_NAMES = ['Ambiente 1', 'Ambiente 2', 'Ambiente 3'];
 
 /* ══════════════════════════════════════
-   WEBGL — INIT
+   HOTSPOT — HTML customizado
+   Recria o visual existente (anel pulsante + dot + label)
+   dentro do container que o Pannellum fornece.
 ══════════════════════════════════════ */
-var canvas = document.getElementById('pano');
-var gl = canvas.getContext('webgl', { antialias: true, alpha: false })
-      || canvas.getContext('experimental-webgl', { antialias: true, alpha: false });
-
-if (!gl) {
-  document.getElementById('loadScreen').innerHTML =
-    '<p style="color:#8CA0BC;font-size:1rem;padding:40px;text-align:center">'+
-    'Seu navegador não suporta WebGL.<br>Tente Chrome ou Firefox.</p>';
-  throw new Error('WebGL not supported');
-}
-
-/* ── Shaders ──
-   Vertex: full-screen quad (−1..1).
-   Fragment: for each pixel, cast a ray through the virtual sphere,
-   map it to equirectangular UV, sample the panorama texture.         */
-var VS = [
-  'attribute vec2 aPos;',
-  'void main() { gl_Position = vec4(aPos, 0.0, 1.0); }'
-].join('\n');
-
-var FS = [
-  'precision highp float;',
-  '',
-  'uniform sampler2D uTex;',
-  'uniform float uLon;',   /* yaw   — degrees, camera heading */
-  'uniform float uLat;',   /* pitch — degrees, camera tilt    */
-  'uniform float uFov;',   /* horizontal field of view, degrees */
-  'uniform vec2  uRes;',   /* canvas pixel size                 */
-  '',
-  'const float PI  = 3.14159265358979;',
-  'const float TAU = 6.28318530717959;',
-  '',
-  'void main() {',
-  /* NDC: −1..1 in both axes, +Y up */
-  '  vec2 ndc = (gl_FragCoord.xy / uRes) * 2.0 - 1.0;',
-  '  ndc.y = -ndc.y;',   /* flip Y so +Y is up in camera space */
-  '',
-  /* Build a ray through this pixel in camera space.
-     Camera looks down −Z; X is right; Y is up.             */
-  '  float aspect   = uRes.x / uRes.y;',
-  '  float tanHalf  = tan(uFov * 0.5 * PI / 180.0);',
-  '  vec3  ray = normalize(vec3(ndc.x * aspect * tanHalf,',
-  '                             ndc.y * tanHalf,',
-  '                             -1.0));',
-  '',
-  /* Rotate ray by camera orientation.
-     1. Pitch (rotate around X by −lat, because positive lat = look up) */
-  '  float cl = cos(-uLat * PI / 180.0);',
-  '  float sl = sin(-uLat * PI / 180.0);',
-  '  vec3 r1 = vec3(ray.x,',
-  '                 ray.y * cl - ray.z * sl,',
-  '                 ray.y * sl + ray.z * cl);',
-  '',
-  /* 2. Yaw (rotate around Y by lon) */
-  '  float cy = cos(uLon * PI / 180.0);',
-  '  float sy = sin(uLon * PI / 180.0);',
-  '  vec3 r2 = vec3( r1.x * cy + r1.z * sy,',
-  '                  r1.y,',
-  '                 -r1.x * sy + r1.z * cy);',
-  '',
-  /* Map sphere ray → equirectangular UV
-     U: atan2(x, −z) normalised 0..1 (left→right = west→east)
-     V: asin(y)      normalised 0..1 (bottom→top  = south→north / nadir→zenith) */
-  '  float u = atan(r2.x, -r2.z) / TAU + 0.5;',
-  '  float v = asin(clamp(r2.y, -1.0, 1.0)) / PI + 0.5;',
-  '',
-  '  gl_FragColor = texture2D(uTex, vec2(u, v));',
-  '}'
-].join('\n');
-
-function compileShader(type, src) {
-  var s = gl.createShader(type);
-  gl.shaderSource(s, src);
-  gl.compileShader(s);
-  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
-    throw new Error(gl.getShaderInfoLog(s));
-  return s;
-}
-var prog = gl.createProgram();
-gl.attachShader(prog, compileShader(gl.VERTEX_SHADER,   VS));
-gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, FS));
-gl.linkProgram(prog);
-if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
-  throw new Error(gl.getProgramInfoLog(prog));
-
-var loc = {
-  aPos: gl.getAttribLocation(prog,  'aPos'),
-  uTex: gl.getUniformLocation(prog, 'uTex'),
-  uLon: gl.getUniformLocation(prog, 'uLon'),
-  uLat: gl.getUniformLocation(prog, 'uLat'),
-  uFov: gl.getUniformLocation(prog, 'uFov'),
-  uRes: gl.getUniformLocation(prog, 'uRes')
-};
-
-/* Full-screen quad: two triangles as a TRIANGLE_STRIP */
-var quadBuf = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
-gl.bufferData(gl.ARRAY_BUFFER,
-  new Float32Array([-1,-1,  1,-1,  -1,1,  1,1]),
-  gl.STATIC_DRAW);
-
-/* ══════════════════════════════════════
-   CANVAS / VIEWPORT — hi-DPI aware
-══════════════════════════════════════ */
-var W = 1, H = 1, dpr = 1;
-
-function resize() {
-  dpr = Math.min(window.devicePixelRatio || 1, 2); /* cap at 2× to avoid OOM */
-  W = window.innerWidth;
-  H = window.innerHeight;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
-  canvas.width  = Math.round(W * dpr);
-  canvas.height = Math.round(H * dpr);
-  gl.viewport(0, 0, canvas.width, canvas.height);
-}
-resize();
-window.addEventListener('resize', resize);
-
-/* ══════════════════════════════════════
-   TEXTURES
-══════════════════════════════════════ */
-var textures = new Array(SCENES.length).fill(null);
-var maxTex   = gl.getParameter(gl.MAX_TEXTURE_SIZE); /* e.g. 8192 or 16384 */
-
-function uploadTexture(source) {
-  /* source can be HTMLImageElement or HTMLCanvasElement */
-  var tex = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-
-  /* Keep image orientation as stored in file (sky = row 0 = top).
-     With UNPACK_FLIP_Y = true WebGL flips the image so texV=1 is the TOP,
-     which matches our shader formula where v=1 → north pole (sky).       */
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
-
-  /* Power-of-2 dimensions → full mipmap chain for best quality at any zoom */
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);          /* horizontal wrap */
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);   /* no pole wrap    */
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-  /* Anisotropic filtering — if available — improves oblique/horizon sharpness */
-  var af = gl.getExtension('EXT_texture_filter_anisotropic')
-        || gl.getExtension('MOZ_EXT_texture_filter_anisotropic')
-        || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
-  if (af) {
-    var maxAF = gl.getParameter(af.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-    gl.texParameterf(gl.TEXTURE_2D, af.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(maxAF, 16));
-  }
-
-  gl.generateMipmap(gl.TEXTURE_2D);
-  return tex;
-}
-
-function loadSceneTex(idx, cb) {
-  if (textures[idx]) { cb(textures[idx]); return; }
-
-  var img = new Image();
-  img.onload = function() {
-    /* Downscale if image exceeds GPU limit (rare on modern devices) */
-    if (img.naturalWidth > maxTex || img.naturalHeight > maxTex) {
-      var scale = maxTex / Math.max(img.naturalWidth, img.naturalHeight);
-      var tc = document.createElement('canvas');
-      tc.width  = Math.floor(img.naturalWidth  * scale);
-      tc.height = Math.floor(img.naturalHeight * scale);
-      tc.getContext('2d').drawImage(img, 0, 0, tc.width, tc.height);
-      textures[idx] = uploadTexture(tc);
-    } else {
-      textures[idx] = uploadTexture(img);
-    }
-    cb(textures[idx]);
-  };
-  img.onerror = function() { cb(null); };
-  img.src = SCENES[idx].src;
-}
-
-/* ══════════════════════════════════════
-   CAMERA STATE
-══════════════════════════════════════ */
-var curIdx  = 0;
-var lon  = 0, lat  = 0;   /* rendered position   */
-var tLon = 0, tLat = 0;   /* target (eased into) */
-var fov     = 75;          /* horizontal FOV, degrees */
-var autoRot = 0.012;       /* degrees per frame auto-rotation */
-var dragging = false;
-var currentTex = null;
-
-/* ══════════════════════════════════════
-   DRAW FRAME
-══════════════════════════════════════ */
-function drawFrame() {
-  if (!currentTex) return;
-  gl.useProgram(prog);
-  gl.activeTexture(gl.TEXTURE0);
-  gl.bindTexture(gl.TEXTURE_2D, currentTex);
-  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
-  gl.enableVertexAttribArray(loc.aPos);
-  gl.vertexAttribPointer(loc.aPos, 2, gl.FLOAT, false, 0, 0);
-  gl.uniform1i(loc.uTex, 0);
-  gl.uniform1f(loc.uLon, lon);
-  gl.uniform1f(loc.uLat, lat);
-  gl.uniform1f(loc.uFov, fov);
-  gl.uniform2f(loc.uRes, canvas.width, canvas.height);
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-}
-
-/* ══════════════════════════════════════
-   MAIN LOOP
-══════════════════════════════════════ */
-function loop() {
-  requestAnimationFrame(loop);
-  if (!dragging) tLon += autoRot;
-  lon += (tLon - lon) * 0.07;
-  lat += (tLat - lat) * 0.07;
-  lat  = Math.max(-85, Math.min(85, lat));
-  drawFrame();
-  updateHotspots();
-}
-loop();
-
-/* ══════════════════════════════════════
-   SCENE TRANSITIONS
-══════════════════════════════════════ */
-function setScene(idx) {
-  curIdx = idx;
-  document.getElementById('sceneName').textContent = SCENES[idx].name;
-  updateNav(idx);
-
-  canvas.style.opacity = '0';
-  loadSceneTex(idx, function(tex) {
-    currentTex = tex;
-    setTimeout(function() {
-      canvas.style.opacity = '1';
-      buildHotspots(idx);
-    }, 350);
-  });
-}
-
-function goTo(idx) {
-  if (idx === curIdx) return;
-  tLon = lon; /* keep heading on scene change */
-  clearHotspots();
-  setScene(idx);
-}
-
-/* ══════════════════════════════════════
-   HOTSPOT 3-D → 2-D PROJECTION
-   Mirrors the vertex transform in the fragment shader.
-══════════════════════════════════════ */
-function projectHotspot(hsLon, hsLat) {
-  var PI = Math.PI;
-  var hsLonR = hsLon * PI / 180;
-  var hsLatR = hsLat * PI / 180;
-
-  /* World-space unit-sphere point for this hotspot (same convention as shader) */
-  var px =  Math.cos(hsLatR) * Math.sin(hsLonR);
-  var py =  Math.sin(hsLatR);
-  var pz = -Math.cos(hsLatR) * Math.cos(hsLonR);
-
-  /* Undo camera yaw (−lon) */
-  var lonR = lon * PI / 180;
-  var cy = Math.cos(-lonR), sy = Math.sin(-lonR);
-  var r1x =  px * cy + pz * sy;
-  var r1y =  py;
-  var r1z = -px * sy + pz * cy;
-
-  /* Undo camera pitch (−(−lat) = lat) */
-  var latR = lat * PI / 180;
-  var cl = Math.cos(latR), sl = Math.sin(latR);
-  var r2x = r1x;
-  var r2y = r1y * cl - r1z * sl;
-  var r2z = r1y * sl + r1z * cl;
-
-  /* Behind camera → hide */
-  if (r2z >= 0) return null;
-
-  var tanHalf = Math.tan(fov * 0.5 * PI / 180);
-  var aspect  = W / H;
-
-  /* Normalised device coordinates */
-  var nx = r2x / (-r2z) / (aspect * tanHalf);
-  var ny = r2y / (-r2z) / tanHalf;
-
-  /* Off-screen → hide */
-  if (Math.abs(nx) > 1.2 || Math.abs(ny) > 1.2) return null;
-
-  return {
-    x: (nx  + 1) * 0.5 * W,
-    y: (-ny + 1) * 0.5 * H
-  };
-}
-
-/* ══════════════════════════════════════
-   HOTSPOT DOM
-══════════════════════════════════════ */
-function clearHotspots() {
-  document.getElementById('hsLayer').innerHTML = '';
-}
-
-function buildHotspots(idx) {
-  clearHotspots();
-  var layer = document.getElementById('hsLayer');
-  SCENES[idx].hotspots.forEach(function(hs) {
-    var btn = document.createElement('button');
-    btn.className = 'hs';
-    btn.innerHTML =
+function makeHotspot(el, label) {
+  el.innerHTML =
+    '<div class="hs-inner">' +
       '<div class="hs-ring"></div>' +
       '<div class="hs-dot">' +
         '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
-          '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor" stroke-width="2.2"' +
-          ' stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor"' +
+          ' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
         '</svg>' +
       '</div>' +
-      '<span class="hs-label">' + hs.label + '</span>';
-    btn.dataset.lon = hs.lon;
-    btn.dataset.lat = hs.lat;
-    btn.addEventListener('click', function() { goTo(hs.to); });
-    layer.appendChild(btn);
-    requestAnimationFrame(function() {
-      requestAnimationFrame(function() { btn.classList.add('show'); });
-    });
-  });
+    '</div>' +
+    '<span class="hs-label">' + label + '</span>';
 }
 
-function updateHotspots() {
-  document.querySelectorAll('.hs').forEach(function(btn) {
-    var pos = projectHotspot(
-      parseFloat(btn.dataset.lon),
-      parseFloat(btn.dataset.lat)
-    );
-    if (!pos) {
-      btn.style.opacity = '0';
-      btn.style.pointerEvents = 'none';
-    } else {
-      btn.style.left = pos.x + 'px';
-      btn.style.top  = pos.y + 'px';
-      btn.style.opacity = btn.classList.contains('show') ? '1' : '0';
-      btn.style.pointerEvents = btn.classList.contains('show') ? 'all' : 'none';
+/* ══════════════════════════════════════
+   PANNELLUM — INICIALIZAÇÃO MULTI-CENA
+══════════════════════════════════════ */
+var viewer = pannellum.viewer('pano', {
+  default: {
+    firstScene:                 'scene0',
+    autoLoad:                   true,
+    autoRotate:                 -2,
+    autoRotateInactivityDelay:  3000,
+    hfov:                       100,
+    minHfov:                    40,
+    maxHfov:                    120,
+    /* Desativa toda a UI própria do Pannellum — usamos a customizada */
+    showControls:               false,
+    showFullscreenCtrl:         false,
+    showZoomCtrl:               false,
+    compass:                    false,
+    keyboardZoom:               true,
+    mouseZoom:                  true,
+    draggable:                  true,
+  },
+
+  scenes: {
+
+    scene0: {
+      type:     'equirectangular',
+      panorama: 'assets/images/Panorama1.png',
+      hotSpots: [
+        {
+          pitch: 0, yaw: 80,
+          type:    'scene', sceneId: 'scene1',
+          cssClass:          'hs-pnlm',
+          createTooltipFunc: makeHotspot,
+          createTooltipArgs: 'Próximo ambiente'
+        }
+      ]
+    },
+
+    scene1: {
+      type:     'equirectangular',
+      panorama: 'assets/images/Panorama2.png',
+      hotSpots: [
+        {
+          pitch: 0, yaw: -90,
+          type:    'scene', sceneId: 'scene0',
+          cssClass:          'hs-pnlm',
+          createTooltipFunc: makeHotspot,
+          createTooltipArgs: 'Voltar'
+        },
+        {
+          pitch: 0, yaw: 80,
+          type:    'scene', sceneId: 'scene2',
+          cssClass:          'hs-pnlm',
+          createTooltipFunc: makeHotspot,
+          createTooltipArgs: 'Próximo ambiente'
+        }
+      ]
+    },
+
+    scene2: {
+      type:     'equirectangular',
+      panorama: 'assets/images/Panorama3.png',
+      hotSpots: [
+        {
+          pitch: 0, yaw: 180,
+          type:    'scene', sceneId: 'scene1',
+          cssClass:          'hs-pnlm',
+          createTooltipFunc: makeHotspot,
+          createTooltipArgs: 'Voltar'
+        }
+      ]
     }
-  });
-}
 
-/* ══════════════════════════════════════
-   INPUT — Mouse
-══════════════════════════════════════ */
-var mX = 0, mY = 0, mLon = 0, mLat = 0;
-
-canvas.addEventListener('mousedown', function(e) {
-  dragging = true;
-  mX = e.clientX; mY = e.clientY;
-  mLon = lon; mLat = lat;
-  document.getElementById('hint').classList.add('gone');
-});
-window.addEventListener('mousemove', function(e) {
-  if (!dragging) return;
-  /* Sensitivity scales inversely with FOV so movement feels consistent */
-  var sens = fov / 75;
-  tLon = mLon - (e.clientX - mX) * 0.20 * sens;
-  tLat = mLat + (e.clientY - mY) * 0.12 * sens;
-  tLat = Math.max(-85, Math.min(85, tLat));
-});
-window.addEventListener('mouseup', function() { dragging = false; });
-
-/* ══════════════════════════════════════
-   INPUT — Touch
-══════════════════════════════════════ */
-var prevPinchDist = 0;
-
-canvas.addEventListener('touchstart', function(e) {
-  if (e.touches.length === 1) {
-    dragging = true;
-    mX = e.touches[0].clientX; mY = e.touches[0].clientY;
-    mLon = lon; mLat = lat;
-    document.getElementById('hint').classList.add('gone');
-  } else if (e.touches.length === 2) {
-    prevPinchDist = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
   }
-}, { passive: true });
-
-window.addEventListener('touchmove', function(e) {
-  if (e.touches.length === 1 && dragging) {
-    var sens = fov / 75;
-    tLon = mLon - (e.touches[0].clientX - mX) * 0.20 * sens;
-    tLat = mLat + (e.touches[0].clientY - mY) * 0.12 * sens;
-    tLat = Math.max(-85, Math.min(85, tLat));
-  } else if (e.touches.length === 2) {
-    var d = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    if (prevPinchDist > 0) {
-      fov *= prevPinchDist / d;
-      fov  = Math.max(30, Math.min(120, fov));
-    }
-    prevPinchDist = d;
-  }
-}, { passive: true });
-
-window.addEventListener('touchend', function() {
-  dragging = false;
-  prevPinchDist = 0;
 });
 
 /* ══════════════════════════════════════
-   INPUT — Scroll / Pinch zoom
+   LOADING SCREEN
 ══════════════════════════════════════ */
-canvas.addEventListener('wheel', function(e) {
-  fov = Math.max(30, Math.min(120, fov + e.deltaY * 0.04));
-}, { passive: true });
+var loadBar   = document.getElementById('loadBar');
+var loadTxt   = document.getElementById('loadTxt');
+var barW      = 0, barPhase = 0;
+var firstLoad = true;
 
-/* ══════════════════════════════════════
-   UI HELPERS
-══════════════════════════════════════ */
-function updateNav(idx) {
-  document.querySelectorAll('.sbtn').forEach(function(b, i) {
-    b.classList.toggle('on', i === idx);
-  });
-}
-
-function startTour() {
-  var ov = document.getElementById('overlay');
-  ov.classList.add('gone');
-  setTimeout(function() { ov.style.display = 'none'; }, 950);
-  setTimeout(function() { document.getElementById('hint').classList.add('gone'); }, 7000);
-}
-
-/* ══════════════════════════════════════
-   BOOT — LOADING SEQUENCE
-══════════════════════════════════════ */
-var loadBar = document.getElementById('loadBar');
-var loadTxt = document.getElementById('loadTxt');
-var barW = 0, barPhase = 0;
+/* Barra de progresso animada enquanto o Pannellum carrega */
 var barIv = setInterval(function() {
   if (barPhase === 0) {
     barW = Math.min(barW + Math.random() * 5, 68);
@@ -772,7 +432,10 @@ var loadMsgIv = setInterval(function() {
   loadTxt.textContent = loadMsgs[lmIdx];
 }, 2800);
 
-loadSceneTex(0, function(tex) {
+/* O Pannellum dispara 'load' quando a primeira cena termina de carregar */
+viewer.on('load', function() {
+  if (!firstLoad) return;
+  firstLoad = false;
   clearInterval(barIv);
   clearInterval(loadMsgIv);
   loadBar.style.width = '100%';
@@ -781,14 +444,46 @@ loadSceneTex(0, function(tex) {
     var ls = document.getElementById('loadScreen');
     ls.classList.add('gone');
     setTimeout(function() { ls.style.display = 'none'; }, 750);
-    currentTex = tex;
-    setScene(0);
-    /* Load remaining scenes in background */
-    for (var i = 1; i < SCENES.length; i++) {
-      (function(n) { loadSceneTex(n, function(){}); })(i);
-    }
   }, 300);
 });
+
+/* ══════════════════════════════════════
+   TROCA DE CENA — sincroniza nav e label
+══════════════════════════════════════ */
+viewer.on('scenechange', function(sceneId) {
+  var idx = parseInt(sceneId.replace('scene', ''), 10);
+  document.getElementById('sceneName').textContent = SCENE_NAMES[idx];
+  document.querySelectorAll('.sbtn').forEach(function(btn, i) {
+    btn.classList.toggle('on', i === idx);
+  });
+});
+
+/* Botões da nav inferior */
+function goTo(idx) {
+  viewer.loadScene('scene' + idx);
+}
+
+/* ══════════════════════════════════════
+   HINT — some ao primeiro arraste
+══════════════════════════════════════ */
+document.getElementById('pano').addEventListener('mousedown', function() {
+  document.getElementById('hint').classList.add('gone');
+}, { once: true });
+document.getElementById('pano').addEventListener('touchstart', function() {
+  document.getElementById('hint').classList.add('gone');
+}, { once: true, passive: true });
+setTimeout(function() {
+  document.getElementById('hint').classList.add('gone');
+}, 7000);
+
+/* ══════════════════════════════════════
+   OVERLAY DE ENTRADA
+══════════════════════════════════════ */
+function startTour() {
+  var ov = document.getElementById('overlay');
+  ov.classList.add('gone');
+  setTimeout(function() { ov.style.display = 'none'; }, 950);
+}
 </script>
 </body>
 </html>
