@@ -7,249 +7,137 @@
   <link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-  <!-- Pannellum CDN — preconnect acelera o DNS lookup -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
-
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --cyan: #00CFFF; --cyan-glow: rgba(0,207,255,0.28);
-      --dark: #06080F; --text: #EBF1FF;
-      --text-2: #8CA0BC; --text-dim: #4D637D;
-      --border: rgba(255,255,255,0.08);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --c:#00CFFF;--cg:rgba(0,207,255,.28);
+      --dk:#06080F;--tx:#EBF1FF;--t2:#8CA0BC;--td:#4D637D;
+      --br:rgba(255,255,255,.08)
     }
-    html, body {
-      width: 100%; height: 100%; overflow: hidden;
-      background: var(--dark); font-family: 'Inter', system-ui, sans-serif;
-      color: var(--text); -webkit-font-smoothing: antialiased; user-select: none;
-    }
+    html,body{width:100%;height:100%;overflow:hidden;background:var(--dk);
+      font-family:'Inter',system-ui,sans-serif;color:var(--tx);
+      -webkit-font-smoothing:antialiased;user-select:none}
 
-    /* ── Pannellum container ── */
-    #pano {
-      position: fixed; inset: 0; width: 100%; height: 100%;
-    }
-    /* Override Pannellum internals to match dark theme */
-    .pnlm-container { background: var(--dark) !important; }
-    .pnlm-grab      { cursor: grab    !important; }
-    .pnlm-grabbing  { cursor: grabbing !important; }
-    /* Hide Pannellum's own UI — we use custom controls */
-    .pnlm-controls-container,
-    .pnlm-load-button,
-    .pnlm-lbox { display: none !important; }
+    /* canvas ocupa tudo */
+    #c{position:fixed;inset:0;width:100%;height:100%;display:block;
+       cursor:grab;background:#000;transition:opacity .35s}
+    #c:active{cursor:grabbing}
 
-    /* ── Custom Pannellum hotspot — reset sprite, apply our design ── */
-    div.pnlm-hotspot.hs-pnlm {
-      width: auto !important; height: auto !important;
-      background-image: none !important; background-color: transparent !important;
-      border: none !important; display: flex !important;
-      flex-direction: column !important; align-items: center !important;
-      overflow: visible !important;
-    }
-    /* Inner wrapper keeps the ring positioned correctly */
-    .hs-inner {
-      position: relative; width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Pulsing outer ring */
-    .hs-ring {
-      width: 62px; height: 62px; border-radius: 50%;
-      border: 2px solid rgba(0,207,255,0.55);
-      box-shadow: 0 0 18px rgba(0,207,255,0.25);
-      animation: hs-pulse 2.2s ease-in-out infinite;
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%); pointer-events: none;
-    }
-    /* Filled centre dot */
-    .hs-dot {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(0,207,255,0.18); border: 2px solid rgba(0,207,255,0.8);
-      box-shadow: 0 0 24px rgba(0,207,255,0.4), inset 0 0 12px rgba(0,207,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.22s, background 0.22s; position: relative;
-      color: var(--cyan); filter: drop-shadow(0 0 4px var(--cyan));
-    }
-    div.pnlm-hotspot.hs-pnlm:hover .hs-dot {
-      transform: scale(1.12); background: rgba(0,207,255,0.32);
-    }
-    /* Label below */
-    .hs-label {
-      font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.9);
-      letter-spacing: 0.06em; text-transform: uppercase;
-      background: rgba(6,8,15,0.72); border: 1px solid rgba(0,207,255,0.25);
-      padding: 4px 12px; border-radius: 100px; white-space: nowrap;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      margin-top: 8px; display: block;
-    }
-    @keyframes hs-pulse {
-      0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.7; }
-      60%  { transform: translate(-50%,-50%) scale(1.45); opacity: 0;   }
-      100% { transform: translate(-50%,-50%) scale(1);    opacity: 0;   }
-    }
+    /* ── loading ── */
+    #ls{position:fixed;inset:0;z-index:500;background:var(--dk);
+        display:flex;flex-direction:column;align-items:center;
+        justify-content:center;gap:18px;transition:opacity .7s}
+    #ls.out{opacity:0;pointer-events:none}
+    #ls img{width:54px;height:54px;border-radius:50%;
+            border:1px solid rgba(0,207,255,.3);
+            box-shadow:0 0 20px rgba(0,207,255,.15)}
+    .bt{width:190px;height:2px;background:rgba(255,255,255,.08);
+        border-radius:2px;overflow:hidden}
+    #lb{height:100%;width:0%;border-radius:2px;
+        background:linear-gradient(90deg,var(--c),#0098CC);
+        box-shadow:0 0 8px var(--cg);transition:width .2s}
+    .lt{font-size:.76rem;color:var(--td);letter-spacing:.05em}
 
-    /* ── Loading screen ── */
-    #loadScreen {
-      position: fixed; inset: 0; z-index: 500; background: var(--dark);
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 18px; transition: opacity 0.7s ease;
-    }
-    #loadScreen.gone { opacity: 0; pointer-events: none; }
-    #loadScreen img {
-      width: 54px; height: 54px; border-radius: 50%;
-      border: 1px solid rgba(0,207,255,0.3); box-shadow: 0 0 20px rgba(0,207,255,0.15);
-    }
-    .bar-track {
-      width: 190px; height: 2px; background: rgba(255,255,255,0.08);
-      border-radius: 2px; overflow: hidden;
-    }
-    #loadBar {
-      height: 100%; width: 0%; border-radius: 2px;
-      background: linear-gradient(90deg, var(--cyan), #0098CC);
-      box-shadow: 0 0 8px var(--cyan-glow); transition: width 0.25s ease;
-    }
-    .load-txt { font-size: 0.76rem; color: var(--text-dim); letter-spacing: 0.05em; }
+    /* ── header ── */
+    #hd{position:fixed;top:0;left:0;right:0;z-index:200;
+        display:flex;align-items:center;justify-content:space-between;
+        padding:16px 28px;
+        background:linear-gradient(to bottom,rgba(6,8,15,.92),transparent);
+        pointer-events:none}
+    #hd>*{pointer-events:all}
+    .ll{display:flex;align-items:center;text-decoration:none}
+    .ll img{width:44px;height:44px;border-radius:50%;object-fit:cover;
+            border:1px solid rgba(0,207,255,.25);
+            box-shadow:0 0 14px rgba(0,207,255,.12)}
+    #sl{display:flex;align-items:center;gap:8px;font-size:.76rem;
+        font-weight:500;color:var(--t2);background:rgba(6,8,15,.75);
+        border:1px solid var(--br);padding:7px 16px;border-radius:100px;
+        backdrop-filter:blur(16px)}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--c);
+         box-shadow:0 0 8px var(--cg);flex-shrink:0;
+         animation:blink 2.4s ease-in-out infinite}
+    #bk{display:flex;align-items:center;gap:7px;
+        background:rgba(6,8,15,.75);border:1px solid var(--br);
+        color:var(--t2);font-size:.78rem;font-weight:500;
+        padding:7px 16px;border-radius:100px;cursor:pointer;
+        backdrop-filter:blur(16px);text-decoration:none;
+        transition:color .2s,border-color .2s}
+    #bk:hover{color:var(--tx);border-color:rgba(0,207,255,.3)}
 
-    /* ── Header ── */
-    #topBar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 28px;
-      background: linear-gradient(to bottom, rgba(6,8,15,0.92) 0%, transparent 100%);
-      pointer-events: none;
-    }
-    #topBar > * { pointer-events: all; }
-    .logo-lnk { display: flex; align-items: center; text-decoration: none; }
-    .logo-lnk img {
-      width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
-      border: 1px solid rgba(0,207,255,0.25); box-shadow: 0 0 14px rgba(0,207,255,0.12);
-    }
-    #sceneLabel {
-      display: flex; align-items: center; gap: 8px; font-size: 0.76rem;
-      font-weight: 500; color: var(--text-2); background: rgba(6,8,15,0.75);
-      border: 1px solid var(--border); padding: 7px 16px; border-radius: 100px;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    }
-    .ldot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
-      box-shadow: 0 0 8px var(--cyan-glow); flex-shrink: 0;
-      animation: blink 2.4s ease-in-out infinite;
-    }
-    #backBtn {
-      display: flex; align-items: center; gap: 7px; background: rgba(6,8,15,0.75);
-      border: 1px solid var(--border); color: var(--text-2); font-size: 0.78rem;
-      font-weight: 500; padding: 7px 16px; border-radius: 100px; cursor: pointer;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      text-decoration: none; transition: color 0.2s, border-color 0.2s;
-    }
-    #backBtn:hover { color: var(--text); border-color: rgba(0,207,255,0.3); }
+    /* ── nav ── */
+    #nav{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+         z-index:200;display:flex;align-items:center;gap:18px;
+         background:rgba(6,8,15,.78);border:1px solid var(--br);
+         padding:13px 26px;border-radius:100px;
+         backdrop-filter:blur(20px);
+         box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .sb{display:flex;flex-direction:column;align-items:center;gap:5px;
+        cursor:pointer;opacity:.38;transition:opacity .3s;
+        background:none;border:none;padding:2px 6px;color:inherit}
+    .sb:hover{opacity:.72}
+    .sb.on{opacity:1}
+    .pip{width:7px;height:7px;border-radius:50%;background:var(--t2);
+         transition:background .3s,box-shadow .3s,transform .3s}
+    .sb.on .pip{background:var(--c);box-shadow:0 0 10px var(--cg);transform:scale(1.3)}
+    .pl{font-size:.60rem;font-weight:600;color:var(--t2);
+        letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+        transition:color .3s}
+    .sb.on .pl{color:var(--c)}
+    .nd{width:24px;height:1px;background:var(--br);flex-shrink:0}
 
-    /* ── Bottom nav ── */
-    #sceneNav {
-      position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
-      z-index: 200; display: flex; align-items: center; gap: 18px;
-      background: rgba(6,8,15,0.78); border: 1px solid var(--border);
-      padding: 13px 26px; border-radius: 100px;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    }
-    .sbtn {
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
-      cursor: pointer; opacity: 0.38; transition: opacity 0.3s;
-      background: none; border: none; padding: 2px 6px; color: inherit;
-    }
-    .sbtn:hover { opacity: 0.72; }
-    .sbtn.on { opacity: 1; }
-    .pip {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--text-2);
-      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
-    }
-    .sbtn.on .pip { background: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); transform: scale(1.3); }
-    .plbl {
-      font-size: 0.60rem; font-weight: 600; color: var(--text-2);
-      letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
-      transition: color 0.3s;
-    }
-    .sbtn.on .plbl { color: var(--cyan); }
-    .ndiv { width: 24px; height: 1px; background: var(--border); flex-shrink: 0; }
+    /* ── hint ── */
+    #ht{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+        z-index:200;display:flex;align-items:center;gap:6px;
+        font-size:.70rem;color:var(--td);pointer-events:none;
+        transition:opacity 1.2s}
+    #ht.out{opacity:0}
 
-    /* ── Drag hint ── */
-    #hint {
-      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-      z-index: 200; display: flex; align-items: center; gap: 6px;
-      font-size: 0.70rem; color: var(--text-dim); pointer-events: none;
-      transition: opacity 1.2s;
-    }
-    #hint.gone { opacity: 0; }
+    /* ── overlay de entrada ── */
+    #ov{position:fixed;inset:0;z-index:300;
+        display:flex;flex-direction:column;align-items:center;
+        justify-content:center;
+        background:rgba(6,8,15,.94);backdrop-filter:blur(24px);
+        transition:opacity .9s;padding:24px;text-align:center}
+    #ov.out{opacity:0;pointer-events:none}
+    .ot{display:inline-flex;align-items:center;gap:7px;font-size:.68rem;
+        font-weight:600;color:var(--c);border:1px solid rgba(0,207,255,.22);
+        padding:5px 14px;border-radius:100px;margin-bottom:26px;
+        letter-spacing:.12em;text-transform:uppercase;
+        background:rgba(0,207,255,.07)}
+    #ov h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.4rem);
+           font-weight:800;line-height:1.12;letter-spacing:-.025em;
+           color:var(--tx);margin-bottom:16px;max-width:560px}
+    #ov h1 em{font-style:normal;color:var(--c)}
+    #ov p{font-size:.98rem;color:var(--t2);max-width:440px;
+          line-height:1.72;margin-bottom:38px}
+    #sb{display:inline-flex;align-items:center;gap:10px;
+        background:linear-gradient(135deg,#00CFFF,#0098CC);color:#020D14;
+        font-family:'Inter',sans-serif;font-size:.95rem;font-weight:700;
+        padding:14px 32px;border-radius:12px;border:none;cursor:pointer;
+        box-shadow:0 0 28px rgba(0,207,255,.38),0 8px 28px rgba(0,0,0,.4);
+        transition:transform .22s,box-shadow .22s}
+    #sb:hover{transform:translateY(-2px);
+              box-shadow:0 0 44px rgba(0,207,255,.55),0 12px 36px rgba(0,0,0,.45)}
 
-    /* ── Intro overlay ── */
-    #overlay {
-      position: fixed; inset: 0; z-index: 300;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: rgba(6,8,15,0.94); backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px); transition: opacity 0.9s;
-      padding: 24px; text-align: center;
-    }
-    #overlay.gone { opacity: 0; pointer-events: none; }
-    .ov-tag {
-      display: inline-flex; align-items: center; gap: 7px; font-size: 0.68rem;
-      font-weight: 600; color: var(--cyan); border: 1px solid rgba(0,207,255,0.22);
-      padding: 5px 14px; border-radius: 100px; margin-bottom: 26px;
-      letter-spacing: 0.12em; text-transform: uppercase; background: rgba(0,207,255,0.07);
-    }
-    #overlay h1 {
-      font-family: 'Syne', sans-serif; font-size: clamp(2rem,5vw,3.4rem);
-      font-weight: 800; line-height: 1.12; letter-spacing: -0.025em; color: var(--text);
-      margin-bottom: 16px; max-width: 560px;
-    }
-    #overlay h1 em { font-style: normal; color: var(--cyan); }
-    #overlay p {
-      font-size: 0.98rem; color: var(--text-2); max-width: 440px;
-      line-height: 1.72; margin-bottom: 38px;
-    }
-    #startBtn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: linear-gradient(135deg, #00CFFF 0%, #0098CC 100%); color: #020D14;
-      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
-      padding: 14px 32px; border-radius: 12px; border: none; cursor: pointer;
-      box-shadow: 0 0 28px rgba(0,207,255,0.38), 0 8px 28px rgba(0,0,0,0.4);
-      transition: transform 0.22s, box-shadow 0.22s;
-    }
-    #startBtn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 44px rgba(0,207,255,0.55), 0 12px 36px rgba(0,0,0,0.45);
-    }
-    .ov-hint {
-      margin-top: 18px; font-size: 0.70rem; color: var(--text-dim);
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
   </style>
 </head>
 <body>
 
-<!-- Pannellum viewer container -->
-<div id="pano"></div>
+<canvas id="c"></canvas>
 
-<!-- Loading screen -->
-<div id="loadScreen">
+<div id="ls">
   <img src="assets/images/logo-lumitria.png" alt="Lumitria">
-  <div class="bar-track"><div id="loadBar"></div></div>
-  <span class="load-txt" id="loadTxt">Carregando experiência…</span>
+  <div class="bt"><div id="lb"></div></div>
+  <span class="lt" id="lt">Carregando…</span>
 </div>
 
-<!-- Header -->
-<header id="topBar">
-  <a href="index.html" class="logo-lnk">
+<header id="hd">
+  <a href="index.html" class="ll">
     <img src="assets/images/logo-lumitria.png" alt="Lumitria">
   </a>
-  <div id="sceneLabel">
-    <span class="ldot"></span>
-    <span id="sceneName">Tour 360°</span>
-  </div>
-  <a href="index.html" id="backBtn">
+  <div id="sl"><span class="dot"></span><span id="sn">Tour 360°</span></div>
+  <a href="index.html" id="bk">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
       <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round"/>
@@ -258,8 +146,7 @@
   </a>
 </header>
 
-<!-- Drag hint -->
-<div id="hint">
+<div id="ht">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
     <path d="M15 3a9 9 0 11-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     <path d="M15 3l-3-3m3 3l-3 3" stroke="currentColor" stroke-width="1.5"
@@ -268,226 +155,269 @@
   Clique e arraste para explorar
 </div>
 
-<!-- Bottom nav -->
-<nav id="sceneNav">
-  <button class="sbtn on" id="d0" onclick="goTo(0)">
-    <div class="pip"></div><span class="plbl">Ambiente 1</span>
+<nav id="nav">
+  <button class="sb on" onclick="goTo(0)">
+    <div class="pip"></div><span class="pl">Ambiente 1</span>
   </button>
-  <div class="ndiv"></div>
-  <button class="sbtn" id="d1" onclick="goTo(1)">
-    <div class="pip"></div><span class="plbl">Ambiente 2</span>
+  <div class="nd"></div>
+  <button class="sb" onclick="goTo(1)">
+    <div class="pip"></div><span class="pl">Ambiente 2</span>
   </button>
-  <div class="ndiv"></div>
-  <button class="sbtn" id="d2" onclick="goTo(2)">
-    <div class="pip"></div><span class="plbl">Ambiente 3</span>
+  <div class="nd"></div>
+  <button class="sb" onclick="goTo(2)">
+    <div class="pip"></div><span class="pl">Ambiente 3</span>
   </button>
 </nav>
 
-<!-- Intro overlay -->
-<div id="overlay">
-  <div class="ov-tag"><span class="ldot"></span>Tour Interativo 360°</div>
+<div id="ov">
+  <div class="ot"><span class="dot"></span>Tour Interativo 360°</div>
   <h1>Explore o projeto<br><em>como nunca antes.</em></h1>
-  <p>Navegue pelos ambientes, descubra cada detalhe e visualize o espaço com total clareza — antes da primeira pedra ser assentada.</p>
-  <button id="startBtn" onclick="startTour()">
+  <p>Navegue pelos ambientes, descubra cada detalhe e visualize o espaço com total clareza.</p>
+  <button id="sb" onclick="startTour()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
       <path d="M5 3l14 9-14 9V3z" fill="currentColor"/>
     </svg>
-    Ver demonstração completa
+    Iniciar tour
   </button>
-  <p class="ov-hint">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-      <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-    Use os hotspots para transitar entre ambientes
-  </p>
 </div>
 
-<!-- Pannellum JS -->
-<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 <script>
-'use strict';
+/* =====================================================
+   CONFIGURAÇÃO DAS CENAS
+===================================================== */
+var SCENES = [
+  { name: 'Ambiente 1', src: 'assets/images/Panorama1.jpg' },
+  { name: 'Ambiente 2', src: 'assets/images/Panorama2.jpg' },
+  { name: 'Ambiente 3', src: 'assets/images/Panorama3.jpg' }
+];
 
-/* ══════════════════════════════════════
-   NOMES DAS CENAS
-══════════════════════════════════════ */
-var SCENE_NAMES = ['Ambiente 1', 'Ambiente 2', 'Ambiente 3'];
+/* =====================================================
+   WEBGL — configuração inicial
+===================================================== */
+var canvas = document.getElementById('c');
+var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
-/* ══════════════════════════════════════
-   HOTSPOT — HTML customizado
-   Recria o visual existente (anel pulsante + dot + label)
-   dentro do container que o Pannellum fornece.
-══════════════════════════════════════ */
-function makeHotspot(el, label) {
-  el.innerHTML =
-    '<div class="hs-inner">' +
-      '<div class="hs-ring"></div>' +
-      '<div class="hs-dot">' +
-        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
-          '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor"' +
-          ' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '</svg>' +
-      '</div>' +
-    '</div>' +
-    '<span class="hs-label">' + label + '</span>';
+/* Shaders —————————————————————————————————————————
+   Vertex: quad fullscreen
+   Fragment: projeção esférica equiretangular correta  */
+var VS = `
+attribute vec2 a;
+void main(){ gl_Position = vec4(a,0,1); }
+`;
+
+var FS = `
+precision highp float;
+uniform sampler2D uT;
+uniform float uYaw;
+uniform float uPitch;
+uniform float uFov;
+uniform vec2  uRes;
+const float PI  = 3.14159265;
+const float TAU = 6.28318530;
+void main(){
+  vec2 uv = (gl_FragCoord.xy / uRes) * 2.0 - 1.0;
+  uv.y = -uv.y;
+  float asp = uRes.x / uRes.y;
+  float th  = tan(uFov * .5 * PI / 180.0);
+  vec3 r = normalize(vec3(uv.x*asp*th, uv.y*th, -1.0));
+
+  /* pitch */
+  float cp=cos(-uPitch*PI/180.0), sp=sin(-uPitch*PI/180.0);
+  vec3 r1=vec3(r.x, r.y*cp - r.z*sp, r.y*sp + r.z*cp);
+
+  /* yaw */
+  float cy=cos(uYaw*PI/180.0), sy=sin(uYaw*PI/180.0);
+  vec3 r2=vec3(r1.x*cy + r1.z*sy, r1.y, -r1.x*sy + r1.z*cy);
+
+  float u = atan(r2.x,-r2.z)/TAU + 0.5;
+  float v = asin(clamp(r2.y,-1.0,1.0))/PI + 0.5;
+  gl_FragColor = texture2D(uT, vec2(u,v));
+}
+`;
+
+function mkShader(t,s){ var sh=gl.createShader(t); gl.shaderSource(sh,s); gl.compileShader(sh); return sh; }
+var prog = gl.createProgram();
+gl.attachShader(prog, mkShader(gl.VERTEX_SHADER,VS));
+gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER,FS));
+gl.linkProgram(prog);
+
+var aPos = gl.getAttribLocation(prog,'a');
+var uT   = gl.getUniformLocation(prog,'uT');
+var uYaw = gl.getUniformLocation(prog,'uYaw');
+var uPit = gl.getUniformLocation(prog,'uPitch');
+var uFov = gl.getUniformLocation(prog,'uFov');
+var uRes = gl.getUniformLocation(prog,'uRes');
+
+var qBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, qBuf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+
+/* =====================================================
+   CANVAS SIZE
+===================================================== */
+var W=1, H=1;
+function resize(){
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width=W; canvas.height=H;
+  gl.viewport(0,0,W,H);
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* =====================================================
+   TEXTURAS
+===================================================== */
+var texCache = {};
+var curTex   = null;
+
+function loadTex(src, cb){
+  if(texCache[src]){ cb(texCache[src]); return; }
+  var img = new Image();
+  img.onload = function(){
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,img);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    texCache[src]=tex; cb(tex);
+  };
+  img.src = src;
 }
 
-/* ══════════════════════════════════════
-   PANNELLUM — INICIALIZAÇÃO MULTI-CENA
-══════════════════════════════════════ */
-var viewer = pannellum.viewer('pano', {
-  default: {
-    firstScene:                 'scene0',
-    autoLoad:                   true,
-    autoRotate:                 -2,
-    autoRotateInactivityDelay:  3000,
-    hfov:                       100,
-    minHfov:                    40,
-    maxHfov:                    120,
-    /* Desativa toda a UI própria do Pannellum — usamos a customizada */
-    showControls:               false,
-    showFullscreenCtrl:         false,
-    showZoomCtrl:               false,
-    compass:                    false,
-    keyboardZoom:               true,
-    mouseZoom:                  true,
-    draggable:                  true,
-  },
+/* =====================================================
+   ESTADO DA CÂMERA
+===================================================== */
+var yaw=0, pitch=0, tYaw=0, tPitch=0, fov=90, drag=false;
+var autoRot = 0.015;
+var curIdx  = 0;
 
-  scenes: {
+/* =====================================================
+   RENDER
+===================================================== */
+function draw(){
+  if(!curTex) return;
+  gl.useProgram(prog);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, curTex);
+  gl.bindBuffer(gl.ARRAY_BUFFER, qBuf);
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+  gl.uniform1i(uT,0);
+  gl.uniform1f(uYaw,yaw);
+  gl.uniform1f(uPit,pitch);
+  gl.uniform1f(uFov,fov);
+  gl.uniform2f(uRes,W,H);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+}
 
-    scene0: {
-      type:     'equirectangular',
-      panorama: 'assets/images/Panorama1.jpg',
-      preview:  'assets/images/Panorama1_preview.jpg',
-      hotSpots: [
-        {
-          pitch: 0, yaw: 80,
-          type:    'scene', sceneId: 'scene1',
-          cssClass:          'hs-pnlm',
-          createTooltipFunc: makeHotspot,
-          createTooltipArgs: 'Próximo ambiente'
-        }
-      ]
-    },
+function loop(){
+  requestAnimationFrame(loop);
+  if(!drag) tYaw += autoRot;
+  yaw   += (tYaw   - yaw)   * 0.07;
+  pitch += (tPitch - pitch) * 0.07;
+  pitch  = Math.max(-80, Math.min(80, pitch));
+  draw();
+}
+loop();
 
-    scene1: {
-      type:     'equirectangular',
-      panorama: 'assets/images/Panorama2.jpg',
-      preview:  'assets/images/Panorama2_preview.jpg',
-      hotSpots: [
-        {
-          pitch: 0, yaw: -90,
-          type:    'scene', sceneId: 'scene0',
-          cssClass:          'hs-pnlm',
-          createTooltipFunc: makeHotspot,
-          createTooltipArgs: 'Voltar'
-        },
-        {
-          pitch: 0, yaw: 80,
-          type:    'scene', sceneId: 'scene2',
-          cssClass:          'hs-pnlm',
-          createTooltipFunc: makeHotspot,
-          createTooltipArgs: 'Próximo ambiente'
-        }
-      ]
-    },
-
-    scene2: {
-      type:     'equirectangular',
-      panorama: 'assets/images/Panorama3.jpg',
-      preview:  'assets/images/Panorama3_preview.jpg',
-      hotSpots: [
-        {
-          pitch: 0, yaw: 180,
-          type:    'scene', sceneId: 'scene1',
-          cssClass:          'hs-pnlm',
-          createTooltipFunc: makeHotspot,
-          createTooltipArgs: 'Voltar'
-        }
-      ]
-    }
-
-  }
-});
-
-/* ══════════════════════════════════════
-   LOADING SCREEN
-══════════════════════════════════════ */
-var loadBar   = document.getElementById('loadBar');
-var loadTxt   = document.getElementById('loadTxt');
-var barW      = 0, barPhase = 0;
-var firstLoad = true;
-
-/* Barra de progresso animada enquanto o Pannellum carrega */
-var barIv = setInterval(function() {
-  if (barPhase === 0) {
-    barW = Math.min(barW + Math.random() * 5, 68);
-    if (barW >= 68) barPhase = 1;
-  } else {
-    barW = Math.min(barW + 0.08, 93);
-  }
-  loadBar.style.width = barW + '%';
-}, 120);
-
-var loadMsgs = ['Carregando experiência…', 'Preparando panoramas…', 'Quase pronto…'];
-var lmIdx = 0;
-var loadMsgIv = setInterval(function() {
-  lmIdx = (lmIdx + 1) % loadMsgs.length;
-  loadTxt.textContent = loadMsgs[lmIdx];
-}, 2800);
-
-/* O Pannellum dispara 'load' quando a primeira cena termina de carregar */
-viewer.on('load', function() {
-  if (!firstLoad) return;
-  firstLoad = false;
-  clearInterval(barIv);
-  clearInterval(loadMsgIv);
-  loadBar.style.width = '100%';
-  loadTxt.textContent = 'Pronto!';
-  setTimeout(function() {
-    var ls = document.getElementById('loadScreen');
-    ls.classList.add('gone');
-    setTimeout(function() { ls.style.display = 'none'; }, 750);
-  }, 300);
-});
-
-/* ══════════════════════════════════════
-   TROCA DE CENA — sincroniza nav e label
-══════════════════════════════════════ */
-viewer.on('scenechange', function(sceneId) {
-  var idx = parseInt(sceneId.replace('scene', ''), 10);
-  document.getElementById('sceneName').textContent = SCENE_NAMES[idx];
-  document.querySelectorAll('.sbtn').forEach(function(btn, i) {
-    btn.classList.toggle('on', i === idx);
+/* =====================================================
+   TROCA DE CENA
+===================================================== */
+function goTo(idx){
+  if(idx === curIdx) return;
+  curIdx = idx;
+  canvas.style.opacity = '0';
+  document.getElementById('sn').textContent = SCENES[idx].name;
+  document.querySelectorAll('.sb').forEach(function(b,i){ b.classList.toggle('on',i===idx); });
+  loadTex(SCENES[idx].src, function(tex){
+    curTex = tex;
+    setTimeout(function(){ canvas.style.opacity='1'; }, 300);
   });
-});
-
-/* Botões da nav inferior */
-function goTo(idx) {
-  viewer.loadScene('scene' + idx);
 }
 
-/* ══════════════════════════════════════
-   HINT — some ao primeiro arraste
-══════════════════════════════════════ */
-document.getElementById('pano').addEventListener('mousedown', function() {
-  document.getElementById('hint').classList.add('gone');
-}, { once: true });
-document.getElementById('pano').addEventListener('touchstart', function() {
-  document.getElementById('hint').classList.add('gone');
-}, { once: true, passive: true });
-setTimeout(function() {
-  document.getElementById('hint').classList.add('gone');
-}, 7000);
+/* =====================================================
+   INPUT — mouse
+===================================================== */
+var mx=0,my=0,mYaw=0,mPitch=0;
+canvas.addEventListener('mousedown',function(e){
+  drag=true; mx=e.clientX; my=e.clientY; mYaw=yaw; mPitch=pitch;
+  document.getElementById('ht').classList.add('out');
+});
+window.addEventListener('mousemove',function(e){
+  if(!drag) return;
+  tYaw   = mYaw   - (e.clientX-mx)*0.25;
+  tPitch = mPitch + (e.clientY-my)*0.15;
+});
+window.addEventListener('mouseup',function(){ drag=false; });
 
-/* ══════════════════════════════════════
-   OVERLAY DE ENTRADA
-══════════════════════════════════════ */
-function startTour() {
-  var ov = document.getElementById('overlay');
-  ov.classList.add('gone');
-  setTimeout(function() { ov.style.display = 'none'; }, 950);
+/* INPUT — touch */
+var tx=0,ty=0,tYaw0=0,tPitch0=0,pDist=0;
+canvas.addEventListener('touchstart',function(e){
+  if(e.touches.length===1){
+    drag=true; tx=e.touches[0].clientX; ty=e.touches[0].clientY;
+    tYaw0=yaw; tPitch0=pitch;
+    document.getElementById('ht').classList.add('out');
+  } else if(e.touches.length===2){
+    pDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,
+                     e.touches[0].clientY-e.touches[1].clientY);
+  }
+},{passive:true});
+window.addEventListener('touchmove',function(e){
+  if(e.touches.length===1&&drag){
+    tYaw   = tYaw0   - (e.touches[0].clientX-tx)*0.25;
+    tPitch = tPitch0 + (e.touches[0].clientY-ty)*0.15;
+  } else if(e.touches.length===2){
+    var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,
+                     e.touches[0].clientY-e.touches[1].clientY);
+    if(pDist>0){ fov=Math.max(40,Math.min(120,fov*pDist/d)); }
+    pDist=d;
+  }
+},{passive:true});
+window.addEventListener('touchend',function(){ drag=false; pDist=0; });
+
+/* zoom com scroll */
+canvas.addEventListener('wheel',function(e){
+  fov=Math.max(40,Math.min(120,fov+e.deltaY*0.05));
+},{passive:true});
+
+/* =====================================================
+   LOADING SCREEN
+===================================================== */
+var lbEl=document.getElementById('lb');
+var ltEl=document.getElementById('lt');
+var bW=0, bPh=0;
+var bIv=setInterval(function(){
+  bPh===0 ? (bW=Math.min(bW+Math.random()*5,70), bW>=70&&(bPh=1))
+           : (bW=Math.min(bW+.08,93));
+  lbEl.style.width=bW+'%';
+},120);
+
+loadTex(SCENES[0].src, function(tex){
+  clearInterval(bIv);
+  lbEl.style.width='100%';
+  ltEl.textContent='Pronto!';
+  curTex = tex;
+  setTimeout(function(){
+    var ls=document.getElementById('ls');
+    ls.classList.add('out');
+    setTimeout(function(){ ls.style.display='none'; },750);
+    /* pré-carrega as outras cenas em background */
+    for(var i=1;i<SCENES.length;i++)(function(n){ loadTex(SCENES[n].src,function(){}); })(i);
+  },300);
+});
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+function startTour(){
+  var ov=document.getElementById('ov');
+  ov.classList.add('out');
+  setTimeout(function(){ ov.style.display='none'; },950);
+  setTimeout(function(){ document.getElementById('ht').classList.add('out'); },7000);
 }
 </script>
 </body>
