@@ -270,22 +270,67 @@ window.addEventListener('resize', resize);
 var texCache = {};
 var curTex   = null;
 
+/* uploadTexture: cria a textura WebGL a partir de um elemento Image */
+function uploadTexture(img){
+  var tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,img);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.generateMipmap(gl.TEXTURE_2D);
+  return tex;
+}
+
+/* loadTex: carrega imagem via XHR → Blob URL para evitar restrição
+   de CORS do Chrome quando aberto em file://.
+   Blob URLs são same-origin, portanto o WebGL aceita sem "tainted". */
 function loadTex(src, cb){
   if(texCache[src]){ cb(texCache[src]); return; }
-  var img = new Image();
-  img.onload = function(){
-    var tex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,img);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-    gl.generateMipmap(gl.TEXTURE_2D);
-    texCache[src]=tex; cb(tex);
+
+  function fromBlob(blob){
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+    img.onload = function(){
+      URL.revokeObjectURL(url);
+      try {
+        var tex = uploadTexture(img);
+        texCache[src] = tex;
+        cb(tex);
+      } catch(e){
+        console.error('texImage2D falhou:', e);
+        cb(null);
+      }
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); cb(null); };
+    img.src = url;
+  }
+
+  /* Tenta XHR (funciona em file:// e HTTP) */
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', src, true);
+  xhr.responseType = 'blob';
+  xhr.onload = function(){
+    /* status 0 = file://, 200 = HTTP */
+    if((xhr.status === 200 || xhr.status === 0) && xhr.response){
+      fromBlob(xhr.response);
+    } else {
+      cb(null);
+    }
   };
-  img.src = src;
+  xhr.onerror = function(){
+    /* Fallback: carrega diretamente (funciona em HTTP) */
+    var img = new Image();
+    img.onload = function(){
+      try { var tex=uploadTexture(img); texCache[src]=tex; cb(tex); }
+      catch(e){ cb(null); }
+    };
+    img.onerror = function(){ cb(null); };
+    img.src = src;
+  };
+  xhr.send();
 }
 
 /* =====================================================
