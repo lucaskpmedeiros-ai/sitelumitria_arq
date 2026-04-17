@@ -150,10 +150,7 @@ em {
 
 .section-title {
   margin-bottom: 18px;
-  background: linear-gradient(135deg, #EBF1FF 55%, #00CFFF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--cyan);
 }
 
 .section-desc {
