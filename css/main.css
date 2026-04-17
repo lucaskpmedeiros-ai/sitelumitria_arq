@@ -2185,7 +2185,10 @@ em {
   line-height: 1.08;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: #FF2B8F;
+  background: linear-gradient(to right, #C8F0FF 0%, #38BEFF 50%, #0090E8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-align: center;
   margin: 0;
 }
