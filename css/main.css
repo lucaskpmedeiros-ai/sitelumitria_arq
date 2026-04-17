@@ -2139,7 +2139,7 @@ em {
    GANCHO — segundo bloco estratégico
    ============================================================ */
 .section-gancho {
-  padding: 120px 0 100px;
+  padding: 110px 0 100px;
   text-align: center;
   position: relative;
 }
@@ -2150,35 +2150,42 @@ em {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 300px;
-  background: radial-gradient(ellipse at center, rgba(0,207,255,0.07) 0%, transparent 70%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(0,207,255,0.06) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .gancho-inner {
-  max-width: 820px;
+  max-width: 860px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
 }
 
-.gancho-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
+.gancho-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--cyan);
-  opacity: 0.7;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0,229,255,0.18);
+  padding: 7px 16px;
+  border-radius: 100px;
 }
 
 .gancho-title {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.08;
   letter-spacing: -0.03em;
   color: var(--text);
   margin: 0;
@@ -2190,10 +2197,11 @@ em {
 }
 
 .gancho-body {
-  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
   line-height: 1.8;
   color: var(--text-2);
-  max-width: 580px;
+  max-width: 600px;
 }
 
 /* ============================================================
