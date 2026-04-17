@@ -2157,33 +2157,33 @@ em {
 }
 
 .gancho-inner {
-  max-width: 900px;
+  max-width: 780px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .gancho-setup {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(0.85rem, 1.4vw, 1rem);
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-2);
-  line-height: 1.6;
+  line-height: 1.7;
   text-align: center;
   margin: 0;
 }
 
 .gancho-payoff {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-size: clamp(1.9rem, 3.6vw, 3.2rem);
   font-weight: 800;
   font-style: italic;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--cyan);
   text-shadow: 0 0 40px rgba(0, 229, 255, 0.45), 0 0 80px rgba(0, 229, 255, 0.2);
