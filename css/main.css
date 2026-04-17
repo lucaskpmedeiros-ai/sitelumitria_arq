@@ -2157,7 +2157,7 @@ em {
 }
 
 .gancho-inner {
-  max-width: 780px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -2179,14 +2179,14 @@ em {
 
 .gancho-payoff {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2.4rem, 5.2vw, 4.6rem);
+  font-size: clamp(2.8rem, 7.2vw, 7rem);
   font-weight: 800;
   font-style: italic;
   line-height: 1.08;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: var(--cyan);
-  text-shadow: 0 0 40px rgba(0, 229, 255, 0.45), 0 0 80px rgba(0, 229, 255, 0.2);
+  color: #FF2B8F;
+  text-shadow: 0 0 40px rgba(255, 43, 143, 0.5), 0 0 90px rgba(255, 43, 143, 0.22);
   text-align: center;
   margin: 0;
 }
