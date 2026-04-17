@@ -249,12 +249,25 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     submitBtn.disabled    = true;
     submitBtn.style.opacity = '0.7';
 
-    /* Simula envio assíncrono */
-    setTimeout(function () {
-      submitBtn.textContent         = 'Mensagem enviada! ✓';
-      submitBtn.style.opacity       = '1';
-      submitBtn.style.background    = 'linear-gradient(135deg,#0A7A42,#085C30)';
+    var company = form.querySelector('#company');
+    var message = form.querySelector('#message');
 
+    fetch('https://formsubmit.co/ajax/lucaskpmedeiros@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        Nome:     name.value.trim(),
+        Email:    email.value.trim(),
+        Empresa:  company  ? company.value.trim()  : '',
+        Mensagem: message  ? message.value.trim()  : '',
+        _subject: 'Nova mensagem — Lumitria'
+      })
+    })
+    .then(function (res) { return res.json(); })
+    .then(function () {
+      submitBtn.textContent      = 'Mensagem enviada! ✓';
+      submitBtn.style.opacity    = '1';
+      submitBtn.style.background = 'linear-gradient(135deg,#0A7A42,#085C30)';
       setTimeout(function () {
         submitBtn.textContent      = originalText;
         submitBtn.disabled         = false;
@@ -262,7 +275,18 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
         submitBtn.style.background = '';
         form.reset();
       }, 3200);
-    }, 1100);
+    })
+    .catch(function () {
+      submitBtn.textContent      = 'Erro ao enviar. Tente novamente.';
+      submitBtn.style.background = 'linear-gradient(135deg,#7A0A0A,#5C0808)';
+      submitBtn.style.opacity    = '1';
+      setTimeout(function () {
+        submitBtn.textContent      = originalText;
+        submitBtn.disabled         = false;
+        submitBtn.style.opacity    = '';
+        submitBtn.style.background = '';
+      }, 3000);
+    });
   });
 }());
 
