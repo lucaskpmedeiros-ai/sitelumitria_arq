@@ -3039,6 +3039,39 @@ em {
   transform: scale(1.03);
 }
 
+/* Botão de play sobreposto — visível apenas em touch quando pausado */
+.sc-play-btn {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.28);
+  transition: background 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.sc-play-btn svg {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  transition: transform 0.18s ease;
+}
+
+.sc-play-btn:active svg {
+  transform: scale(0.88);
+}
+
+.sc-media.touch-video .sc-play-btn {
+  display: flex;
+}
+
+.sc-media.touch-video.is-playing .sc-play-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .sc-chip {
   position: absolute;
   top: 12px;

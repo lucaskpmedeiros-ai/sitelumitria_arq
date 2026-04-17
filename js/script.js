@@ -750,27 +750,52 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
    ============================================================ */
 (function () {
   var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-  var videos  = Array.from(document.querySelectorAll('.sc-video'));
 
-  if (isTouch) {
-    /* Mobile: autoplay assim que o browser permitir (vídeos são muted+playsinline) */
-    videos.forEach(function (v) {
-      v.setAttribute('autoplay', '');
-    });
-    /* Aguarda a reveal animation (~650 ms) e força play — cobre browsers que ignoram autoplay */
-    setTimeout(function () {
-      videos.forEach(function (v) { v.play().catch(function () {}); });
-    }, 700);
-  } else {
-    /* Desktop: poster visível em repouso, toca ao passar o mouse */
-    document.querySelectorAll('.sc-card').forEach(function (card) {
-      var video = card.querySelector('.sc-video');
-      if (!video) return;
+  document.querySelectorAll('.sc-card').forEach(function (card) {
+    var video = card.querySelector('.sc-video');
+    if (!video) return;
+    var media = card.querySelector('.sc-media');
+
+    if (isTouch) {
+      /* Mobile: clique no card toca/pausa o vídeo */
+      media.classList.add('touch-video');
+
+      /* Botão de play sobreposto */
+      var btn = document.createElement('div');
+      btn.className = 'sc-play-btn';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        + '<circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.45)" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>'
+        + '<polygon points="10,8 17,12 10,16" fill="white"/>'
+        + '</svg>';
+      media.appendChild(btn);
+
+      function syncState() {
+        if (video.paused) {
+          media.classList.remove('is-playing');
+        } else {
+          media.classList.add('is-playing');
+        }
+      }
+
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (video.paused) {
+          video.play().catch(function () {});
+        } else {
+          video.pause();
+        }
+      });
+
+      video.addEventListener('play',  syncState);
+      video.addEventListener('pause', syncState);
+
+    } else {
+      /* Desktop: poster visível em repouso, toca ao passar o mouse */
       card.addEventListener('mouseenter', function () { video.play(); });
       card.addEventListener('mouseleave', function () {
         video.pause();
         video.currentTime = 0;
       });
-    });
-  }
+    }
+  });
 }());
