@@ -4,6 +4,12 @@
    Funciona abrindo index.html diretamente no navegador.
    ============================================================ */
 
+/* Sempre abre no topo — impede restauração de scroll do browser */
+if (history.scrollRestoration) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 'use strict';
 
 /* ============================================================
@@ -249,12 +255,25 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     submitBtn.disabled    = true;
     submitBtn.style.opacity = '0.7';
 
-    /* Simula envio assíncrono */
-    setTimeout(function () {
-      submitBtn.textContent         = 'Mensagem enviada! ✓';
-      submitBtn.style.opacity       = '1';
-      submitBtn.style.background    = 'linear-gradient(135deg,#0A7A42,#085C30)';
+    var company = form.querySelector('#company');
+    var message = form.querySelector('#message');
 
+    fetch('https://formsubmit.co/ajax/lucaskpmedeiros@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        Nome:     name.value.trim(),
+        Email:    email.value.trim(),
+        Empresa:  company  ? company.value.trim()  : '',
+        Mensagem: message  ? message.value.trim()  : '',
+        _subject: 'Nova mensagem — Lumitria'
+      })
+    })
+    .then(function (res) { return res.json(); })
+    .then(function () {
+      submitBtn.textContent      = 'Mensagem enviada! ✓';
+      submitBtn.style.opacity    = '1';
+      submitBtn.style.background = 'linear-gradient(135deg,#0A7A42,#085C30)';
       setTimeout(function () {
         submitBtn.textContent      = originalText;
         submitBtn.disabled         = false;
@@ -262,7 +281,18 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
         submitBtn.style.background = '';
         form.reset();
       }, 3200);
-    }, 1100);
+    })
+    .catch(function () {
+      submitBtn.textContent      = 'Erro ao enviar. Tente novamente.';
+      submitBtn.style.background = 'linear-gradient(135deg,#7A0A0A,#5C0808)';
+      submitBtn.style.opacity    = '1';
+      setTimeout(function () {
+        submitBtn.textContent      = originalText;
+        submitBtn.disabled         = false;
+        submitBtn.style.opacity    = '';
+        submitBtn.style.background = '';
+      }, 3000);
+    });
   });
 }());
 
@@ -663,7 +693,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       el.classList.add('fade-enter');
       void el.offsetWidth;
       el.classList.remove('fade-enter');
-    }, 850); /* aguarda a saída terminar */
+    }, 1100); /* aguarda a saída terminar */
   }
 
   /* Pausa longa para dar tempo de ler — troca a cada 7 s */
@@ -696,4 +726,31 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
   /* Clique fora fecha */
   document.addEventListener('click', close);
   visual.addEventListener('click', function (e) { e.stopPropagation(); });
+}());
+
+/* ============================================================
+   SHOWCASE — play/pause nos cards ao hover
+   ============================================================ */
+(function () {
+  var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+  document.querySelectorAll('.sc-card').forEach(function (card) {
+    var video = card.querySelector('.sc-video');
+    if (!video) return;
+
+    if (isTouch) {
+      /* Mobile: autoplay direto, sem precisar tocar */
+      video.setAttribute('autoplay', '');
+      video.play().catch(function () {});
+    } else {
+      /* Desktop: parado, toca ao passar o mouse */
+      card.addEventListener('mouseenter', function () {
+        video.play();
+      });
+      card.addEventListener('mouseleave', function () {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+  });
 }());
