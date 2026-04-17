@@ -50,6 +50,8 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 body {
@@ -59,6 +61,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 img        { display: block; max-width: 100%; }
@@ -1817,6 +1820,11 @@ em {
 /* --- 768px (mobile nav) --- */
 @media (max-width: 768px) {
   :root { --section-pad: 64px; }
+
+  /* Canvas absoluto no mobile — evita jank no scroll */
+  #galaxyCanvas {
+    position: absolute;
+  }
 
   /* Mobile nav slide-in */
   .nav {
