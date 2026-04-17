@@ -2157,54 +2157,38 @@ em {
 }
 
 .gancho-inner {
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
 }
 
-.gancho-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.gancho-setup {
   font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--cyan);
-  background: var(--cyan-dim);
-  border: 1px solid rgba(0,229,255,0.18);
-  padding: 7px 16px;
-  border-radius: 100px;
-}
-
-.gancho-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-  color: var(--text);
+  color: var(--text-2);
+  line-height: 1.6;
+  text-align: center;
   margin: 0;
 }
 
-.gancho-title em {
+.gancho-payoff {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   color: var(--cyan);
-  font-style: normal;
-}
-
-.gancho-body {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(1.15rem, 1.8vw, 1.35rem);
-  font-weight: 500;
-  line-height: 1.7;
-  color: #B8E8FF;
-  text-shadow: 0 0 28px rgba(0, 207, 255, 0.35);
-  max-width: 640px;
-  letter-spacing: 0.01em;
+  text-shadow: 0 0 40px rgba(0, 229, 255, 0.45), 0 0 80px rgba(0, 229, 255, 0.2);
+  text-align: center;
+  margin: 0;
 }
 
 /* ============================================================
