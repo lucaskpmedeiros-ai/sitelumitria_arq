@@ -5,9 +5,7 @@
    ============================================================ */
 
 /* Sempre abre no topo — impede restauração de scroll do browser */
-if (history.scrollRestoration) {
-  history.scrollRestoration = 'manual';
-}
+if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
 window.scrollTo(0, 0);
 
 'use strict';
@@ -103,18 +101,35 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
    4. SCROLL REVEAL — animar elementos ao entrar na viewport
    ============================================================ */
 (function () {
-  var items = document.querySelectorAll('.reveal');
-  if (!items.length || !('IntersectionObserver' in window)) {
-    /* Fallback: mostrar tudo imediatamente */
+  var items = Array.from(document.querySelectorAll('.reveal'));
+  if (!items.length) return;
+
+  /* 1. Capturar quais elementos já estão visíveis ANTES de esconder qualquer coisa.
+        No mobile, scrollTo(0,0) pode ser assíncrono, então getBoundingClientRect()
+        ainda reflete a posição restaurada pelo browser (ex: no meio da showcase). */
+  var vh = window.innerHeight || document.documentElement.clientHeight;
+  var alreadyVisible = items.filter(function (el) {
+    var r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < vh;
+  });
+
+  /* 2. Ativar CSS que esconde os .reveal */
+  document.documentElement.classList.add('js-ready');
+
+  /* 3. Revelar imediatamente os que já estavam na viewport — sem flicker */
+  alreadyVisible.forEach(function (el) { el.classList.add('visible'); });
+
+  if (!('IntersectionObserver' in window)) {
+    /* Fallback: mostrar tudo */
     items.forEach(function (el) { el.classList.add('visible'); });
     return;
   }
 
+  /* 4. Observer para os demais */
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
 
-      /* Escalonar irmãos com classe .reveal no mesmo pai */
       var siblings = Array.from(entry.target.parentNode.querySelectorAll('.reveal'));
       var idx      = siblings.indexOf(entry.target);
       var delay    = idx * 80;
@@ -127,7 +142,9 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
 
-  items.forEach(function (el) { observer.observe(el); });
+  items.forEach(function (el) {
+    if (!el.classList.contains('visible')) { observer.observe(el); }
+  });
 }());
 
 
@@ -729,28 +746,31 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
 }());
 
 /* ============================================================
-   SHOWCASE — play/pause nos cards ao hover
+   SHOWCASE — play/pause nos cards
    ============================================================ */
 (function () {
   var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  var videos  = Array.from(document.querySelectorAll('.sc-video'));
 
-  document.querySelectorAll('.sc-card').forEach(function (card) {
-    var video = card.querySelector('.sc-video');
-    if (!video) return;
-
-    if (isTouch) {
-      /* Mobile: autoplay direto, sem precisar tocar */
-      video.setAttribute('autoplay', '');
-      video.play().catch(function () {});
-    } else {
-      /* Desktop: parado, toca ao passar o mouse */
-      card.addEventListener('mouseenter', function () {
-        video.play();
-      });
+  if (isTouch) {
+    /* Mobile: autoplay assim que o browser permitir (vídeos são muted+playsinline) */
+    videos.forEach(function (v) {
+      v.setAttribute('autoplay', '');
+    });
+    /* Aguarda a reveal animation (~650 ms) e força play — cobre browsers que ignoram autoplay */
+    setTimeout(function () {
+      videos.forEach(function (v) { v.play().catch(function () {}); });
+    }, 700);
+  } else {
+    /* Desktop: poster visível em repouso, toca ao passar o mouse */
+    document.querySelectorAll('.sc-card').forEach(function (card) {
+      var video = card.querySelector('.sc-video');
+      if (!video) return;
+      card.addEventListener('mouseenter', function () { video.play(); });
       card.addEventListener('mouseleave', function () {
         video.pause();
         video.currentTime = 0;
       });
-    }
-  });
+    });
+  }
 }());

@@ -1410,14 +1410,14 @@ em {
   100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
 }
 
-/* Scroll reveal */
-.reveal {
+/* Scroll reveal — visível antes do JS; o JS adiciona .js-ready ao <html> e ativa a animação */
+.js-ready .reveal {
   opacity: 0;
   transform: translateY(22px);
   transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
 }
 
-.reveal.visible {
+.js-ready .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
