@@ -726,17 +726,25 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
    SHOWCASE — play/pause nos cards ao hover
    ============================================================ */
 (function () {
+  var isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
   document.querySelectorAll('.sc-card').forEach(function (card) {
     var video = card.querySelector('.sc-video');
     if (!video) return;
 
-    card.addEventListener('mouseenter', function () {
-      video.play();
-    });
-
-    card.addEventListener('mouseleave', function () {
-      video.pause();
-      video.currentTime = 0;
-    });
+    if (isTouch) {
+      /* Mobile: autoplay direto, sem precisar tocar */
+      video.setAttribute('autoplay', '');
+      video.play().catch(function () {});
+    } else {
+      /* Desktop: parado, toca ao passar o mouse */
+      card.addEventListener('mouseenter', function () {
+        video.play();
+      });
+      card.addEventListener('mouseleave', function () {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
   });
 }());
