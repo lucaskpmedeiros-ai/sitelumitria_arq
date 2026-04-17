@@ -697,3 +697,22 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
   document.addEventListener('click', close);
   visual.addEventListener('click', function (e) { e.stopPropagation(); });
 }());
+
+/* ============================================================
+   SHOWCASE — play/pause nos cards ao hover
+   ============================================================ */
+(function () {
+  document.querySelectorAll('.sc-card').forEach(function (card) {
+    var video = card.querySelector('.sc-video');
+    if (!video) return;
+
+    card.addEventListener('mouseenter', function () {
+      video.play();
+    });
+
+    card.addEventListener('mouseleave', function () {
+      video.pause();
+      video.currentTime = 0;
+    });
+  });
+}());
