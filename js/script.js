@@ -4,6 +4,12 @@
    Funciona abrindo index.html diretamente no navegador.
    ============================================================ */
 
+/* Sempre abre no topo — impede restauração de scroll do browser */
+if (history.scrollRestoration) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 'use strict';
 
 /* ============================================================
