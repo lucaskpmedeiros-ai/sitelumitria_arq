@@ -663,7 +663,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       el.classList.add('fade-enter');
       void el.offsetWidth;
       el.classList.remove('fade-enter');
-    }, 850); /* aguarda a saída terminar */
+    }, 1100); /* aguarda a saída terminar */
   }
 
   /* Pausa longa para dar tempo de ler — troca a cada 7 s */
