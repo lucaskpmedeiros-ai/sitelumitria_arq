@@ -690,12 +690,12 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
   if (!el) return;
 
   var phrases = [
-    'facilita decisões e acelera vendas.',
-    'convence clientes antes da obra.',
-    'elimina dúvidas antes de construir.',
-    'gera confiança no primeiro contato.',
-    'transforma visitas em fechamentos.',
-    'apresenta projetos de forma única.',
+    'imaginar.',
+    'ver antes de existir.',
+    'sentir como seu.',
+    'entender de verdade.',
+    'percorrer antes de comprar.',
+    'visualizar com clareza.',
   ];
 
   var current = 0;
