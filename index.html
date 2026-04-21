@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Seu cliente não compra o que não consegue imaginar. A Lumitria permite que ele caminhe pelo projeto antes de ser construído — e decida no stand, sem ir pra casa pensar.">
-  <title>Lumitria — Seu cliente percorre o projeto antes de ser construído</title>
+  <meta name="description" content="Seu cliente não compra o que não consegue imaginar. A Lumitria permite que ele caminhe pelo projeto antes de ser construído e decida no stand, sem ir pra casa pensar.">
+  <title>Lumitria Seu cliente percorre o projeto antes de ser construído</title>
   <link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
   <link rel="shortcut icon" type="image/x-icon" href="para-vriaricone.ico">
+
+  <!-- Pré-conexão Twinmotion: estabelece TCP/TLS antes do clique -->
+  <link rel="dns-prefetch" href="https://twinmotion.unrealengine.com">
+  <link rel="preconnect" href="https://twinmotion.unrealengine.com">
+  <link rel="prefetch" href="https://twinmotion.unrealengine.com/presentation/v3sLu5078RClI64S">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +67,7 @@
         </h1>
 
         <p class="hero-subtitle">
-          Com a Lumitria, ele caminha pelo projeto antes de ser construído — e decide na hora, sem precisar imaginar.
+          Com a Lumitria, seu cliente caminha pelo projeto antes de ser construído e decide na hora, sem precisar imaginar.
         </p>
 
         <div class="hero-actions">
@@ -90,7 +95,8 @@
           Toque para explorar
         </div>
 
-        <!-- Painel de opções — aparece ao clicar/hover -->
+
+        <!-- Painel de opções aparece ao clicar/hover -->
         <div class="logo-options-panel" id="logoPanel">
           <a href="#contato" class="lopt-card" id="logoOpt1">
             <div class="lopt-card-icon">
@@ -101,7 +107,7 @@
             </div>
             <div class="lopt-card-body">
               <span class="lopt-card-tag">Loteamentos &amp; Incorporadoras</span>
-              <strong class="lopt-card-title">Feche no stand — sem "vou pensar"</strong>
+              <strong class="lopt-card-title">Feche no stand sem "vou pensar"</strong>
               <span class="lopt-card-cta">Falar com especialista →</span>
             </div>
           </a>
@@ -125,13 +131,13 @@
 
     </div>
 
-    <div class="hero-scroll-hint" aria-hidden="true">
+<div class="hero-scroll-hint" aria-hidden="true">
       <div class="scroll-line"></div>
     </div>
   </section>
 
 <!-- ====================================================
-       GANCHO — segundo bloco estratégico
+       GANCHO segundo bloco estratégico
   ==================================================== -->
   <section id="gancho" class="section section-gancho">
     <div class="container">
@@ -143,14 +149,39 @@
   </section>
 
   <!-- ====================================================
-       SHOWCASE — GRID 2×2 DE SOLUÇÕES
+       VÍDEO PROJETO EM MOVIMENTO
+  ==================================================== -->
+  <section id="video-projeto" class="section section-video-projeto">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Veja como seu cliente vai experienciar o projeto</h2>
+        <p class="section-sub">É exatamente isso que o cliente recebe antes de qualquer obra começar.</p>
+      </div>
+
+      <div class="video-projeto-wrap reveal">
+        <video
+          class="video-projeto-player"
+          src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776713639/video_app_funcioando_dqwfkg.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        ></video>
+        <div class="video-projeto-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       SHOWCASE GRID 2×2 DE SOLUÇÕES
   ==================================================== -->
   <section id="showcase" class="section section-showcase">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">O que entregamos</span>
         <h2 class="section-title">Transforme seu projeto<br>em decisão de compra.</h2>
-        <p class="section-desc">Quatro formas do seu cliente percorrer o projeto — e parar de imaginar para começar a decidir.</p>
+        <p class="section-desc">Quatro formas do seu cliente percorrer o projeto e parar de imaginar para começar a decidir.</p>
       </div>
 
       <div class="showcase-grid reveal">
@@ -158,8 +189,8 @@
         <!-- Card 1: Navegação desktop -->
         <div class="sc-card">
           <div class="sc-media">
-            <video src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776433526/WhatsApp_Video_2026-04-17_at_10.43.29_dqf82b.mp4"
-                   poster="https://res.cloudinary.com/dzn9q1rkt/video/upload/so_1/v1776433526/WhatsApp_Video_2026-04-17_at_10.43.29_dqf82b.jpg"
+            <video src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776712612/video_lotemanto_aay69b.mp4"
+                   poster="https://res.cloudinary.com/dzn9q1rkt/video/upload/so_1/v1776712612/video_lotemanto_aay69b.jpg"
                    muted loop playsinline preload="none" class="sc-video"></video>
             <span class="sc-chip">
               <svg viewBox="0 0 24 24" fill="none" width="11" height="11"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -176,8 +207,8 @@
         <!-- Card 2: Insolação solar -->
         <div class="sc-card">
           <div class="sc-media">
-            <video src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776433530/WhatsApp_Video_2026-04-17_at_10.42.03_b8coha.mp4"
-                   poster="https://res.cloudinary.com/dzn9q1rkt/video/upload/so_1/v1776433530/WhatsApp_Video_2026-04-17_at_10.42.03_b8coha.jpg"
+            <video src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776713040/video_solar_12_njxemw.mp4"
+                   poster="https://res.cloudinary.com/dzn9q1rkt/video/upload/so_1/v1776713040/video_solar_12_njxemw.jpg"
                    muted loop playsinline preload="none" class="sc-video"></video>
             <span class="sc-chip sc-chip--yellow">
               <svg viewBox="0 0 24 24" fill="none" width="11" height="11"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l-1.41 1.41M6.34 17.66l-1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -185,7 +216,7 @@
             </span>
           </div>
           <div class="sc-body">
-            <h3>Mostre como o sol entra em cada ambiente — antes da compra.</h3>
+            <h3>Mostre como o sol entra em cada ambiente antes da compra.</h3>
             <p>Simule a incidência solar em qualquer horário do dia: no quarto, na sala, no lote ou em todo o empreendimento. O cliente decide com informação real, não com suposição.</p>
             <a href="#contato" class="sc-link">Quero essa funcionalidade <span>→</span></a>
           </div>
@@ -230,7 +261,7 @@
   </section>
 
 <!-- ====================================================
-       PARA QUEM É — duas trilhas  (movido para cá)
+       PARA QUEM É duas trilhas  (movido para cá)
   ==================================================== -->
   <section id="diferenciais" class="section section-dark">
     <div class="container">
@@ -254,9 +285,9 @@
             <span class="trilha-badge">Loteamentos &amp; Incorporadoras</span>
           </div>
           <h3 class="trilha-title">"Stand cheio. Interesse alto. Na hora de assinar, o cliente trava."</h3>
-          <p class="trilha-desc">Vai pra casa, esfria, some. Você perdeu o momento — não o cliente. Com a Lumitria, ele percorre o loteamento em tempo real, escolhe o lote, entende a orientação solar e decide com segurança. No stand, na hora.</p>
+          <p class="trilha-desc">Vai pra casa, esfria, some. Você perdeu o momento não o cliente. Com a Lumitria, ele percorre o loteamento em tempo real, escolhe o lote, entende a orientação solar e decide com segurança. No stand, na hora.</p>
           <ul class="trilha-benefits">
-            <li><span class="trilha-check">✔</span> Cliente decide no stand — sem ir pra casa pensar</li>
+            <li><span class="trilha-check">✔</span> Cliente decide no stand sem ir pra casa pensar</li>
             <li><span class="trilha-check">✔</span> Ciclo de venda mais curto no lançamento</li>
             <li><span class="trilha-check">✔</span> Menos lote parado, mais caixa entrando</li>
             <li><span class="trilha-check">✔</span> Link disponível pelo WhatsApp para fechar depois</li>
@@ -277,7 +308,7 @@
             <span class="trilha-badge">Arquitetos &amp; Projetos Residenciais</span>
           </div>
           <h3 class="trilha-title">"Meu cliente aprovou tudo na planta. Quando viu a obra, mudou tudo."</h3>
-          <p class="trilha-desc">Revisão 7, revisão 8. Você perde dinheiro, tempo e energia — e ainda fica como vilão. Com a Lumitria, o cliente percorre o projeto antes de aprovar. Entende cada espaço, cada decisão. Aprova com convicção — não com esperança.</p>
+          <p class="trilha-desc">Revisão 7, revisão 8. Você perde dinheiro, tempo e energia e ainda fica como vilão. Com a Lumitria, o cliente percorre o projeto antes de aprovar. Entende cada espaço, cada decisão. Aprova com convicção não com esperança.</p>
           <ul class="trilha-benefits">
             <li><span class="trilha-check">✔</span> Aprovação na primeira apresentação</li>
             <li><span class="trilha-check">✔</span> Zero revisão de obra por falta de entendimento</li>
@@ -300,7 +331,7 @@
             <span class="trilha-badge">Construtoras &amp; Comercial</span>
           </div>
           <h3 class="trilha-title">"Meu cliente não consegue imaginar o projeto só pelo desenho."</h3>
-          <p class="trilha-desc">Nenhuma planta ou imagem estática faz o cliente sentir o espaço. Com a Lumitria, ele percorre os ambientes, entende o fluxo, vê a luz natural em cada horário — e toma a decisão com a cabeça no lugar certo.</p>
+          <p class="trilha-desc">Nenhuma planta ou imagem estática faz o cliente sentir o espaço. Com a Lumitria, ele percorre os ambientes, entende o fluxo, vê a luz natural em cada horário e toma a decisão com a cabeça no lugar certo.</p>
           <ul class="trilha-benefits">
             <li><span class="trilha-check">✔</span> Cliente entende o espaço de verdade</li>
             <li><span class="trilha-check">✔</span> Menos objeções no momento da decisão</li>
@@ -320,9 +351,9 @@
   <section id="demo" class="section section-video">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Experimente agora</span>
-        <h2 class="section-title">Navegue por um projeto real —<br>como seu cliente vai navegar.</h2>
-        <p class="section-desc">O que você vai ver aqui é o que seu cliente recebe. Construído com o mesmo cuidado de cada projeto que entregamos. Experimente antes de decidir.</p>
+        <span class="section-tag">Isso é só o começo</span>
+        <h2 class="section-title">Se isso já é uma revolução<br>de imagem para você —</h2>
+        <p class="section-desc">Imagine percorrer cada ambiente do projeto como se já estivesse lá. Fale com a gente e libere a opção de navegar pelo projeto completo.</p>
       </div>
 
       <div class="tour-preview-wrap">
@@ -341,13 +372,13 @@
           <!-- CTA central -->
           <div class="tour-preview-cta">
             <div class="tour-play-ring">
-              <div class="tour-play-btn" onclick="window.location.href='tour.html'">
+              <div class="tour-play-btn" onclick="window.open('https://wa.me/5519998949137?text=Ol%C3%A1%2C%20quero%20liberar%20a%20op%C3%A7%C3%A3o%20de%20percorrer%20o%20projeto%20completo.','_blank')">
                 <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
                   <path d="M5 3l14 9-14 9V3z" fill="currentColor"/>
                 </svg>
               </div>
             </div>
-            <p class="tour-preview-label">Iniciar tour interativo</p>
+            <p class="tour-preview-label">Falar com a Lumitria</p>
           </div>
 
           <!-- Barra inferior -->
@@ -359,8 +390,8 @@
               </span>
               <span class="tour-preview-title">Projeto em Demonstração</span>
             </div>
-            <a href="tour.html" class="btn-tour-open">
-              Entrar na experiência
+            <a href="https://wa.me/5519998949137?text=Ol%C3%A1%2C%20quero%20liberar%20a%20op%C3%A7%C3%A3o%20de%20percorrer%20o%20projeto%20completo." target="_blank" rel="noopener" class="btn-tour-open">
+              Quero percorrer o projeto
               <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
                 <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
@@ -369,7 +400,7 @@
 
         </div>
         <p class="video-caption">
-          Esta é a experiência que o seu cliente recebe. Mesma qualidade, mesmo cuidado. Quando cases reais estiverem disponíveis, aparecem aqui — com nome, cidade e resultado.
+          Esta é a experiência que o seu cliente recebe. Mesma qualidade, mesmo cuidado. Quando cases reais estiverem disponíveis, aparecem aqui com nome, cidade e resultado.
         </p>
       </div>
     </div>
@@ -383,7 +414,7 @@
       <div class="section-header">
         <span class="section-tag">Como funciona</span>
         <h2 class="section-title">Simples para você.<br>Decisivo para o seu cliente.</h2>
-        <p class="section-desc">Quatro etapas. Sem complexidade técnica da sua parte. Você envia o projeto — a gente entrega a experiência pronta para vender.</p>
+        <p class="section-desc">Quatro etapas. Sem complexidade técnica da sua parte. Você envia o projeto a gente entrega a experiência pronta para vender.</p>
       </div>
 
       <div class="process-steps">
@@ -392,7 +423,7 @@
           <div class="step-num">01</div>
           <div class="step-content">
             <h3>Você nos envia o projeto</h3>
-            <p>Revit, SKP, DXF, FBX ou OBJ — os formatos mais usados no mercado. Sem burocracia. Você envia, a gente cuida do resto.</p>
+            <p>Revit, SKP, DXF, FBX ou OBJ os formatos mais usados no mercado. Sem burocracia. Você envia, a gente cuida do resto.</p>
           </div>
         </div>
 
@@ -400,15 +431,15 @@
           <div class="step-num">02</div>
           <div class="step-content">
             <h3>A gente transforma em experiência navegável</h3>
-            <p>Materiais, iluminação, luz natural, orientação solar. Seu cliente vai caminhar por cada ambiente como se estivesse lá — antes da obra existir.</p>
+            <p>Materiais, iluminação, luz natural, orientação solar. Seu cliente vai caminhar por cada ambiente como se estivesse lá antes da obra existir.</p>
           </div>
         </div>
 
         <div class="process-step reveal">
           <div class="step-num">03</div>
           <div class="step-content">
-            <h3>Você apresenta — no stand, na reunião ou pelo celular</h3>
-            <p>No stand: online com backup offline automático. Se a internet cair, o cliente não percebe. Pelo celular: envie o link pelo WhatsApp após a visita — disponível para quem tiver boa conexão.</p>
+            <h3>Você apresenta no stand, na reunião ou pelo celular</h3>
+            <p>No stand: online com backup offline automático. Se a internet cair, o cliente não percebe. Pelo celular: envie o link pelo WhatsApp após a visita disponível para quem tiver boa conexão.</p>
           </div>
         </div>
 
@@ -416,7 +447,7 @@
           <div class="step-num">04</div>
           <div class="step-content">
             <h3>Seu cliente entende, decide e assina</h3>
-            <p>Ele não precisa mais imaginar. Percorreu o projeto. Sentiu o espaço. Entendeu o que está comprando. Agora está pronto para assinar — no stand ou depois, pela tela.</p>
+            <p>Ele não precisa mais imaginar. Percorreu o projeto. Sentiu o espaço. Entendeu o que está comprando. Agora está pronto para assinar no stand ou depois, pela tela.</p>
           </div>
         </div>
 
@@ -432,7 +463,7 @@
       <div class="section-header">
         <span class="section-tag">O que muda</span>
         <h2 class="section-title">O que acontece quando<br>o cliente finalmente entende.</h2>
-        <p class="section-desc">Não é sobre impressionar. É sobre o cliente parar de hesitar — e começar a decidir.</p>
+        <p class="section-desc">Não é sobre impressionar. É sobre o cliente parar de hesitar e começar a decidir.</p>
       </div>
 
       <div class="tech-grid">
@@ -460,7 +491,7 @@
           </div>
           <div>
             <h3>Você se diferencia sem precisar explicar por quê</h3>
-            <p>Enquanto o concorrente mostra planta e render estático, você coloca o cliente dentro do projeto. A diferença é imediata — e o cliente sente isso.</p>
+            <p>Enquanto o concorrente mostra planta e render estático, você coloca o cliente dentro do projeto. A diferença é imediata e o cliente sente isso.</p>
             <div class="tech-tags">
               <span>Diferencial real</span><span>Valor percebido maior</span><span>Posição de autoridade</span>
             </div>
@@ -475,7 +506,7 @@
           </div>
           <div>
             <h3>O stand de vendas para de depender da imaginação do cliente</h3>
-            <p>A apresentação roda com backup offline automático. Se a internet cair, a experiência continua. O corretor foca em fechar — não em pedir desculpas pela conexão.</p>
+            <p>A apresentação roda com backup offline automático. Se a internet cair, a experiência continua. O corretor foca em fechar não em pedir desculpas pela conexão.</p>
             <div class="tech-tags">
               <span>Online + offline</span><span>Stand sempre funcionando</span><span>Zero interrupção</span>
             </div>
@@ -490,7 +521,7 @@
           </div>
           <div>
             <h3>O link que continua vendendo depois do stand</h3>
-            <p>Depois da visita, o corretor envia o link pelo WhatsApp. O cliente acessa em casa, mostra pra família, revisita os ambientes — e volta pra fechar.</p>
+            <p>Depois da visita, o corretor envia o link pelo WhatsApp. O cliente acessa em casa, mostra pra família, revisita os ambientes e volta pra fechar.</p>
             <div class="tech-tags">
               <span>Link disponível</span><span>Acesso pelo celular</span><span>Decisão em família</span>
             </div>
@@ -516,7 +547,7 @@
         <div class="stat-card reveal">
           <span class="stat-value" style="font-size:1.6rem; line-height:1.2">Sem<br>"vou pensar"</span>
           <span class="stat-label">No stand</span>
-          <p class="stat-desc">Quem percorreu o projeto decide no stand. Não vai pra casa imaginar — porque já esteve lá.</p>
+          <p class="stat-desc">Quem percorreu o projeto decide no stand. Não vai pra casa imaginar porque já esteve lá.</p>
         </div>
 
         <div class="stat-card reveal">
@@ -549,7 +580,7 @@
       <div class="section-header">
         <span class="section-tag">Quem já usou</span>
         <h2 class="section-title">Quem já apresentou assim<br>não quer voltar atrás.</h2>
-        <p class="section-desc">Loteadores, construtoras e investidores que deixaram o cliente percorrer o projeto — e viram a diferença na hora do fechamento.</p>
+        <p class="section-desc">Loteadores, construtoras e investidores que deixaram o cliente percorrer o projeto e viram a diferença na hora do fechamento.</p>
       </div>
 
       <div class="testi-grid">
@@ -563,12 +594,12 @@
             <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.953 2.878c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/></svg>
             <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.953 2.878c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/></svg>
           </div>
-          <p class="testi-text">"A interatividade da Lumitria é incrível. Proporcionou que meus clientes entendessem o projeto do loteamento e pudessem comprar antes mesmo de terminar a obra — concluímos todas as vendas. A alegria deles de ver a análise solar de cada terreno antes de decidir foi visível, e o loteamento valorizou bastante pela alta procura."</p>
+          <p class="testi-text">"A interatividade da Lumitria é incrível. Proporcionou que meus clientes entendessem o projeto do loteamento e pudessem comprar antes mesmo de terminar a obra concluímos todas as vendas. A alegria deles de ver a análise solar de cada terreno antes de decidir foi visível, e o loteamento valorizou bastante pela alta procura."</p>
           <div class="testi-author">
             <img src="https://ui-avatars.com/api/?name=Joao+Guimaraes&background=0a0e1a&color=00CFFF&size=80&bold=true&font-size=0.38&rounded=true" alt="João Guimarães" class="testi-avatar">
             <div class="testi-info">
               <span class="testi-name">João Guimarães</span>
-              <span class="testi-role">Proprietário · Loteamento Alto do Mirante — Chapada Diamantina, BA</span>
+              <span class="testi-role">Proprietário · Loteamento Alto do Mirante Chapada Diamantina, BA</span>
             </div>
           </div>
         </div>
@@ -582,7 +613,7 @@
             <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.953 2.878c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/></svg>
             <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.953 2.878c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/></svg>
           </div>
-          <p class="testi-text">"Fiquei impressionado como a interatividade é decisiva na hora da compra. O cliente para, explora, questiona — e decide. Não é mais uma apresentação, é uma experiência que move o cliente para o fechamento de um jeito que nenhuma maquete ou imagem consegue."</p>
+          <p class="testi-text">"Fiquei impressionado como a interatividade é decisiva na hora da compra. O cliente para, explora, questiona e decide. Não é mais uma apresentação, é uma experiência que move o cliente para o fechamento de um jeito que nenhuma maquete ou imagem consegue."</p>
           <div class="testi-author">
             <img src="https://ui-avatars.com/api/?name=Fernando+Lima&background=0a0e1a&color=00CFFF&size=80&bold=true&font-size=0.38&rounded=true" alt="Fernando Lima" class="testi-avatar">
             <div class="testi-info">
@@ -601,7 +632,7 @@
             <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.953 2.878c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/></svg>
             <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.953 2.878c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/></svg>
           </div>
-          <p class="testi-text">"A família amou. Puderam andar pelo projeto inteiro antes mesmo da obra começar, entendendo cada detalhe e já se imaginando dentro da própria casa. Sem contar que aumentou muito o valor percebido pelos meus clientes — foi decisivo para o fechamento."</p>
+          <p class="testi-text">"A família amou. Puderam andar pelo projeto inteiro antes mesmo da obra começar, entendendo cada detalhe e já se imaginando dentro da própria casa. Sem contar que aumentou muito o valor percebido pelos meus clientes foi decisivo para o fechamento."</p>
           <div class="testi-author">
             <img src="https://ui-avatars.com/api/?name=Luciano+Blanco&background=0a0e1a&color=00CFFF&size=80&bold=true&font-size=0.38&rounded=true" alt="Luciano Blanco" class="testi-avatar">
             <div class="testi-info">
@@ -650,7 +681,7 @@
         <div class="contact-content">
           <span class="section-tag">Fale com a gente</span>
           <h2 class="section-title">Seu cliente merece<br>entender o que está comprando.</h2>
-          <p class="section-desc">Fale com a gente. Entendemos seu projeto e montamos uma proposta direta — sem enrolação.</p>
+          <p class="section-desc">Fale com a gente. Entendemos seu projeto e montamos uma proposta direta sem enrolação.</p>
 
           <ul class="contact-info">
             <li>
@@ -711,7 +742,7 @@
         <a href="#" class="logo">
           <img src="assets/images/logo-lumitria.png" alt="Lumitria" class="logo-img">
         </a>
-        <p>Experiências interativas 3D que transformam projetos em decisões — para loteamentos, residenciais e empreendimentos comerciais.</p>
+        <p>Experiências interativas 3D que transformam projetos em decisões para loteamentos, residenciais e empreendimentos comerciais.</p>
         <div class="footer-social">
           <a href="#" aria-label="LinkedIn" class="social-link">
             <svg viewBox="0 0 24 24" fill="none" width="17" height="17">
@@ -777,5 +808,24 @@
   </footer>
 
   <script src="js/script.js"></script>
+  <script>
+    // Pré-carrega o Twinmotion quando o usuário passa o mouse no card
+    (function () {
+      var frame = document.getElementById('demoFrame');
+      var url = 'https://twinmotion.unrealengine.com/presentation/v3sLu5078RClI64S';
+      var prefetched = false;
+      if (!frame) return;
+      frame.addEventListener('mouseenter', function () {
+        if (prefetched) return;
+        prefetched = true;
+        var link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+        // warm up a fetch too so the page starts downloading
+        fetch(url, { mode: 'no-cors', credentials: 'omit' }).catch(function(){});
+      }, { once: true });
+    })();
+  </script>
 </body>
 </html>

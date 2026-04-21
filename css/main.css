@@ -213,13 +213,12 @@ em {
 /* Ghost / outline */
 .btn-ghost {
   color: var(--text-2);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: none;
   background: transparent;
 }
 .btn-ghost:hover {
   color: var(--text);
-  border-color: var(--cyan);
-  background: var(--cyan-dim);
+  background: transparent;
 }
 
 /* Nav CTA */
@@ -3068,6 +3067,51 @@ em {
 }
 
 /* ============================================================
+   VÍDEO PROJETO
+   ============================================================ */
+.section-video-projeto {
+  border-top: 1px solid var(--border);
+}
+
+.video-projeto-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #06080F;
+  box-shadow: 0 0 80px rgba(0,229,255,0.06);
+}
+
+.video-projeto-player {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.video-projeto-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 60px rgba(0,229,255,0.04);
+}
+
+.demo-btn:hover {
+  background: #00cfff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,229,255,0.3);
+}
+
+.demo-hint {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+/* ============================================================
    SHOWCASE GRID 2×2
    ============================================================ */
 .section-showcase {
@@ -3236,5 +3280,140 @@ em {
 
   .sc-media {
     aspect-ratio: 16 / 9;
+  }
+}
+
+/* ============================================================
+   MOBILE — ajustes gerais (≤ 768px)
+   Não altera nada no desktop.
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* ── Hero ── */
+  .hero {
+    padding: 80px 0 48px;
+    min-height: 100svh; /* usa altura visual real no mobile */
+  }
+
+  .hero-badge {
+    font-size: 0.72rem;
+    padding: 6px 13px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.9rem, 8vw, 2.8rem);
+    line-height: 1.15;
+    max-width: 100%;
+  }
+
+  .hero-subtitle {
+    font-size: 0.97rem;
+    max-width: 100%;
+  }
+
+  /* Botões do hero: empilha verticalmente */
+  .hero-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Logo options panel: empilha os cards verticalmente */
+  .logo-options-panel {
+    flex-direction: column;
+    gap: 10px;
+    width: min(280px, 90vw);
+    bottom: -8px;
+  }
+
+  .lopt-card {
+    width: 100%;
+  }
+
+  /* Reduz o visual do hero para caber na tela */
+  .hero-visual {
+    height: 300px;
+  }
+
+  .vring-1 { width: 260px; height: 260px; }
+  .vring-2 { width: 188px; height: 188px; }
+  .vring-3 { width: 124px; height: 124px; }
+
+  .visual-core {
+    width: 160px;
+    height: 160px;
+  }
+
+  /* ── Gancho ── */
+  .gancho-setup,
+  .gancho-payoff {
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+  }
+
+  /* ── Section headers ── */
+  .section-title {
+    font-size: clamp(1.6rem, 6.5vw, 2.2rem);
+  }
+
+  /* ── Stats: força 1 coluna abaixo de 480px ── */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .stat-card {
+    padding: 24px 18px;
+  }
+
+  /* Stat values com estilo inline: garante que não transbordam */
+  .stat-value {
+    font-size: 1.3rem !important;
+    line-height: 1.25 !important;
+    word-break: keep-all;
+  }
+
+  /* ── Depoimentos: 1 coluna ── */
+  .testi-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* ── CTA mid ── */
+  .cta-mid-title {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+
+  /* ── Contato ── */
+  .contact-form {
+    padding: 24px 16px;
+  }
+
+  /* ── Processo ── */
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* ── Footer ── */
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* ── 480px: itens extra-pequenos ── */
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions .btn {
+    font-size: 0.9rem;
+    padding: 14px 18px;
   }
 }

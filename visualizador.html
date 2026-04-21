@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualizador — Lumitria</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="dns-prefetch" href="https://twinmotion.unrealengine.com">
+  <link rel="preconnect" href="https://twinmotion.unrealengine.com">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cyan:      #00E5FF;
+      --cyan-dim:  rgba(0,229,255,0.10);
+      --cyan-glow: rgba(0,229,255,0.20);
+      --bg:        #06080F;
+      --bg-card:   rgba(13,21,38,0.85);
+      --border:    rgba(0,229,255,0.09);
+      --border-h:  rgba(0,229,255,0.28);
+      --text:      #EBF1FF;
+      --text-2:    #8CA0BC;
+      --text-muted:#4D637D;
+      --radius:    12px;
+      --radius-lg: 18px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Layout principal ── */
+    .viewer-layout {
+      display: grid;
+      grid-template-rows: 84px 1fr 80px;
+      height: 100vh;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(6,8,15,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+
+    .topbar-logo img {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid rgba(0,229,255,0.28);
+      box-shadow: 0 0 20px rgba(0,229,255,0.18);
+      display: block;
+      transition: box-shadow 0.3s ease, filter 0.3s ease;
+    }
+
+    .topbar-logo img:hover {
+      box-shadow: 0 0 32px rgba(0,229,255,0.35);
+      filter: brightness(1.12);
+    }
+
+    .topbar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .topbar-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .topbar-badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,229,255,0.5); }
+      50%       { opacity: 0.6; box-shadow: 0 0 0 4px rgba(0,229,255,0); }
+    }
+
+    /* ── Loading overlay ── */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 48px;
+      background: #06080F;
+      transition: opacity 0.8s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .loading-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(6,8,15,0.75) 0%, rgba(6,8,15,0.15) 60%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .loading-info {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .loading-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.92);
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+    }
+
+    .loading-sublabel {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Botão ativar som — canto superior direito */
+    .loading-unmute {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 3;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.85);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      animation: pulse-btn 2s ease-in-out infinite;
+    }
+
+    .loading-unmute.show { display: flex; }
+
+    @keyframes pulse-btn {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.65; }
+    }
+
+    /* ── Barra de controles do vídeo ── */
+    .loading-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      padding: 12px 24px 18px;
+      background: linear-gradient(to top, rgba(6,8,15,0.92) 0%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Barra de progresso */
+    .loading-progress {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .loading-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--cyan);
+      border-radius: 2px;
+      pointer-events: none;
+      transition: width 0.1s linear;
+    }
+
+    .loading-progress-thumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.15s;
+      pointer-events: none;
+    }
+
+    .loading-progress:hover .loading-progress-thumb {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Linha de botões + tempo */
+    .loading-ctrl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .loading-ctrl-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ctrl-vid-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.85);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .ctrl-vid-btn:hover {
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.28);
+    }
+
+    .ctrl-vid-btn.play-pause { width: 40px; height: 40px; }
+
+    .loading-time {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.03em;
+    }
+
+    /* Botão pular — direita da ctrl-row */
+    .loading-skip-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .loading-skip-warning {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      color: rgba(255,200,80,0.7);
+      text-align: right;
+    }
+
+    .loading-skip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .loading-skip:hover {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── Área central (iframe) ── */
+    .viewer-main {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viewer-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #080c16;
+    }
+
+
+    /* ── Card "Desenvolvido por Lumitria" sobre badge do Twinmotion ── */
+    .iframe-devby-card {
+      position: absolute;
+      top: 7px;
+      right: 148px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      padding: 6px 14px;
+      background: rgba(10,14,24,0.95);
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.07);
+      pointer-events: none;
+    }
+
+    .iframe-devby-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      white-space: nowrap;
+    }
+
+    /* logo circle ao lado */
+    .iframe-logo-beside {
+      position: absolute;
+      top: 9px;
+      right: 72px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .iframe-logo-beside img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(255,255,255,0.45);
+    }
+
+    /* Fallback overlay (se iframe bloquear) */
+    .iframe-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      background: rgba(6,8,15,0.96);
+      z-index: 6;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .iframe-fallback.visible { display: flex; }
+
+    .fallback-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,229,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,229,255,0.08);
+    }
+
+    .fallback-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .fallback-sub {
+      font-size: 0.85rem;
+      color: var(--text-2);
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    .btn-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: var(--cyan);
+      color: #06080F;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-enter:hover {
+      background: #00cfff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,229,255,0.28);
+    }
+
+    /* ── Barra inferior de controles ── */
+    .controlbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-top: 1px solid var(--border);
+      background: rgba(6,8,15,0.95);
+      backdrop-filter: blur(12px);
+      gap: 16px;
+    }
+
+    .ctrl-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .ctrl-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .ctrl-item svg {
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .ctrl-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ctrl-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--border-h);
+      color: var(--text);
+      background: rgba(0,229,255,0.05);
+    }
+
+    .ctrl-btn.primary {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #06080F;
+      font-weight: 700;
+    }
+
+    .ctrl-btn.primary:hover {
+      background: #00cfff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="viewer-layout">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <img src="assets/images/logo-lumitria.png" alt="Lumitria" />
+    </div>
+    <div class="topbar-title">Visualizador de Projeto</div>
+    <div class="topbar-badge">
+      <span class="dot"></span>
+      Projeto ao vivo
+    </div>
+  </header>
+
+  <!-- Tela central — iframe direto -->
+  <main class="viewer-main">
+
+    <!-- Loading overlay com vídeo -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <video id="loadingVideo" class="loading-video"
+        src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776792173/WhatsApp_Video_2026-04-21_at_14.20.07_oru06m.mp4"
+        playsinline preload="auto"></video>
+      <button class="loading-unmute" id="loadingUnmute">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+        Toque para ativar o som
+      </button>
+      <div class="loading-info">
+        <div class="loading-label">Assista ao tutorial para navegar pelo seu projeto</div>
+        <div class="loading-sublabel">Veja como aproveitar ao máximo a experiência interativa</div>
+      </div>
+
+      <!-- Controles do vídeo -->
+      <div class="loading-controls">
+        <div class="loading-progress" id="vidProgress">
+          <div class="loading-progress-fill" id="vidFill"></div>
+          <div class="loading-progress-thumb" id="vidThumb"></div>
+        </div>
+        <div class="loading-ctrl-row">
+          <div class="loading-ctrl-left">
+            <!-- Voltar 10s -->
+            <button class="ctrl-vid-btn" id="vidBack" title="Voltar 10s">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.5 3a9 9 0 100 18 9 9 0 000-18zm0 2a7 7 0 110 14 7 7 0 010-14z" opacity="0"/>
+                <text x="12" y="0" font-size="0"/>
+              </svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/>
+                <text x="12" y="16" font-size="7" fill="currentColor" stroke="none" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700">10</text>
+              </svg>
+            </button>
+            <!-- Play/Pause -->
+            <button class="ctrl-vid-btn play-pause" id="vidPlayPause" title="Play/Pause">
+              <svg id="iconPlay" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="iconPause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+            <!-- Avançar 10s -->
+            <button class="ctrl-vid-btn" id="vidFwd" title="Avançar 10s">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5"/>
+                <text x="12" y="16" font-size="7" fill="currentColor" stroke="none" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700">10</text>
+              </svg>
+            </button>
+            <span class="loading-time" id="vidTime">0:00 / 0:00</span>
+          </div>
+          <div class="loading-skip-wrap">
+            <div class="loading-skip-warning">⚠ Pule só se já assistiu</div>
+            <button class="loading-skip" id="loadingSkip">Já vi, pular →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <iframe
+      id="twiframe"
+      class="viewer-iframe"
+      src="https://twinmotion.unrealengine.com/presentation/v3sLu5078RClI64S"
+      allow="fullscreen; accelerometer; gyroscope; xr-spatial-tracking"
+      allowfullscreen
+    ></iframe>
+
+
+
+    <!-- Fallback se iframe bloquear -->
+    <div class="iframe-fallback" id="fallbackOverlay">
+      <div class="fallback-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--cyan)">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+      <div class="fallback-title">Abrir em nova janela</div>
+      <div class="fallback-sub">O projeto usa tecnologia que exige janela própria para funcionar em plena capacidade.</div>
+      <a class="btn-enter" href="https://twinmotion.unrealengine.com/presentation/v3sLu5078RClI64S" target="_blank" rel="noopener">
+        Entrar na experiência →
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Barra de controles -->
+  <footer class="controlbar">
+    <div class="ctrl-left">
+      <div class="ctrl-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+        </svg>
+        Tour 360°
+      </div>
+      <div class="ctrl-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+        </svg>
+        Navegação livre
+      </div>
+      <div class="ctrl-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/>
+        </svg>
+        Alta resolução
+      </div>
+    </div>
+
+    <div class="ctrl-right">
+      <a class="ctrl-btn" href="proposta-arquiteto.html" target="_blank">
+        Ver proposta →
+      </a>
+      <a class="ctrl-btn primary" href="https://wa.me/5519998949137?text=Ol%C3%A1%2C%20acabei%20de%20ver%20o%20visualizador%20da%20Lumitria%20e%20quero%20saber%20mais." target="_blank" rel="noopener">
+        Falar pelo WhatsApp
+      </a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  var iframe      = document.getElementById('twiframe');
+  var loading     = document.getElementById('loadingOverlay');
+  var loadVid     = document.getElementById('loadingVideo');
+  var skipBtn     = document.getElementById('loadingSkip');
+  var unmuteBtn   = document.getElementById('loadingUnmute');
+  var fallback    = document.getElementById('fallbackOverlay');
+  var vidFill     = document.getElementById('vidFill');
+  var vidThumb    = document.getElementById('vidThumb');
+  var vidProgress = document.getElementById('vidProgress');
+  var vidTime     = document.getElementById('vidTime');
+  var playPause   = document.getElementById('vidPlayPause');
+  var iconPlay    = document.getElementById('iconPlay');
+  var iconPause   = document.getElementById('iconPause');
+  var hidden      = false;
+
+  function fmt(s) {
+    var m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function hideLoading() {
+    if (hidden || !loading) return;
+    hidden = true;
+    loading.classList.add('hidden');
+    setTimeout(function () { loading.style.display = 'none'; }, 900);
+  }
+
+  if (loadVid) {
+    loadVid.muted = false;
+    loadVid.play().catch(function () {
+      loadVid.muted = true;
+      loadVid.play().catch(function(){});
+      if (unmuteBtn) unmuteBtn.classList.add('show');
+    });
+
+    loadVid.addEventListener('ended', hideLoading);
+
+    // Atualiza barra de progresso e tempo
+    loadVid.addEventListener('timeupdate', function () {
+      if (!loadVid.duration) return;
+      var pct = (loadVid.currentTime / loadVid.duration) * 100;
+      if (vidFill) vidFill.style.width = pct + '%';
+      if (vidThumb) vidThumb.style.left = pct + '%';
+      if (vidTime) vidTime.textContent = fmt(loadVid.currentTime) + ' / ' + fmt(loadVid.duration);
+    });
+
+    loadVid.addEventListener('play',  function () { if (iconPlay) iconPlay.style.display = 'none';  if (iconPause) iconPause.style.display = ''; });
+    loadVid.addEventListener('pause', function () { if (iconPlay) iconPlay.style.display = '';      if (iconPause) iconPause.style.display = 'none'; });
+  }
+
+  // Play / Pause
+  if (playPause) {
+    playPause.addEventListener('click', function () {
+      loadVid.paused ? loadVid.play() : loadVid.pause();
+    });
+  }
+
+  // Voltar 10s
+  var btnBack = document.getElementById('vidBack');
+  if (btnBack) btnBack.addEventListener('click', function () { loadVid.currentTime = Math.max(0, loadVid.currentTime - 10); });
+
+  // Avançar 10s
+  var btnFwd = document.getElementById('vidFwd');
+  if (btnFwd) btnFwd.addEventListener('click', function () { loadVid.currentTime = Math.min(loadVid.duration, loadVid.currentTime + 10); });
+
+  // Seek na barra de progresso
+  if (vidProgress) {
+    vidProgress.addEventListener('click', function (e) {
+      var rect = vidProgress.getBoundingClientRect();
+      var pct = (e.clientX - rect.left) / rect.width;
+      loadVid.currentTime = pct * loadVid.duration;
+    });
+  }
+
+  // Botão ativar som
+  if (unmuteBtn) {
+    unmuteBtn.addEventListener('click', function () {
+      loadVid.muted = false;
+      loadVid.volume = 1;
+      unmuteBtn.style.display = 'none';
+    });
+  }
+
+  if (skipBtn) skipBtn.addEventListener('click', hideLoading);
+
+  iframe.addEventListener('load', function () {
+    try {
+      var loc = iframe.contentWindow.location.href;
+      if (loc.indexOf('browser-unsupported') !== -1) fallback.classList.add('visible');
+    } catch (e) {}
+  });
+</script>
+
+</body>
+</html>

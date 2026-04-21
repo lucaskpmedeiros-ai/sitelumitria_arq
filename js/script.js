@@ -720,6 +720,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
 /* ============================================================
    12. LOGO INTERATIVO — expandir opções ao clicar/hover
    ============================================================ */
+
 (function () {
   var visual = document.getElementById('heroVisual');
   var core   = document.getElementById('logoCore');
