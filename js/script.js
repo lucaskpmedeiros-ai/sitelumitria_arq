@@ -384,17 +384,21 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     }
   }
 
-  /* ── nebulosas tech ── */
+  /* ── nebulosas panorâmicas em camadas de profundidade ── */
   function buildNebulas() {
     nebulas = [];
-    /* Grande nebulosa cyan no centro-alto */
-    nebulas.push({ x:0.50, y:0.20, rx:W*0.55, ry:H*0.30, r:0, g:229, b:255, a:0.055, layer:0 });
-    /* Nebulosa roxo no canto inferior esquerdo */
-    nebulas.push({ x:0.12, y:0.80, rx:W*0.45, ry:H*0.35, r:120, g:80, b:255, a:0.045, layer:0 });
-    /* Nebulosa azul profundo direita */
-    nebulas.push({ x:0.88, y:0.45, rx:W*0.38, ry:H*0.38, r:0, g:120, b:255, a:0.040, layer:0 });
-    /* Nebulosa cyan fraca no centro */
-    nebulas.push({ x:0.50, y:0.60, rx:W*0.30, ry:H*0.25, r:0, g:200, b:255, a:0.025, layer:1 });
+    /* Camada fundo — nebulosa grande roxo-azul, cria horizonte */
+    nebulas.push({ x:0.50, y:0.55, rx:W*0.80, ry:H*0.50, r:60,  g:40,  b:200, a:0.060, layer:0 });
+    /* Camada meio — cyan no topo, como aurora */
+    nebulas.push({ x:0.50, y:0.10, rx:W*0.65, ry:H*0.38, r:0,   g:180, b:255, a:0.055, layer:0 });
+    /* Nuvem esquerda */
+    nebulas.push({ x:0.08, y:0.42, rx:W*0.40, ry:H*0.45, r:40,  g:0,   b:180, a:0.048, layer:1 });
+    /* Nuvem direita */
+    nebulas.push({ x:0.92, y:0.38, rx:W*0.38, ry:H*0.42, r:0,   g:100, b:220, a:0.042, layer:1 });
+    /* Glow central brilhante — ponto de fuga */
+    nebulas.push({ x:0.50, y:0.45, rx:W*0.22, ry:H*0.22, r:0,   g:229, b:255, a:0.035, layer:2 });
+    /* Horizonte inferior escuro */
+    nebulas.push({ x:0.50, y:1.05, rx:W*1.20, ry:H*0.30, r:0,   g:0,   b:0,   a:0.70,  layer:0 });
   }
 
   /* ── desenho nebulosas ── */
@@ -402,35 +406,21 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     nebulas.forEach(function(n) {
       var ox = mouse.cx * PARALLAX[n.layer], oy = mouse.cy * PARALLAX[n.layer];
       var cx = n.x * W + ox, cy = n.y * H + oy;
+      var scaleY = n.ry / n.rx;
       ctx.save();
-      ctx.scale(1, n.ry / n.rx);
-      var gr = ctx.createRadialGradient(cx, cy * (n.rx/n.ry), 0, cx, cy * (n.rx/n.ry), n.rx);
+      ctx.scale(1, scaleY);
+      var gcx = cx, gcy = cy / scaleY;
+      var gr = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, n.rx);
       gr.addColorStop(0,    'rgba('+n.r+','+n.g+','+n.b+','+n.a+')');
-      gr.addColorStop(0.40, 'rgba('+n.r+','+n.g+','+n.b+','+(n.a*0.45)+')');
-      gr.addColorStop(0.75, 'rgba('+n.r+','+n.g+','+n.b+','+(n.a*0.12)+')');
+      gr.addColorStop(0.38, 'rgba('+n.r+','+n.g+','+n.b+','+(n.a*0.50)+')');
+      gr.addColorStop(0.70, 'rgba('+n.r+','+n.g+','+n.b+','+(n.a*0.15)+')');
       gr.addColorStop(1,    'rgba('+n.r+','+n.g+','+n.b+',0)');
       ctx.fillStyle = gr;
       ctx.beginPath();
-      ctx.arc(cx, cy * (n.rx/n.ry), n.rx, 0, Math.PI*2);
+      ctx.arc(gcx, gcy, n.rx, 0, Math.PI*2);
       ctx.fill();
       ctx.restore();
     });
-  }
-
-  /* ── grid tech ── */
-  function drawGrid() {
-    var sz = 80;
-    var ox = (mouse.cx * 6) % sz, oy = (mouse.cy * 6) % sz;
-    ctx.save();
-    ctx.strokeStyle = 'rgba(0,229,255,0.04)';
-    ctx.lineWidth   = 0.5;
-    for (var x = ox; x < W + sz; x += sz) {
-      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
-    }
-    for (var y = oy; y < H + sz; y += sz) {
-      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
-    }
-    ctx.restore();
   }
 
   /* ── linhas de conexão entre nodes ── */
@@ -595,7 +585,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     mouse.cy += (mouse.ty - mouse.cy) * 0.055;
 
     ctx.clearRect(0, 0, W, H);
-    drawGrid();
     drawNebulas();
     drawConnections(t);
     drawStars(t);
