@@ -3417,3 +3417,112 @@ em {
     padding: 14px 18px;
   }
 }
+
+/* ============================================================
+   MOBILE — container e overflow
+   ============================================================ */
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  body { overflow-x: hidden; }
+}
+
+/* ============================================================
+   MOBILE — centralizações e alinhamentos (≤ 900px)
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* ── Seção Solar ── */
+  .solar-content-col {
+    align-items: center;
+    text-align: center;
+  }
+  .solar-bullets {
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+  }
+
+  /* ── Seção Totem ── */
+  .totem-content-col {
+    align-items: center;
+    text-align: center;
+  }
+  .totem-desc { max-width: 100%; }
+  .totem-bullets {
+    text-align: left;
+    width: 100%;
+  }
+
+  /* ── Seção VR ── */
+  .vr-text {
+    text-align: center;
+  }
+  .vr-text .section-tag,
+  .vr-text .section-title,
+  .vr-text .section-desc {
+    text-align: center;
+  }
+  .vr-features { align-items: center; }
+
+  /* ── Seção nav-desktop ── */
+  .nav-desktop-text {
+    align-items: center;
+    text-align: center;
+  }
+  .nav-desktop-title,
+  .nav-desktop-desc { text-align: center; }
+
+  /* ── CTA mid ── */
+  .cta-mid-left { text-align: center; }
+
+  /* ── Processo ── */
+  .process-step { text-align: center; }
+  .step-icon { margin: 0 auto; }
+
+  /* ── Section headers genéricos ── */
+  .section-header {
+    text-align: center;
+  }
+  .section-tag,
+  .section-title,
+  .section-desc,
+  .section-sub {
+    text-align: center;
+  }
+}
+
+/* ============================================================
+   MOBILE — centralizações (≤ 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* ── Gancho ── */
+  .gancho-inner { text-align: center; }
+
+  /* ── Trilhas ── */
+  .trilha-card { text-align: center; }
+  .trilha-header { justify-content: center; }
+  .trilha-list { text-align: left; }
+  .trilha-cta { align-self: center; }
+
+  /* ── Benefícios / diferenciais ── */
+  .benefit-card { text-align: center; }
+  .benefit-icon { margin: 0 auto; }
+
+  /* ── Depoimentos ── */
+  .testi-card { text-align: center; }
+  .testi-author { justify-content: center; }
+
+  /* ── Processo ── */
+  .step-number { margin: 0 auto; }
+
+  /* ── Stats ── */
+  .stat-card { text-align: center; }
+
+  /* ── Footer links ── */
+  .footer-col { text-align: center; }
+  .footer-col ul { align-items: center; }
+
+  /* ── Contact info ── */
+  .contact-info-item { justify-content: center; }
+}
