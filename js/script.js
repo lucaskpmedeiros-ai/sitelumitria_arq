@@ -336,89 +336,96 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
 
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
-  /* Paleta tech: cyan brand + azul profundo + roxo */
+  /* Paleta original: branco frio, azul-branco, laranja, amarelo */
   function pickColor(bright) {
     var r = Math.random();
     if (bright) {
-      if (r < 0.40) return [0, 229, 255];   /* cyan brand      */
-      if (r < 0.60) return [100, 200, 255];  /* azul-cyan       */
-      if (r < 0.75) return [180, 130, 255];  /* roxo tech       */
-      if (r < 0.88) return [200, 240, 255];  /* azul claro      */
-      return               [255, 255, 255];  /* branco          */
+      if (r < 0.30) return [160, 200, 255];
+      if (r < 0.52) return [255, 215, 140];
+      if (r < 0.68) return [255, 175, 100];
+      if (r < 0.82) return [200, 230, 255];
+      return               [248, 248, 255];
     }
-    if (r < 0.50) return [180, 230, 255];  /* azul pálido      */
-    if (r < 0.75) return [140, 200, 240];  /* azul-cinza       */
-    if (r < 0.90) return [100, 180, 255];  /* azul médio       */
-    return               [200, 200, 255];  /* lilás            */
+    if (r < 0.68) return [230, 238, 255];
+    if (r < 0.84) return [195, 218, 255];
+    if (r < 0.93) return [255, 232, 200];
+    return               [175, 200, 255];
   }
 
   /* ── estrelas ── */
   function buildStars() {
     stars = []; nodes = [];
 
-    for (var i = 0; i < 480; i++) {
+    for (var i = 0; i < 520; i++) {
       var c = pickColor(false);
-      stars.push({ x: rnd(0,W), y: rnd(0,H), r: rnd(0.12,0.48),
-        cr:c[0],cg:c[1],cb:c[2], baseA:rnd(0.06,0.32),
+      stars.push({ x:rnd(0,W), y:rnd(0,H), r:rnd(0.15,0.52),
+        cr:c[0],cg:c[1],cb:c[2], baseA:rnd(0.08,0.36),
         twk:rnd(0.002,0.009), ph:rnd(0,Math.PI*2),
-        spd:rnd(0.002,0.008), ang:rnd(0,Math.PI*2),
+        spd:rnd(0.003,0.010), ang:rnd(0,Math.PI*2),
         layer:0, glow:false, spikes:false });
     }
-    for (var i = 0; i < 160; i++) {
-      var c = pickColor(false); var big = Math.random()>0.80;
-      stars.push({ x:rnd(0,W), y:rnd(0,H), r: big?rnd(0.8,1.3):rnd(0.35,0.80),
-        cr:c[0],cg:c[1],cb:c[2], baseA:rnd(0.18,0.60),
-        twk:rnd(0.003,0.011), ph:rnd(0,Math.PI*2),
-        spd:rnd(0.006,0.018), ang:rnd(0,Math.PI*2),
+    for (var i = 0; i < 180; i++) {
+      var c = pickColor(false); var big = Math.random()>0.82;
+      stars.push({ x:rnd(0,W), y:rnd(0,H), r:big?rnd(0.9,1.35):rnd(0.40,0.88),
+        cr:c[0],cg:c[1],cb:c[2], baseA:rnd(0.18,0.64),
+        twk:rnd(0.003,0.012), ph:rnd(0,Math.PI*2),
+        spd:rnd(0.007,0.020), ang:rnd(0,Math.PI*2),
         layer:1, glow:big, spikes:false });
     }
-    for (var i = 0; i < 28; i++) {
-      var c = pickColor(true); var big = i < 5;
-      var s = { x:rnd(0,W), y:rnd(0,H), r: big?rnd(1.4,2.6):rnd(0.9,1.5),
+    for (var i = 0; i < 32; i++) {
+      var c = pickColor(true); var big = i < 6;
+      var s = { x:rnd(0,W), y:rnd(0,H), r:big?rnd(1.5,2.8):rnd(0.9,1.55),
         cr:c[0],cg:c[1],cb:c[2], baseA:rnd(0.55,0.92),
         twk:rnd(0.004,0.013), ph:rnd(0,Math.PI*2),
-        spd:rnd(0.010,0.030), ang:rnd(0,Math.PI*2),
+        spd:rnd(0.012,0.038), ang:rnd(0,Math.PI*2),
         layer:2, glow:true, spikes:big, spikeAng:rnd(0,Math.PI/4) };
       stars.push(s);
-      nodes.push(s); /* cyan nodes for connections */
+      nodes.push(s);
     }
   }
 
-  /* ── nebulosas panorâmicas em camadas de profundidade ── */
+  /* ── galáxias e manchas difusas (original) ── */
   function buildNebulas() {
     nebulas = [];
-    /* Camada fundo — nebulosa grande roxo-azul, cria horizonte */
-    nebulas.push({ x:0.50, y:0.55, rx:W*0.80, ry:H*0.50, r:60,  g:40,  b:200, a:0.060, layer:0 });
-    /* Camada meio — cyan no topo, como aurora */
-    nebulas.push({ x:0.50, y:0.10, rx:W*0.65, ry:H*0.38, r:0,   g:180, b:255, a:0.055, layer:0 });
-    /* Nuvem esquerda */
-    nebulas.push({ x:0.08, y:0.42, rx:W*0.40, ry:H*0.45, r:40,  g:0,   b:180, a:0.048, layer:1 });
-    /* Nuvem direita */
-    nebulas.push({ x:0.92, y:0.38, rx:W*0.38, ry:H*0.42, r:0,   g:100, b:220, a:0.042, layer:1 });
-    /* Glow central brilhante — ponto de fuga */
-    nebulas.push({ x:0.50, y:0.45, rx:W*0.22, ry:H*0.22, r:0,   g:229, b:255, a:0.035, layer:2 });
-    /* Horizonte inferior escuro */
-    nebulas.push({ x:0.50, y:1.05, rx:W*1.20, ry:H*0.30, r:0,   g:0,   b:0,   a:0.70,  layer:0 });
+    var edgeData = [
+      { x:0.18, y:0.22, rw:52, rh:6,  ang:-18 },
+      { x:0.62, y:0.68, rw:38, rh:5,  ang: 12 },
+      { x:0.84, y:0.35, rw:30, rh:4,  ang:-28 },
+      { x:0.40, y:0.82, rw:42, rh:5,  ang:  5 },
+    ];
+    edgeData.forEach(function(d) {
+      nebulas.push({ type:'edge', x:d.x, y:d.y, rw:d.rw, rh:d.rh,
+        ang:d.ang*(Math.PI/180), a:rnd(0.10,0.20),
+        layer:Math.random()>0.5?0:1 });
+    });
+    for (var i = 0; i < 5; i++) {
+      nebulas.push({ type:'round', x:rnd(0.05,0.93), y:rnd(0.05,0.93),
+        r:rnd(7,20), a:rnd(0.06,0.13), layer:0 });
+    }
   }
 
-  /* ── desenho nebulosas ── */
+  /* ── desenho galáxias original ── */
   function drawNebulas() {
-    nebulas.forEach(function(n) {
-      var ox = mouse.cx * PARALLAX[n.layer], oy = mouse.cy * PARALLAX[n.layer];
-      var cx = n.x * W + ox, cy = n.y * H + oy;
-      var scaleY = n.ry / n.rx;
+    nebulas.forEach(function(g) {
+      var ox = mouse.cx * PARALLAX[g.layer], oy = mouse.cy * PARALLAX[g.layer];
       ctx.save();
-      ctx.scale(1, scaleY);
-      var gcx = cx, gcy = cy / scaleY;
-      var gr = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, n.rx);
-      gr.addColorStop(0,    'rgba('+n.r+','+n.g+','+n.b+','+n.a+')');
-      gr.addColorStop(0.38, 'rgba('+n.r+','+n.g+','+n.b+','+(n.a*0.50)+')');
-      gr.addColorStop(0.70, 'rgba('+n.r+','+n.g+','+n.b+','+(n.a*0.15)+')');
-      gr.addColorStop(1,    'rgba('+n.r+','+n.g+','+n.b+',0)');
-      ctx.fillStyle = gr;
-      ctx.beginPath();
-      ctx.arc(gcx, gcy, n.rx, 0, Math.PI*2);
-      ctx.fill();
+      if (g.type === 'edge') {
+        var cx = g.x*W+ox, cy = g.y*H+oy;
+        ctx.translate(cx,cy); ctx.rotate(g.ang); ctx.scale(1,g.rh/g.rw);
+        var gr = ctx.createRadialGradient(0,0,0,0,0,g.rw);
+        gr.addColorStop(0,    'rgba(215,222,240,'+g.a+')');
+        gr.addColorStop(0.28, 'rgba(210,218,238,'+(g.a*0.55)+')');
+        gr.addColorStop(0.65, 'rgba(200,210,232,'+(g.a*0.20)+')');
+        gr.addColorStop(1,    'rgba(190,205,228,0)');
+        ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(0,0,g.rw,0,Math.PI*2); ctx.fill();
+      } else {
+        var cx = g.x*W+ox, cy = g.y*H+oy;
+        var gr = ctx.createRadialGradient(cx,cy,0,cx,cy,g.r);
+        gr.addColorStop(0,   'rgba(218,225,245,'+g.a+')');
+        gr.addColorStop(0.5, 'rgba(210,218,240,'+(g.a*0.4)+')');
+        gr.addColorStop(1,   'rgba(200,212,235,0)');
+        ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(cx,cy,g.r,0,Math.PI*2); ctx.fill();
+      }
       ctx.restore();
     });
   }
@@ -546,9 +553,9 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       var ang  = Math.atan2(c.vy, c.vx);
       var tx   = x - Math.cos(ang) * c.len, ty = y - Math.sin(ang) * c.len;
       var grad = ctx.createLinearGradient(tx, ty, x, y);
-      grad.addColorStop(0,    'rgba(0,229,255,0)');
-      grad.addColorStop(0.65, 'rgba(0,229,255,' + (alpha * 0.4) + ')');
-      grad.addColorStop(1,    'rgba(200,245,255,' + alpha + ')');
+      grad.addColorStop(0,    'rgba(255,255,255,0)');
+      grad.addColorStop(0.65, 'rgba(180,220,255,' + (alpha * 0.3) + ')');
+      grad.addColorStop(1,    'rgba(255,255,255,' + alpha + ')');
 
       ctx.save();
       ctx.strokeStyle = grad;
@@ -586,7 +593,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function (link) {
 
     ctx.clearRect(0, 0, W, H);
     drawNebulas();
-    drawConnections(t);
     drawStars(t);
     drawComets(t);
   }
