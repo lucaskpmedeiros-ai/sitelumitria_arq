@@ -1039,49 +1039,33 @@
        Cada chave é o id do elemento HTML correspondente.
        ============================================================ */
     /* ============================================================
-       PANORAMAS 360° — cada URL usada uma única vez
+       PANORAMAS — cada URL usada UMA ÚNICA VEZ
+       Slots marcados com ADICIONAR → cole a URL quando tiver a foto
        ============================================================ */
     var PANORAMAS = {
-      /* Decorado */
-      'pnlm-dec-1': 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png',
-      'pnlm-dec-2': 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159287/Panorama7_jdhdtx.png',
-      /* Ambientes internos */
-      'pnlm-int1':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159298/Panorama3_fvjpcl.png',
-      'pnlm-int2':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png',
-      'pnlm-int3':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png',
-      'pnlm-int4':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1776426468/Panorama1_oomkm4.png',
-      /* Revestimentos — panoramas do tour original */
-      'pnlm-rev1':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1776427656/Panorama2_kcgwlp.png',
-      'pnlm-rev2':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1776426468/Panorama3_tblowv.png'
-    };
-
-    /* ============================================================
-       IMAGENS ESTÁTICAS DE ALTO PADRÃO — seções sem panorama real
-       (substituídas pelas fotos do projeto quando disponíveis)
-       ============================================================ */
-    var STATIC_IMGS = {
+      /* Decorado — 2 panoramas únicos */
+      'pnlm-dec-1':      'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png',
+      'pnlm-dec-2':      'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159287/Panorama7_jdhdtx.png',
+      /* Ambientes internos — 3 panoramas únicos */
+      'pnlm-int1':       'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159298/Panorama3_fvjpcl.png',
+      'pnlm-int2':       'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png',
+      'pnlm-int3':       'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png',
+      'pnlm-int4':       '<!-- ADICIONAR URL -->',
       /* Revestimentos */
-      'pnlm-rev3':
-        'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=1600&q=88&auto=format&fit=crop',
-      /* Áreas Comuns */
-      'pnlm-comum-hero':
-        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600&q=88&auto=format&fit=crop',
-      'pnlm-comum1':
-        'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=88&auto=format&fit=crop',
-      'pnlm-comum2':
-        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=88&auto=format&fit=crop',
-      'pnlm-comum3':
-        'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1600&q=88&auto=format&fit=crop',
+      'pnlm-rev1':       '<!-- ADICIONAR URL -->',
+      'pnlm-rev2':       '<!-- ADICIONAR URL -->',
+      'pnlm-rev3':       '<!-- ADICIONAR URL -->',
+      /* Áreas comuns */
+      'pnlm-comum-hero': '<!-- ADICIONAR URL -->',
+      'pnlm-comum1':     '<!-- ADICIONAR URL -->',
+      'pnlm-comum2':     '<!-- ADICIONAR URL -->',
+      'pnlm-comum3':     '<!-- ADICIONAR URL -->',
       /* Apresentação — slides */
-      'pnlm-slide1':
-        'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=88&auto=format&fit=crop',
-      'pnlm-slide2':
-        'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1600&q=88&auto=format&fit=crop',
-      'pnlm-slide3':
-        'https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=1600&q=88&auto=format&fit=crop',
+      'pnlm-slide1':     '<!-- ADICIONAR URL -->',
+      'pnlm-slide2':     '<!-- ADICIONAR URL -->',
+      'pnlm-slide3':     '<!-- ADICIONAR URL -->',
       /* Localização */
-      'pnlm-loc':
-        'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=88&auto=format&fit=crop'
+      'pnlm-loc':        '<!-- ADICIONAR URL -->'
     };
 
     /* IDs dentro de galerias — controles padrão ocultos, usam botão customizado */
@@ -1114,19 +1098,6 @@
         touchPanSpeedCoeffFactor: 1,
         showFullscreenCtrl: false
       });
-    });
-
-    /* Aplica imagens estáticas nos slots sem panorama 360° */
-    Object.keys(STATIC_IMGS).forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.style.width           = '100%';
-      el.style.height          = '100%';
-      el.style.backgroundImage = 'url(' + STATIC_IMGS[id] + ')';
-      el.style.backgroundSize  = 'cover';
-      el.style.backgroundPosition = 'center';
-      el.style.position        = 'absolute';
-      el.style.inset           = '0';
     });
 
     /* Oculta placeholder quando o vídeo começa a tocar */
