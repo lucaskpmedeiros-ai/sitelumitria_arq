@@ -173,15 +173,15 @@
     /* ============================================================
        3. AMBIENTES INTERNOS — galeria 2×2
        ============================================================ */
-    .gallery-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
-    .gallery-grid--3 { grid-template-columns: repeat(3, 1fr); }
+    .gallery-grid   { display: grid; grid-template-columns: 1fr; gap: 3px; }
+    .gallery-grid--3 { grid-template-columns: 1fr; }
 
     .gallery-item {
       position: relative; display: flex; flex-direction: column;
       overflow: hidden;
     }
     .gallery-pano {
-      aspect-ratio: 4/3; min-height: 220px;
+      aspect-ratio: 16/9; min-height: 240px;
       overflow: hidden; position: relative; flex-shrink: 0;
     }
     .gallery-pano > div,
@@ -437,9 +437,9 @@
 
     @media (max-width: 600px) {
       .hero-title { font-size: clamp(2.2rem, 9vw, 3.2rem); }
-      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
-      .gallery-grid--3 { grid-template-columns: 1fr 1fr; }
-      .gallery-pano { aspect-ratio: 3/4; min-height: 150px; }
+      .gallery-grid { grid-template-columns: 1fr; gap: 3px; }
+      .gallery-grid--3 { grid-template-columns: 1fr; }
+      .gallery-pano { aspect-ratio: 16/9; min-height: 220px; }
       .gallery-label { padding: 10px 12px 12px; }
       .gallery-label-name { font-size: 0.80rem; }
       .gallery-label-desc { font-size: 0.67rem; }
