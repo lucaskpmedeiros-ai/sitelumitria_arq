@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folder do Empreendimento — Lumitria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       CONFIGURAÇÕES RÁPIDAS — altere aqui para personalizar
+       ============================================================ */
+    :root {
+      --ouro:       #C9A96E;   /* cor dourada dos destaques */
+      --ouro-dim:   rgba(201,169,110,0.12);
+      --dark:       #08090F;   /* fundo principal */
+      --dark-2:     #0F1118;
+      --dark-card:  #13161F;
+      --text:       #F0EDE8;   /* texto principal */
+      --text-2:     #8A8A8A;   /* texto secundário */
+      --border:     rgba(201,169,110,0.18);
+      --radius:     4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    img  { display: block; max-width: 100%; }
+    a    { color: inherit; text-decoration: none; }
+    ul   { list-style: none; }
+
+    /* ============================================================
+       PANORAMAS — troque apenas o src de cada imagem
+       ============================================================ */
+    .panorama {
+      width: 100%;
+      height: 70vh;
+      min-height: 420px;
+      overflow: hidden;
+      position: relative;
+    }
+    .panorama img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 8s ease;
+    }
+    .panorama:hover img { transform: scale(1.04); }
+
+    .panorama--full  { height: 100vh; min-height: 600px; }
+    .panorama--mid   { height: 60vh;  min-height: 360px; }
+    .panorama--short { height: 45vh;  min-height: 280px; }
+
+    /* ============================================================
+       OVERLAY DE CAPA
+       ============================================================ */
+    .cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,9,15,0.85) 0%, rgba(8,9,15,0.25) 60%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 64px 72px;
+      z-index: 2;
+    }
+
+    .cover-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ouro);
+      margin-bottom: 16px;
+    }
+
+    .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .cover-title em {
+      font-style: italic;
+      color: var(--ouro);
+    }
+
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+      font-weight: 300;
+      color: rgba(240,237,232,0.75);
+      max-width: 520px;
+      letter-spacing: 0.04em;
+    }
+
+    .cover-line {
+      width: 60px;
+      height: 2px;
+      background: var(--ouro);
+      margin-bottom: 24px;
+    }
+
+    /* ============================================================
+       CONTAINER E SEÇÕES
+       ============================================================ */
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section { padding: 100px 0; }
+    .section-alt { background: var(--dark-2); }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ouro);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--ouro);
+    }
+
+    .section-desc {
+      color: var(--text-2);
+      font-size: 1rem;
+      line-height: 1.8;
+      max-width: 620px;
+    }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--ouro);
+      margin: 28px 0;
+    }
+
+    /* ============================================================
+       LAYOUT DOIS PAINÉIS (texto + imagem)
+       ============================================================ */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .two-col--reverse { direction: rtl; }
+    .two-col--reverse > * { direction: ltr; }
+
+    .two-col-content {
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--dark-2);
+    }
+
+    /* ============================================================
+       GALERIA GRID
+       ============================================================ */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+
+    .gallery-grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+    .gallery-item {
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img { transform: scale(1.06); }
+
+    /* ============================================================
+       DIFERENCIAIS
+       ============================================================ */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+    }
+
+    .feature-item {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      padding: 40px 36px;
+      transition: border-color 0.3s;
+    }
+
+    .feature-item:hover { border-color: var(--ouro); }
+
+    .feature-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 400;
+      color: var(--ouro);
+      opacity: 0.5;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       ESTATÍSTICAS
+       ============================================================ */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    .stat-item {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--ouro);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-2);
+    }
+
+    /* ============================================================
+       FOOTER DO FOLDER
+       ============================================================ */
+    .folder-footer {
+      background: #050608;
+      border-top: 1px solid var(--border);
+      padding: 60px 0 40px;
+      text-align: center;
+    }
+
+    .folder-footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--ouro);
+      margin-bottom: 16px;
+      letter-spacing: 0.08em;
+    }
+
+    .folder-footer p {
+      font-size: 0.85rem;
+      color: var(--text-2);
+      line-height: 1.8;
+    }
+
+    .folder-footer-note {
+      margin-top: 40px;
+      font-size: 0.72rem;
+      color: rgba(138,138,138,0.5);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       CAPTION DE IMAGEM
+       ============================================================ */
+    .img-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 20px;
+      background: rgba(8,9,15,0.72);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ouro);
+      z-index: 2;
+    }
+
+    /* ============================================================
+       RESPONSIVO
+       ============================================================ */
+    @media (max-width: 900px) {
+      .container { padding: 0 24px; }
+      .section { padding: 64px 0; }
+      .two-col { grid-template-columns: 1fr; }
+      .two-col--reverse { direction: ltr; }
+      .two-col-content { padding: 48px 28px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .gallery-grid--3 { grid-template-columns: 1fr 1fr; }
+      .cover-overlay { padding: 40px 28px; }
+    }
+
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid--3 { grid-template-columns: 1fr; }
+      .panorama { height: 55vw; min-height: 240px; }
+      .panorama--full { height: 100svh; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       CAPA — imagem panorâmica de abertura
+       Troque o src abaixo pela URL da imagem de capa
+  ============================================================ -->
+  <section class="panorama panorama--full">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png" alt="Capa do empreendimento">
+    <!--
+      DICA: use uma imagem panorâmica wide (landscape) de alta resolução.
+      Proporção ideal: 16:9 ou mais larga. Ex: render do empreendimento, fachada ou área de lazer.
+    -->
+    <div class="cover-overlay">
+      <span class="cover-tag">Apresentação do Empreendimento</span>
+      <div class="cover-line"></div>
+      <!-- TROQUE: nome do empreendimento -->
+      <h1 class="cover-title">Nome do<br><em>Empreendimento</em></h1>
+      <!-- TROQUE: tagline do projeto -->
+      <p class="cover-sub">Uma linha descritiva breve sobre o projeto, localização ou diferenciais principais.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SOBRE O EMPREENDIMENTO
+  ============================================================ -->
+  <div class="two-col">
+
+    <!-- Texto -->
+    <div class="two-col-content">
+      <span class="section-label">O empreendimento</span>
+      <!-- TROQUE: título da seção sobre -->
+      <h2 class="section-title">Onde cada detalhe<br>foi pensado com <em>cuidado.</em></h2>
+      <div class="divider"></div>
+      <!-- TROQUE: descrição do empreendimento -->
+      <p class="section-desc">
+        Descreva aqui o empreendimento de forma envolvente. Mencione diferenciais, conceito do projeto, localização e proposta de valor para o comprador.
+      </p>
+      <p class="section-desc" style="margin-top: 16px;">
+        Segundo parágrafo opcional com mais detalhes sobre o conceito arquitetônico ou o lifestyle que o empreendimento oferece.
+      </p>
+    </div>
+
+    <!-- Imagem lateral -->
+    <!-- TROQUE o src pela URL da imagem da fachada ou área social -->
+    <div class="panorama panorama--mid" style="height: 100%; min-height: 460px;">
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159298/Panorama3_fvjpcl.png" alt="Sobre o empreendimento">
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       ESTATÍSTICAS / NÚMEROS DO PROJETO
+  ============================================================ -->
+  <section class="section section-alt">
+    <div class="container">
+      <span class="section-label">Números do projeto</span>
+      <h2 class="section-title">O projeto<br>em <em>números.</em></h2>
+
+      <div class="stats-row">
+        <!-- TROQUE: valores e rótulos das estatísticas -->
+        <div class="stat-item">
+          <div class="stat-value">128m²</div>
+          <div class="stat-label">Área privativa</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Suítes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">20+</div>
+          <div class="stat-label">Itens de lazer</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">2026</div>
+          <div class="stat-label">Previsão de entrega</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PANORAMA 1 — ambiente principal (full width)
+       Troque o src pela URL da imagem panorâmica
+  ============================================================ -->
+  <div class="panorama" style="position: relative;">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159287/Panorama7_jdhdtx.png" alt="Ambiente 1">
+    <!-- TROQUE: legenda da imagem -->
+    <div class="img-caption">Living com varanda gourmet — Imagem ilustrativa</div>
+  </div>
+
+
+  <!-- ============================================================
+       GALERIA DE AMBIENTES
+  ============================================================ -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Ambientes</span>
+      <h2 class="section-title">Cada espaço pensado<br>para o seu <em>bem-estar.</em></h2>
+    </div>
+
+    <!-- Grade de imagens — TROQUE cada src -->
+    <div class="gallery-grid" style="margin-top: 48px;">
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png" alt="Ambiente 1">
+      </div>
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png" alt="Ambiente 2">
+      </div>
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png" alt="Ambiente 3">
+      </div>
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png" alt="Ambiente 4">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PANORAMA 2 — suíte master ou área de lazer
+  ============================================================ -->
+  <div class="two-col two-col--reverse">
+
+    <div class="panorama panorama--mid" style="height: 100%; min-height: 500px;">
+      <!-- TROQUE o src pela URL da imagem -->
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png" alt="Suíte master">
+    </div>
+
+    <div class="two-col-content">
+      <!-- TROQUE: título e texto desta seção -->
+      <span class="section-label">Suíte master</span>
+      <h2 class="section-title">Um refúgio<br><em>exclusivo.</em></h2>
+      <div class="divider"></div>
+      <p class="section-desc">
+        Descreva o ambiente em destaque — dimensões, acabamentos, diferenciais específicos como closet, banheiro com banheira, vista privilegiada etc.
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       DIFERENCIAIS DO EMPREENDIMENTO
+  ============================================================ -->
+  <section class="section section-alt">
+    <div class="container">
+      <span class="section-label">Diferenciais</span>
+      <h2 class="section-title">O que torna este<br>projeto <em>único.</em></h2>
+
+      <div class="features-grid">
+        <!-- TROQUE: número, título e descrição de cada diferencial -->
+        <div class="feature-item">
+          <div class="feature-num">01</div>
+          <div class="feature-title">Nome do diferencial</div>
+          <p class="feature-desc">Descrição breve do diferencial. Ex: piscina climatizada com raia de 25m, deck exclusivo e ducha.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">02</div>
+          <div class="feature-title">Nome do diferencial</div>
+          <p class="feature-desc">Descrição breve do diferencial. Ex: fitness completo com equipamentos de última geração e área de alongamento.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">03</div>
+          <div class="feature-title">Nome do diferencial</div>
+          <p class="feature-desc">Descrição breve do diferencial. Ex: salão de festas com lounge externo e cozinha gourmet equipada.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">04</div>
+          <div class="feature-title">Nome do diferencial</div>
+          <p class="feature-desc">Descrição breve do diferencial. Ex: espaço kids com brinquedoteca coberta e área de lazer ao ar livre.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">05</div>
+          <div class="feature-title">Nome do diferencial</div>
+          <p class="feature-desc">Descrição breve do diferencial. Ex: lobby de alto padrão com recepção 24h e sistema de portaria virtual.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">06</div>
+          <div class="feature-title">Nome do diferencial</div>
+          <p class="feature-desc">Descrição breve do diferencial. Ex: bicicletário coberto e acesso direto por ciclovias do bairro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PANORAMA 3 — área de lazer / fachada
+  ============================================================ -->
+  <div class="panorama panorama--mid" style="position: relative;">
+    <!-- TROQUE o src pela URL da imagem -->
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png" alt="Área de lazer">
+    <div class="img-caption">Área de lazer — Imagem ilustrativa</div>
+  </div>
+
+
+  <!-- ============================================================
+       GALERIA 3 COLUNAS — detalhes e acabamentos
+  ============================================================ -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Acabamentos</span>
+      <h2 class="section-title">Elegância em<br>cada <em>detalhe.</em></h2>
+    </div>
+
+    <div class="gallery-grid gallery-grid--3" style="margin-top: 48px;">
+      <!-- TROQUE cada src -->
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159298/Panorama3_fvjpcl.png" alt="Detalhe 1">
+      </div>
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159287/Panorama7_jdhdtx.png" alt="Detalhe 2">
+      </div>
+      <div class="gallery-item">
+        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png" alt="Detalhe 3">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       LOCALIZAÇÃO
+  ============================================================ -->
+  <div class="two-col">
+
+    <div class="two-col-content">
+      <span class="section-label">Localização</span>
+      <!-- TROQUE: nome do bairro/cidade -->
+      <h2 class="section-title">No coração de<br><em>Nome do Bairro.</em></h2>
+      <div class="divider"></div>
+      <!-- TROQUE: texto sobre a localização -->
+      <p class="section-desc">
+        Descreva a localização do empreendimento. Proximidade a serviços, estabelecimentos, vias de acesso, qualidade de vida do bairro.
+      </p>
+      <ul style="margin-top: 28px; display: flex; flex-direction: column; gap: 12px;">
+        <!-- TROQUE: pontos de referência próximos -->
+        <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-2);">
+          <span style="color: var(--ouro); font-weight: 600;">—</span> Supermercados e farmácias a 5 min
+        </li>
+        <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-2);">
+          <span style="color: var(--ouro); font-weight: 600;">—</span> Escolas de alto padrão na região
+        </li>
+        <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-2);">
+          <span style="color: var(--ouro); font-weight: 600;">—</span> Restaurantes e gastronomia variada
+        </li>
+        <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-2);">
+          <span style="color: var(--ouro); font-weight: 600;">—</span> Acesso fácil às principais vias
+        </li>
+      </ul>
+    </div>
+
+    <!-- TROQUE: imagem aérea ou foto do bairro -->
+    <div class="panorama panorama--mid" style="height: 100%; min-height: 480px;">
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png" alt="Localização">
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       PANORAMA FINAL — imagem de impacto
+  ============================================================ -->
+  <div class="panorama" style="position: relative;">
+    <!-- TROQUE o src pela URL da imagem final de impacto -->
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png" alt="Imagem final">
+    <div class="cover-overlay" style="justify-content: center; align-items: center; text-align: center; background: linear-gradient(to top, rgba(8,9,15,0.75) 0%, rgba(8,9,15,0.4) 100%);">
+      <span class="cover-tag">Realização</span>
+      <!-- TROQUE: nome da construtora/incorporadora -->
+      <h2 class="cover-title" style="font-size: clamp(2rem, 4vw, 3.8rem);">Nome da <em>Incorporadora</em></h2>
+      <!-- TROQUE: endereço -->
+      <p class="cover-sub" style="margin: 0 auto;">Rua Exemplo, 000 — Bairro, Cidade/UF</p>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       RODAPÉ DO FOLDER
+  ============================================================ -->
+  <footer class="folder-footer">
+    <div class="container">
+      <!-- TROQUE: nome da incorporadora -->
+      <div class="folder-footer-logo">Nome da Incorporadora</div>
+      <!-- TROQUE: contato -->
+      <p>(00) 00000-0000 &nbsp;·&nbsp; contato@incorporadora.com.br &nbsp;·&nbsp; www.incorporadora.com.br</p>
+
+      <p class="folder-footer-note">
+        * Imagens meramente ilustrativas. As áreas e especificações estão sujeitas a alterações conforme memorial descritivo e projeto executivo aprovado.
+        Consulte o material de vendas para informações completas sobre o empreendimento.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
