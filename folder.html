@@ -494,6 +494,53 @@
     .pnlm-controls { filter: invert(1) sepia(1) saturate(2) hue-rotate(5deg) opacity(0.45); }
 
     /* ============================================================
+       PADRÃO GREGO — losango duplo, estilo mosaico Mykonos
+       Aplicado em todos os fundos escuros do site
+       ============================================================ */
+    :root {
+      --greek-pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 3L37 20L20 37L3 20Z' fill='none' stroke='rgba(201,169,110,0.10)' stroke-width='0.8'/%3E%3Cpath d='M20 11L29 20L20 29L11 20Z' fill='none' stroke='rgba(201,169,110,0.06)' stroke-width='0.5'/%3E%3C/svg%3E");
+      --greek-size: 40px 40px;
+    }
+
+    /* Seções escuras principais */
+    .section-alt,
+    .impact-phrase,
+    .dec-cta,
+    .slide-content,
+    .loc-content,
+    .lumitria-vr,
+    .folder-footer {
+      background-image: var(--greek-pattern);
+      background-size: var(--greek-size);
+    }
+
+    /* Hero — pattern sutil sobre a imagem de capa */
+    .hero-overlay {
+      background-image: var(--greek-pattern),
+        linear-gradient(to top, rgba(8,9,15,0.90) 0%, rgba(8,9,15,0.35) 55%, transparent 100%);
+      background-size: var(--greek-size), cover;
+    }
+
+    /* Cards — pattern menor, mais denso */
+    .feature-item,
+    .gallery-label,
+    .mat-label,
+    .vr-card {
+      background-image: var(--greek-pattern);
+      background-size: 28px 28px;
+    }
+
+    /* Cortina: delay de 2s antes de abrir */
+    .panorama:hover .pano-curtain,
+    .panorama.revealed .pano-curtain {
+      transition-delay: 2s;
+    }
+    /* Quando fecha (saiu do hover): fecha rápido, sem delay */
+    .pano-curtain {
+      transition-property: transform;
+    }
+
+    /* ============================================================
        ANIMAÇÕES
        ============================================================ */
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
