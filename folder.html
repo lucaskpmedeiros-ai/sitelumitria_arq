@@ -142,43 +142,44 @@
        2. DECORADO — panorama principal + dois ambientes
        ============================================================ */
     .panorama {
-      width: 100%;
-      --pano-h: 68vh; --pano-hmin: 400px;
-      height: calc(var(--pano-h) * 0.70);
-      min-height: calc(var(--pano-hmin) * 0.70);
+      width: 100%; height: 68vh; min-height: 400px;
       overflow: hidden; position: relative;
-      transition: height 0.9s cubic-bezier(0.4, 0, 0.2, 1),
-                  min-height 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .panorama--hero  { --pano-h: 78vh; --pano-hmin: 500px; }
-    .panorama--mid   { --pano-h: 58vh; --pano-hmin: 340px; }
-    .panorama--short { --pano-h: 44vh; --pano-hmin: 260px; }
-
-    /* Expande no hover (desktop) ou quando classe .expanded for adicionada (JS) */
-    .panorama.expanded,
-    .panorama:hover {
-      height: var(--pano-h);
-      min-height: var(--pano-hmin);
-    }
-
-    /* Hint "passe o mouse" — visível no estado comprimido, some ao expandir */
-    .pano-hint {
-      position: absolute; bottom: 0; left: 0; right: 0; z-index: 8;
-      display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 22px; pointer-events: none;
-      background: linear-gradient(to top, rgba(8,9,15,0.72) 0%, transparent 70%);
-      transition: opacity 0.5s;
-    }
-    .pano-hint-inner {
-      display: flex; align-items: center; gap: 8px;
-      color: rgba(240,237,232,0.75);
-      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.10em;
-      text-transform: uppercase;
-    }
-    .panorama.expanded .pano-hint,
-    .panorama:hover .pano-hint { opacity: 0; pointer-events: none; }
+    .panorama--hero  { height: 78vh; min-height: 500px; }
+    .panorama--mid   { height: 58vh; min-height: 340px; }
+    .panorama--short { height: 44vh; min-height: 260px; }
 
     .pano-inner { width: 100%; height: 100%; }
+
+    /* ── Cortina horizontal — cobre 30% direito, desliza ao hover ── */
+    .pano-curtain {
+      position: absolute; top: 0; right: 0; bottom: 0;
+      width: 30%; z-index: 9;
+      background: var(--dark);
+      transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      display: flex; align-items: center; justify-content: flex-start;
+      padding-left: 28px;
+    }
+    /* Gradiente suave na borda esquerda da cortina */
+    .pano-curtain::before {
+      content: '';
+      position: absolute; left: -56px; top: 0; bottom: 0; width: 56px;
+      background: linear-gradient(to right, transparent, var(--dark));
+    }
+    .pano-curtain-hint {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(201,169,110,0.55);
+      white-space: nowrap;
+    }
+    /* Hover (desktop) desliza a cortina para a direita */
+    .panorama:hover .pano-curtain {
+      transform: translateX(100%);
+    }
+    /* Mobile: classe .revealed adicionada pelo JS quando centrado na tela */
+    .panorama.revealed .pano-curtain {
+      transform: translateX(100%);
+    }
 
     .img-caption {
       position: absolute; bottom: 0; left: 0; right: 0;
@@ -482,14 +483,9 @@
     /* ============================================================
        PANNELLUM OVERRIDES
        ============================================================ */
-    .pnlm-container { width: 100% !important; height: 100% !important; background: #08090F !important; touch-action: none; }
+    .pnlm-container { width: 100% !important; height: 100% !important; background: #08090F !important; }
     .pnlm-about-msg, .pnlm-load-button { display: none !important; }
-    .pnlm-container canvas { cursor: default !important; touch-action: none; }
-    /* Bloqueia scroll horizontal causado pelo Pannellum */
-    .panorama, .gallery-pano, .slide-pano, .mat-pano {
-      touch-action: pan-y;
-      overflow: hidden;
-    }
+    .pnlm-container canvas { cursor: grab !important; }
     /* Esconde zoom +/- — pinch já faz o zoom no mobile */
     .pnlm-zoom-controls { display: none !important; }
     /* Oculta controles nas galerias — substituídos por botão customizado */
@@ -595,11 +591,8 @@
     <!-- Panorama 1 -->
     <div class="panorama panorama--hero" style="position:relative;">
       <div id="pnlm-dec-1" class="pano-inner"></div>
-      <div class="pano-hint" aria-hidden="true">
-        <div class="pano-hint-inner">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-          <span>Passe o mouse para expandir</span>
-        </div>
+      <div class="pano-curtain" aria-hidden="true">
+        <span class="pano-curtain-hint">Explorar →</span>
       </div>
       <button class="pano-float-orient" data-pnlm="pnlm-dec-1" onclick="toggleOrient(this)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -622,11 +615,8 @@
     <!-- Panorama 2 -->
     <div class="panorama panorama--hero" style="position:relative;">
       <div id="pnlm-dec-2" class="pano-inner"></div>
-      <div class="pano-hint" aria-hidden="true">
-        <div class="pano-hint-inner">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-          <span>Passe o mouse para expandir</span>
-        </div>
+      <div class="pano-curtain" aria-hidden="true">
+        <span class="pano-curtain-hint">Explorar →</span>
       </div>
       <button class="pano-float-orient" data-pnlm="pnlm-dec-2" onclick="toggleOrient(this)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -852,11 +842,8 @@
     <div class="panorama panorama--hero" style="position:relative; margin-bottom:3px;">
       <div id="pnlm-comum-hero" class="pano-inner"></div>
       <div class="img-caption">Área de lazer — Imagem ilustrativa</div>
-      <div class="pano-hint" aria-hidden="true">
-        <div class="pano-hint-inner">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-          <span>Passe o mouse para expandir</span>
-        </div>
+      <div class="pano-curtain" aria-hidden="true">
+        <span class="pano-curtain-hint">Explorar →</span>
       </div>
     </div>
 
@@ -1138,18 +1125,18 @@
         panorama:    PANORAMAS[id],
         autoLoad:    true,
         autoRotate:  -2,
-        autoRotateInactivityDelay: 99999,
+        autoRotateInactivityDelay: 2000,
         compass:     false,
         showControls: !isGallery,
         hfov:        100,
-        minHfov:     100,
-        maxHfov:     100,
+        minHfov:     80,
+        maxHfov:     110,
         pitch:       0,
         yaw:         0,
-        minPitch:    0,
-        maxPitch:    0,
+        minPitch:    -20,
+        maxPitch:    20,
         mouseZoom:   false,
-        draggable:   false,
+        draggable:   true,
         keyboardZoom: false,
         showFullscreenCtrl: false
       });
@@ -1165,20 +1152,20 @@
       });
     }
 
-    /* Expand panoramas quando centrados na tela (mobile + desktop) */
+    /* Mobile: revela cortina quando o panorama entra na tela */
     if ('IntersectionObserver' in window) {
-      var panoObs = new IntersectionObserver(function (entries) {
+      var curtainObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            entry.target.classList.add('expanded');
+            entry.target.classList.add('revealed');
           } else {
-            entry.target.classList.remove('expanded');
+            entry.target.classList.remove('revealed');
           }
         });
       }, { threshold: 0.45 });
 
       document.querySelectorAll('.panorama').forEach(function (el) {
-        panoObs.observe(el);
+        if (el.querySelector('.pano-curtain')) curtainObs.observe(el);
       });
     }
 
