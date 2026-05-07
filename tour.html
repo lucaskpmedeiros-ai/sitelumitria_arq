@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Tour Interativo 360° — Lumitria</title>
   <link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +36,15 @@
     .pnlm-ui .pnlm-about-msg,
     .pnlm-ui .pnlm-zoom-controls { display: none !important; }
 
+    /* ── Transição entre cenas ── */
+    #transition {
+      position: fixed; inset: 0; z-index: 150;
+      background: var(--dark);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    #transition.active { opacity: 1; pointer-events: all; }
+
     /* ── Loading ── */
     #loadScreen {
       position: fixed; inset: 0; z-index: 500; background: var(--dark);
@@ -57,7 +66,7 @@
     #topBar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 28px;
+      padding: max(16px, env(safe-area-inset-top)) 28px 16px;
       background: linear-gradient(to bottom, rgba(6,8,15,0.92) 0%, transparent 100%);
       pointer-events: none;
     }
@@ -83,15 +92,21 @@
 
     /* ── Nav de cenas ── */
     #sceneNav {
-      position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
-      z-index: 200; display: flex; align-items: center; gap: 18px;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center; gap: 0;
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(6,8,15,0.92) 0%, transparent 100%);
+    }
+    .nav-inner {
+      display: flex; align-items: center; gap: 4px;
       background: rgba(6,8,15,0.78); border: 1px solid var(--border);
-      padding: 13px 26px; border-radius: 100px; backdrop-filter: blur(20px);
+      padding: 10px 20px; border-radius: 100px; backdrop-filter: blur(20px);
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     }
     .sbtn { display: flex; flex-direction: column; align-items: center; gap: 5px;
       cursor: pointer; opacity: 0.38; transition: opacity 0.3s;
-      background: none; border: none; padding: 2px 6px; color: inherit; }
+      background: none; border: none; padding: 6px 14px; color: inherit;
+      min-width: 64px; /* toque mínimo de 44px garantido */ }
     .sbtn:hover { opacity: 0.72; }
     .sbtn.on { opacity: 1; }
     .pip { width: 7px; height: 7px; border-radius: 50%; background: var(--text-2);
@@ -102,12 +117,13 @@
       letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
       transition: color 0.3s; }
     .sbtn.on .plbl { color: var(--cyan); }
-    .ndiv { width: 24px; height: 1px; background: var(--border); flex-shrink: 0; }
+    .ndiv { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
 
     /* ── Hint ── */
     #hint { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
       z-index: 200; display: flex; align-items: center; gap: 6px; font-size: 0.70rem;
-      color: var(--text-dim); pointer-events: none; transition: opacity 1.2s; }
+      color: var(--text-dim); pointer-events: none; transition: opacity 1.2s;
+      white-space: nowrap; }
     #hint.gone { opacity: 0; }
 
     /* ── Overlay de entrada ── */
@@ -130,7 +146,7 @@
     #startBtn { display: inline-flex; align-items: center; gap: 10px;
       background: linear-gradient(135deg, #00CFFF 0%, #0098CC 100%); color: #020D14;
       font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
-      padding: 14px 32px; border-radius: 12px; border: none; cursor: pointer;
+      padding: 16px 36px; border-radius: 12px; border: none; cursor: pointer;
       box-shadow: 0 0 28px rgba(0,207,255,0.38), 0 8px 28px rgba(0,0,0,0.4);
       transition: transform 0.22s, box-shadow 0.22s; }
     #startBtn:hover { transform: translateY(-2px);
@@ -139,7 +155,7 @@
     /* ── Hotspots customizados ── */
     .hs-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
     .hs-circle {
-      width: 44px; height: 44px; border-radius: 50%;
+      width: 52px; height: 52px; border-radius: 50%;
       background: rgba(0,207,255,0.15); border: 2px solid rgba(0,207,255,0.8);
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 0 20px rgba(0,207,255,0.4);
@@ -149,7 +165,7 @@
     .hs-circle::before {
       content: '';
       position: absolute;
-      width: 62px; height: 62px; border-radius: 50%;
+      width: 70px; height: 70px; border-radius: 50%;
       border: 2px solid rgba(0,207,255,0.4);
       animation: hs-pulse 2s ease-in-out infinite;
     }
@@ -158,8 +174,22 @@
     .hs-label { font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.9);
       letter-spacing: 0.06em; text-transform: uppercase;
       background: rgba(6,8,15,0.75); border: 1px solid rgba(0,207,255,0.25);
-      padding: 4px 12px; border-radius: 100px; white-space: nowrap;
+      padding: 5px 14px; border-radius: 100px; white-space: nowrap;
       backdrop-filter: blur(8px); }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      #topBar { padding: max(14px, env(safe-area-inset-top)) 16px 14px; }
+      .logo-lnk img { width: 36px; height: 36px; }
+      #sceneLabel { font-size: 0.70rem; padding: 6px 12px; }
+      #backBtn { font-size: 0.72rem; padding: 6px 12px; }
+      #backBtn span { display: none; } /* esconde texto, mantém ícone */
+      #overlay h1 { font-size: clamp(1.7rem, 8vw, 2.6rem); }
+      #overlay p { font-size: 0.88rem; margin-bottom: 30px; }
+      #hint { bottom: 100px; font-size: 0.66rem; }
+      .nav-inner { padding: 10px 14px; }
+      .sbtn { padding: 6px 10px; min-width: 56px; }
+    }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     @keyframes hs-pulse {
@@ -173,6 +203,9 @@
 
 <!-- Pannellum container -->
 <div id="panorama"></div>
+
+<!-- Overlay de transição entre cenas -->
+<div id="transition"></div>
 
 <!-- Loading -->
 <div id="loadScreen">
@@ -195,32 +228,35 @@
       <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    Voltar ao site
+    <span>Voltar ao site</span>
   </a>
 </header>
 
 <!-- Hint -->
 <div id="hint">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-    <path d="M15 3a9 9 0 11-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M15 3l-3-3m3 3l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 7c0-2.8 2.2-5 5-5s5 2.2 5 5v5c0 2.8-2.2 5-5 5s-5-2.2-5-5V7z"
+      stroke="currentColor" stroke-width="1.5"/>
+    <path d="M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
   </svg>
-  Clique e arraste para explorar
+  Arraste para explorar
 </div>
 
 <!-- Nav de cenas -->
 <nav id="sceneNav">
-  <button class="sbtn on" onclick="goTo(0)">
-    <div class="pip"></div><span class="plbl">Ambiente 1</span>
-  </button>
-  <div class="ndiv"></div>
-  <button class="sbtn" onclick="goTo(1)">
-    <div class="pip"></div><span class="plbl">Ambiente 2</span>
-  </button>
-  <div class="ndiv"></div>
-  <button class="sbtn" onclick="goTo(2)">
-    <div class="pip"></div><span class="plbl">Ambiente 3</span>
-  </button>
+  <div class="nav-inner">
+    <button class="sbtn on" onclick="goTo(0)">
+      <div class="pip"></div><span class="plbl">Ambiente 1</span>
+    </button>
+    <div class="ndiv"></div>
+    <button class="sbtn" onclick="goTo(1)">
+      <div class="pip"></div><span class="plbl">Ambiente 2</span>
+    </button>
+    <div class="ndiv"></div>
+    <button class="sbtn" onclick="goTo(2)">
+      <div class="pip"></div><span class="plbl">Ambiente 3</span>
+    </button>
+  </div>
 </nav>
 
 <!-- Overlay de entrada -->
@@ -245,28 +281,33 @@ var SCENES = [
     name: 'Ambiente 1',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1776426468/Panorama1_oomkm4.png',
     hotspots: [
-      { pitch: -15, yaw: 0, to: 1, label: 'Siga o caminho' }
+      { pitch: -15, yaw: 0, to: 1, label: 'Próximo' }
     ]
   },
   {
     name: 'Ambiente 2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1776427656/Panorama2_kcgwlp.png',
     hotspots: [
-      { pitch: 0, yaw: -90, to: 0, label: 'Siga o caminho' },
-      { pitch: 0, yaw: 80,  to: 2, label: 'Siga o caminho' }
+      { pitch: 0, yaw: -90, to: 0, label: 'Anterior' },
+      { pitch: 0, yaw: 80,  to: 2, label: 'Próximo' }
     ]
   },
   {
     name: 'Ambiente 3',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1776426468/Panorama3_tblowv.png',
     hotspots: [
-      { pitch: 0, yaw: 180, to: 1, label: 'Siga o caminho' }
+      { pitch: 0, yaw: 180, to: 1, label: 'Anterior' }
     ]
   }
 ];
 
 var viewer = null;
 var curIdx = 0;
+var transitioning = false;
+
+/* hfov adaptado para mobile — tela estreita, campo menor evita distorção */
+var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 600;
+var BASE_HFOV = isMobile ? 90 : 100;
 
 /* ── Oculta loading screen imediatamente — overlay cobre tudo ── */
 (function () {
@@ -274,7 +315,16 @@ var curIdx = 0;
   if (ls) ls.style.display = 'none';
 }());
 
-/* ── Inicializa Pannellum ── */
+/* ── Hint: ajusta texto para toque ou mouse ── */
+(function () {
+  var h = document.getElementById('hint');
+  if (!h) return;
+  var touch = 'ontouchstart' in window;
+  h.querySelector('svg').style.display = touch ? '' : 'none';
+  // texto já está genérico ("Arraste para explorar") — serve para ambos
+}());
+
+/* ── Hotspots ── */
 function buildHotspots(sceneIdx) {
   return SCENES[sceneIdx].hotspots.map(function (hs) {
     return {
@@ -285,7 +335,7 @@ function buildHotspots(sceneIdx) {
       createTooltipFunc: function (el) {
         el.innerHTML =
           '<div class="hs-circle">' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">' +
               '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
             '</svg>' +
           '</div>' +
@@ -296,7 +346,8 @@ function buildHotspots(sceneIdx) {
   });
 }
 
-function initViewer(sceneIdx) {
+/* ── Inicializa viewer ── */
+function initViewer(sceneIdx, onLoaded) {
   if (viewer) { viewer.destroy(); viewer = null; }
 
   viewer = pannellum.viewer('panorama', {
@@ -307,7 +358,7 @@ function initViewer(sceneIdx) {
     autoRotateInactivityDelay: 3000,
     showControls: false,
     mouseZoom: true,
-    hfov: 100,
+    hfov: BASE_HFOV,
     minHfov: 60,
     maxHfov: 120,
     pitch: 0,
@@ -315,23 +366,37 @@ function initViewer(sceneIdx) {
     hotSpots: buildHotspots(sceneIdx)
   });
 
-  /* load event: nenhuma ação necessária — overlay já cobre a tela */
+  if (typeof onLoaded === 'function') {
+    viewer.on('load', function () { onLoaded(); });
+    /* fallback: se o load demorar mais de 8s, libera a tela mesmo assim */
+    setTimeout(function () { onLoaded(); }, 8000);
+  }
 }
 
+/* ── Troca de cena com transição escura para não "cair" no panorama ── */
 function goTo(idx) {
-  if (idx === curIdx) return;
+  if (idx === curIdx || transitioning) return;
+  transitioning = true;
   curIdx = idx;
   updateNav(idx);
   document.getElementById('sceneName').textContent = SCENES[idx].name;
 
-  /* Fade suave */
-  var pano = document.getElementById('panorama');
-  pano.style.transition = 'opacity 0.35s';
-  pano.style.opacity = '0';
+  var tr = document.getElementById('transition');
+
+  /* 1. Escurece a tela */
+  tr.classList.add('active');
+
+  /* 2. Depois que o fade-in completou (~350ms), troca o viewer */
   setTimeout(function () {
-    initViewer(idx);
-    pano.style.opacity = '1';
-  }, 350);
+    var done = false;
+    function reveal() {
+      if (done) return;
+      done = true;
+      tr.classList.remove('active');
+      transitioning = false;
+    }
+    initViewer(idx, reveal);
+  }, 360);
 }
 
 function updateNav(idx) {
@@ -345,7 +410,6 @@ function startTour() {
   ov.classList.add('gone');
   setTimeout(function () { ov.style.display = 'none'; }, 950);
   setTimeout(function () { document.getElementById('hint').classList.add('gone'); }, 7000);
-  /* Viewer já está carregando em background — não reinicializa */
 }
 
 /* Pré-carrega em background enquanto o overlay está visível */
