@@ -202,17 +202,78 @@
     .gallery-label-desc { font-size: 0.75rem; color: var(--text-2); line-height: 1.5; }
 
     /* Botão de orientação */
-    .gallery-orient-btn {
-      width: 100%; display: flex; align-items: center; justify-content: center;
-      gap: 8px; background: rgba(201,169,110,0.06);
-      border: 1px solid rgba(201,169,110,0.20); border-radius: 8px;
-      padding: 10px 14px; cursor: pointer; color: var(--ouro);
-      font-family: 'Inter', sans-serif; font-size: 0.70rem; font-weight: 500;
-      letter-spacing: 0.04em; transition: background 0.2s, border-color 0.2s;
+    /* Botão flutuante de orientação — dentro da imagem */
+    .pano-float-orient {
+      position: absolute; bottom: 14px; right: 14px; z-index: 10;
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(8,9,15,0.72); border: 1px solid rgba(201,169,110,0.30);
+      border-radius: 100px; padding: 7px 14px;
+      color: var(--ouro); font-family: 'Inter', sans-serif;
+      font-size: 0.66rem; font-weight: 500; letter-spacing: 0.05em;
+      cursor: pointer; backdrop-filter: blur(10px);
+      transition: background 0.2s, border-color 0.2s;
     }
-    .gallery-orient-btn:hover { background: rgba(201,169,110,0.12); border-color: rgba(201,169,110,0.4); }
-    .gallery-orient-btn.active { background: rgba(201,169,110,0.16); border-color: rgba(201,169,110,0.55); color: #E0BE84; }
-    .gallery-orient-btn svg { flex-shrink: 0; }
+    .pano-float-orient:hover { background: rgba(8,9,15,0.9); border-color: rgba(201,169,110,0.55); }
+    .pano-float-orient.active { border-color: rgba(201,169,110,0.7); color: #E0BE84; }
+    .pano-float-orient svg { flex-shrink: 0; }
+
+    /* Caption mínimo dentro das imagens de galeria */
+    .gallery-cap {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
+      padding: 8px 16px;
+      background: linear-gradient(to top, rgba(8,9,15,0.82) 0%, transparent 100%);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(240,237,232,0.85);
+    }
+
+    /* ── Frase de impacto (decorado) ── */
+    .impact-phrase {
+      background: var(--dark-2);
+      padding: 80px 40px; text-align: center;
+    }
+    .impact-phrase blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.6rem);
+      font-style: italic; font-weight: 600;
+      color: var(--text); line-height: 1.35;
+      max-width: 760px; margin: 0 auto;
+    }
+    .impact-phrase blockquote em { color: var(--ouro); font-style: italic; }
+
+    /* ── CTA decorado ── */
+    .dec-cta {
+      background: var(--dark-2); text-align: center;
+      padding: 80px 40px; border-top: 1px solid var(--border);
+    }
+    .dec-cta h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 600;
+      color: var(--text); margin-bottom: 14px;
+    }
+    .dec-cta p {
+      color: var(--text-2); font-size: 0.98rem; line-height: 1.75;
+      max-width: 480px; margin: 0 auto 36px;
+    }
+    .dec-cta-btns {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .dec-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ouro); color: #08090F;
+      font-size: 0.90rem; font-weight: 600; letter-spacing: 0.02em;
+      padding: 14px 28px; border-radius: 8px; text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .dec-btn-primary:hover { background: #E0BE84; transform: translateY(-2px); }
+    .dec-btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 0.90rem; font-weight: 500;
+      padding: 14px 28px; border-radius: 8px; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .dec-btn-secondary:hover { border-color: var(--ouro); color: var(--ouro); }
 
     /* ============================================================
        4. REVESTIMENTOS — bloco texto + 3 materiais em destaque
@@ -491,40 +552,66 @@
 
 
   <!-- ============================================================
-       2. DECORADO — panorama principal + par de ambientes
+       2. DECORADO
        ============================================================ -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Apartamento Decorado</span>
-        <h2 class="section-title">O espaço que você<br>vai <em>viver.</em></h2>
-        <div class="divider"></div>
-        <p class="section-desc">
-          Conheça o decorado em 360° e sinta cada ambiente com total liberdade —
-          antes de assinar qualquer documento.
-        </p>
-      </div>
+  <section class="section" style="padding-bottom:0;">
+    <div class="container" style="padding-bottom:52px;">
+      <span class="section-label">Apartamento Decorado</span>
+      <h2 class="section-title">O espaço que você<br>vai <em>viver.</em></h2>
     </div>
 
-    <!-- Panorama principal do decorado -->
+    <!-- Panorama 1 -->
     <div class="panorama panorama--hero" style="position:relative;">
-      <div id="pnlm-dec-hero" class="pano-inner"></div>
-      <div class="img-caption">Sala de estar — Decorado — Imagem ilustrativa</div>
+      <div id="pnlm-dec-1" class="pano-inner"></div>
+      <button class="pano-float-orient" data-pnlm="pnlm-dec-1" onclick="toggleOrient(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="2" width="10" height="20" rx="2"/>
+          <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
+          <path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/>
+        </svg>
+        <span class="orient-lbl">Mover o celular para girar</span>
+      </button>
     </div>
 
-    <!-- Par: living + suíte -->
-    <div class="pano-pair">
-      <div class="pano-pair-item">
-        <div class="panorama">
-          <div id="pnlm-dec-1" class="pano-inner"></div>
-          <div class="img-caption">Living com varanda — Imagem ilustrativa</div>
-        </div>
-      </div>
-      <div class="pano-pair-item">
-        <div class="panorama">
-          <div id="pnlm-dec-2" class="pano-inner"></div>
-          <div class="img-caption">Suíte master — Imagem ilustrativa</div>
-        </div>
+    <!-- Frase de impacto -->
+    <div class="impact-phrase">
+      <blockquote>
+        "Cada ambiente foi projetado para transformar<br>
+        o seu dia a dia em algo <em>extraordinário.</em>"
+      </blockquote>
+    </div>
+
+    <!-- Panorama 2 -->
+    <div class="panorama panorama--hero" style="position:relative;">
+      <div id="pnlm-dec-2" class="pano-inner"></div>
+      <button class="pano-float-orient" data-pnlm="pnlm-dec-2" onclick="toggleOrient(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="2" width="10" height="20" rx="2"/>
+          <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
+          <path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/>
+        </svg>
+        <span class="orient-lbl">Mover o celular para girar</span>
+      </button>
+    </div>
+
+    <!-- CTA -->
+    <div class="dec-cta">
+      <h3>Venha viver esta experiência.</h3>
+      <p>
+        Visite o decorado em pessoa ou explore o tour virtual completo —
+        percorra cada ambiente como se o projeto já fosse seu.
+      </p>
+      <div class="dec-cta-btns">
+        <a href="tour.html" class="dec-btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/>
+          </svg>
+          Tour virtual 360°
+        </a>
+        <a href="https://wa.me/5519998949137?text=Olá!%20Quero%20agendar%20uma%20visita%20ao%20decorado."
+           class="dec-btn-secondary" target="_blank" rel="noopener">
+          Agendar visita ao decorado →
+        </a>
       </div>
     </div>
   </section>
@@ -543,74 +630,42 @@
 
     <div class="gallery-grid" style="margin-top:0;">
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-int1"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Living</span>
-            <span class="gallery-label-desc">Integrado com varanda gourmet</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-int1" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-int1"></div>
+          <div class="gallery-cap">Living</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-int1" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-int2"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Suíte Master</span>
-            <span class="gallery-label-desc">Com closet e banheiro privativo</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-int2" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-int2"></div>
+          <div class="gallery-cap">Suíte Master</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-int2" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-int3"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Cozinha</span>
-            <span class="gallery-label-desc">Aberta, integrada à sala de jantar</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-int3" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-int3"></div>
+          <div class="gallery-cap">Cozinha</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-int3" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-int4"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Varanda Gourmet</span>
-            <span class="gallery-label-desc">Vista panorâmica e churrasqueira</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-int4" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-int4"></div>
+          <div class="gallery-cap">Varanda Gourmet</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-int4" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
@@ -755,59 +810,35 @@
       <div class="img-caption">Área de lazer — Imagem ilustrativa</div>
     </div>
 
-    <!-- Galeria 3 colunas -->
+    <!-- Galeria áreas comuns -->
     <div class="gallery-grid gallery-grid--3">
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-comum1"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Piscina</span>
-            <span class="gallery-label-desc">Raia de 25m, deck e ducha</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-comum1" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-comum1"></div>
+          <div class="gallery-cap">Piscina</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-comum1" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-comum2"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Fitness</span>
-            <span class="gallery-label-desc">Equipamentos de última geração</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-comum2" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-comum2"></div>
+          <div class="gallery-cap">Fitness</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-comum2" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-pano"><div id="pnlm-comum3"></div></div>
-        <div class="gallery-label">
-          <div class="gallery-label-info">
-            <span class="gallery-label-name">Salão de Festas</span>
-            <span class="gallery-label-desc">Lounge externo e cozinha gourmet</span>
-          </div>
-          <button class="gallery-orient-btn" data-pnlm="pnlm-comum3" onclick="toggleOrient(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-              <path d="M2 9a10 10 0 000 6" opacity=".5"/>
-              <path d="M22 9a10 10 0 010 6" opacity=".5"/>
-            </svg>
-            <span class="orient-lbl">Mover o celular para girar</span>
+        <div class="gallery-pano">
+          <div id="pnlm-comum3"></div>
+          <div class="gallery-cap">Salão de Festas</div>
+          <button class="pano-float-orient" data-pnlm="pnlm-comum3" onclick="toggleOrient(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/></svg>
+            <span class="orient-lbl">Mover o celular</span>
           </button>
         </div>
       </div>
