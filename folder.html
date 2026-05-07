@@ -155,22 +155,21 @@
     .pano-curtain {
       position: absolute; top: 0; right: 0; bottom: 0;
       width: 30%; z-index: 9;
-      background: var(--dark);
+      background-color: var(--dark);
+      /* Padrão geométrico grego — losango repetido, estilo mosaico de Mykonos */
+      background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 2L30 16L16 30L2 16Z' fill='none' stroke='rgba(201,169,110,0.13)' stroke-width='0.8'/%3E%3Cpath d='M16 8L24 16L16 24L8 16Z' fill='none' stroke='rgba(201,169,110,0.08)' stroke-width='0.5'/%3E%3C/svg%3E");
+      background-size: 32px 32px;
+      border-left: 1.5px solid rgba(201,169,110,0.28);
       transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: none;
       display: flex; align-items: center; justify-content: flex-start;
-      padding-left: 28px;
-    }
-    /* Gradiente suave na borda esquerda da cortina */
-    .pano-curtain::before {
-      content: '';
-      position: absolute; left: -56px; top: 0; bottom: 0; width: 56px;
-      background: linear-gradient(to right, transparent, var(--dark));
+      padding-left: 20px;
     }
     .pano-curtain-hint {
-      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(201,169,110,0.55);
-      white-space: nowrap;
+      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(201,169,110,0.50);
+      white-space: nowrap; writing-mode: vertical-rl;
+      transform: rotate(180deg);
     }
     /* Hover (desktop) desliza a cortina para a direita */
     .panorama:hover .pano-curtain {
@@ -1113,19 +1112,20 @@
       'pnlm-comum1','pnlm-comum2','pnlm-comum3'
     ];
 
+    var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
     var viewers = {};
 
     Object.keys(PANORAMAS).forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
-      if (!PANORAMAS[id] || PANORAMAS[id].indexOf('ADICIONAR') !== -1) return; /* sem URL — pula */
+      if (!PANORAMAS[id] || PANORAMAS[id].indexOf('ADICIONAR') !== -1) return;
       var isGallery = GALLERY_IDS.indexOf(id) !== -1;
       viewers[id] = pannellum.viewer(id, {
         type:        'equirectangular',
         panorama:    PANORAMAS[id],
         autoLoad:    true,
         autoRotate:  -2,
-        autoRotateInactivityDelay: 2000,
+        autoRotateInactivityDelay: isMobile ? 99999 : 2000,
         compass:     false,
         showControls: !isGallery,
         hfov:        100,
@@ -1133,10 +1133,12 @@
         maxHfov:     110,
         pitch:       0,
         yaw:         0,
-        minPitch:    -20,
-        maxPitch:    20,
+        minPitch:    isMobile ? 0 : -20,
+        maxPitch:    isMobile ? 0 : 20,
         mouseZoom:   false,
-        draggable:   true,
+        /* Mobile: sem drag — dedo rola a página livremente */
+        /* Desktop: drag completo com mouse */
+        draggable:   !isMobile,
         keyboardZoom: false,
         showFullscreenCtrl: false
       });
