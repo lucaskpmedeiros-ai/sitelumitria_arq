@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="libs/pannellum/pannellum.css">
 
   <style>
     /* ============================================================
@@ -345,6 +346,23 @@
     }
 
     /* ============================================================
+       PANNELLUM VIEWER — encaixa no container .panorama
+       ============================================================ */
+    .pnlm-container {
+      width: 100% !important;
+      height: 100% !important;
+      background: #08090F !important;
+    }
+    /* Esconde UI desnecessária */
+    .pnlm-about-msg,
+    .pnlm-load-button { display: none !important; }
+    /* Cursor de arrastar */
+    .pnlm-container canvas { cursor: grab !important; }
+    .pnlm-container canvas:active { cursor: grabbing !important; }
+    /* Controles de zoom — discretos e dourados */
+    .pnlm-controls { filter: invert(1) sepia(1) saturate(2) hue-rotate(5deg) opacity(0.5); }
+
+    /* ============================================================
        RESPONSIVO
        ============================================================ */
     @media (max-width: 900px) {
@@ -376,11 +394,7 @@
        Troque o src abaixo pela URL da imagem de capa
   ============================================================ -->
   <section class="panorama panorama--full">
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png" alt="Capa do empreendimento">
-    <!--
-      DICA: use uma imagem panorâmica wide (landscape) de alta resolução.
-      Proporção ideal: 16:9 ou mais larga. Ex: render do empreendimento, fachada ou área de lazer.
-    -->
+    <div id="pnlm-capa" style="width:100%;height:100%;"></div>
     <div class="cover-overlay">
       <span class="cover-tag">Apresentação do Empreendimento</span>
       <div class="cover-line"></div>
@@ -412,10 +426,8 @@
       </p>
     </div>
 
-    <!-- Imagem lateral -->
-    <!-- TROQUE o src pela URL da imagem da fachada ou área social -->
     <div class="panorama panorama--mid" style="height: 100%; min-height: 460px;">
-      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159298/Panorama3_fvjpcl.png" alt="Sobre o empreendimento">
+      <div id="pnlm-sobre" style="width:100%;height:100%;"></div>
     </div>
 
   </div>
@@ -457,8 +469,7 @@
        Troque o src pela URL da imagem panorâmica
   ============================================================ -->
   <div class="panorama" style="position: relative;">
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159287/Panorama7_jdhdtx.png" alt="Ambiente 1">
-    <!-- TROQUE: legenda da imagem -->
+    <div id="pnlm-pan1" style="width:100%;height:100%;"></div>
     <div class="img-caption">Living com varanda gourmet — Imagem ilustrativa</div>
   </div>
 
@@ -496,8 +507,7 @@
   <div class="two-col two-col--reverse">
 
     <div class="panorama panorama--mid" style="height: 100%; min-height: 500px;">
-      <!-- TROQUE o src pela URL da imagem -->
-      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png" alt="Suíte master">
+      <div id="pnlm-pan2" style="width:100%;height:100%;"></div>
     </div>
 
     <div class="two-col-content">
@@ -562,8 +572,7 @@
        PANORAMA 3 — área de lazer / fachada
   ============================================================ -->
   <div class="panorama panorama--mid" style="position: relative;">
-    <!-- TROQUE o src pela URL da imagem -->
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png" alt="Área de lazer">
+    <div id="pnlm-pan3" style="width:100%;height:100%;"></div>
     <div class="img-caption">Área de lazer — Imagem ilustrativa</div>
   </div>
 
@@ -623,9 +632,8 @@
       </ul>
     </div>
 
-    <!-- TROQUE: imagem aérea ou foto do bairro -->
     <div class="panorama panorama--mid" style="height: 100%; min-height: 480px;">
-      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png" alt="Localização">
+      <div id="pnlm-loc" style="width:100%;height:100%;"></div>
     </div>
 
   </div>
@@ -635,8 +643,7 @@
        PANORAMA FINAL — imagem de impacto
   ============================================================ -->
   <div class="panorama" style="position: relative;">
-    <!-- TROQUE o src pela URL da imagem final de impacto -->
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png" alt="Imagem final">
+    <div id="pnlm-final" style="width:100%;height:100%;position:absolute;inset:0;z-index:1;"></div>
     <div class="cover-overlay" style="justify-content: center; align-items: center; text-align: center; background: linear-gradient(to top, rgba(8,9,15,0.75) 0%, rgba(8,9,15,0.4) 100%);">
       <span class="cover-tag">Realização</span>
       <!-- TROQUE: nome da construtora/incorporadora -->
@@ -664,5 +671,40 @@
     </div>
   </footer>
 
+  <script src="libs/pannellum/pannellum.js"></script>
+  <script>
+    /* ============================================================
+       PANORAMAS NAVEGÁVEIS — troque apenas as URLs abaixo
+       ============================================================ */
+    var PANORAMAS = {
+      'pnlm-capa':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png',
+      'pnlm-sobre': 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159298/Panorama3_fvjpcl.png',
+      'pnlm-pan1':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159287/Panorama7_jdhdtx.png',
+      'pnlm-pan2':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png',
+      'pnlm-pan3':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png',
+      'pnlm-loc':   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png',
+      'pnlm-final': 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png'
+    };
+
+    Object.keys(PANORAMAS).forEach(function (id) {
+      if (!document.getElementById(id)) return;
+      pannellum.viewer(id, {
+        type:        'equirectangular',
+        panorama:    PANORAMAS[id],
+        autoLoad:    true,
+        autoRotate:  -1.5,       /* rotação suave automática */
+        autoRotateInactivityDelay: 3000,
+        compass:     false,
+        showControls: true,
+        hfov:        100,
+        minHfov:     60,
+        maxHfov:     120,
+        mouseZoom:   true,
+        draggable:   true,
+        touchPanSpeedCoeffFactor: 1,
+        showFullscreenCtrl: false
+      });
+    });
+  </script>
 </body>
 </html>
