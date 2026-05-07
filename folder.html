@@ -76,16 +76,19 @@
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; z-index: 1;
     }
-    /* Imagem de capa — substitui o vídeo até ele ficar pronto */
+    /* Imagem de capa — preenche altura, corta levemente as laterais */
     .hero-placeholder {
       position: absolute; inset: 0; z-index: 1;
       overflow: hidden;
     }
     .hero-placeholder img {
-      width: 100%; height: 100%;
-      object-fit: contain;        /* mostra a imagem inteira sem cortar */
-      object-position: center;
-      background: var(--dark);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100%;       /* preenche altura total — sem bordas em cima/baixo */
+      width: auto;        /* mantém proporção — corta laterais se necessário */
+      min-width: 100%;    /* garante que nunca fica menor que a tela */
+      max-width: none;
     }
     .hero-overlay {
       position: absolute; inset: 0; z-index: 3;
