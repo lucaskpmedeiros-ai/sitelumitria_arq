@@ -205,6 +205,8 @@
     .gallery-item {
       overflow: hidden;
       aspect-ratio: 4/3;
+      min-height: 260px;
+      position: relative;
     }
 
     .gallery-item img {
@@ -483,19 +485,18 @@
       <h2 class="section-title">Cada espaço pensado<br>para o seu <em>bem-estar.</em></h2>
     </div>
 
-    <!-- Grade de imagens — TROQUE cada src -->
     <div class="gallery-grid" style="margin-top: 48px;">
       <div class="gallery-item">
-        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png" alt="Ambiente 1">
+        <div id="pnlm-amb1" style="width:100%;height:100%;"></div>
       </div>
       <div class="gallery-item">
-        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png" alt="Ambiente 2">
+        <div id="pnlm-amb2" style="width:100%;height:100%;"></div>
       </div>
       <div class="gallery-item">
-        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png" alt="Ambiente 3">
+        <div id="pnlm-amb3" style="width:100%;height:100%;"></div>
       </div>
       <div class="gallery-item">
-        <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png" alt="Ambiente 4">
+        <div id="pnlm-amb4" style="width:100%;height:100%;"></div>
       </div>
     </div>
   </section>
@@ -683,7 +684,11 @@
       'pnlm-pan2':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png',
       'pnlm-pan3':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png',
       'pnlm-loc':   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png',
-      'pnlm-final': 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png'
+      'pnlm-final': 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png',
+      'pnlm-amb1':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159311/Panorama13_bxjnve.png',
+      'pnlm-amb2':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159281/Panorama12_hqbnju.png',
+      'pnlm-amb3':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159275/Panorama9_ezuoli.png',
+      'pnlm-amb4':  'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778159264/Panorama10_chf5qi.png'
     };
 
     Object.keys(PANORAMAS).forEach(function (id) {
