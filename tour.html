@@ -199,6 +199,44 @@
       .sbtn { padding: 6px 10px; min-width: 52px; }
     }
 
+    /* ── Planta baixa ── */
+    #plantaBox {
+      position: fixed; bottom: 80px; left: 20px; z-index: 200;
+      width: 210px;
+      background: rgba(8,9,15,0.84); border: 1px solid rgba(201,169,110,0.28);
+      border-radius: 12px; overflow: hidden; backdrop-filter: blur(14px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      transition: opacity 0.4s;
+    }
+    #plantaBox.hidden { opacity: 0; pointer-events: none; }
+    .planta-header {
+      padding: 7px 12px; border-bottom: 1px solid rgba(201,169,110,0.15);
+      font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ouro);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .planta-wrap { position: relative; padding: 8px; }
+    .planta-wrap img { width: 100%; display: block; opacity: 0.90; }
+    .room-dot {
+      position: absolute; width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(201,169,110,0.35); border: 2px solid rgba(201,169,110,0.50);
+      transform: translate(-50%, -50%);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .room-dot.active {
+      background: var(--ouro);
+      box-shadow: 0 0 0 4px rgba(201,169,110,0.25), 0 0 12px var(--ouro-glow);
+      transform: translate(-50%, -50%) scale(1.25);
+    }
+    .room-dot-label {
+      position: absolute; transform: translateX(-50%);
+      font-size: 0.48rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--ouro);
+      white-space: nowrap; margin-top: 2px;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .room-dot.active + .room-dot-label { opacity: 1; }
+
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     @keyframes hs-pulse {
       0%   { transform: scale(1);    opacity: 0.7; }
@@ -211,6 +249,28 @@
 
 <div id="panorama"></div>
 <div id="transition"></div>
+
+<!-- Planta baixa -->
+<div id="plantaBox">
+  <div class="planta-header">
+    <span class="ldot"></span> Planta Baixa
+  </div>
+  <div class="planta-wrap" id="plantaWrap">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778362145/vamos_tentat_essa-removebg-preview_an8cmw.png" alt="Planta Baixa">
+    <!-- Marcadores — posições em % relativas à imagem. Ajuste com left/top -->
+    <div class="room-dot active" id="dot-0" style="left:42%; top:55%;"></div>
+    <div class="room-dot-label" style="left:42%; top:63%;">Sala</div>
+
+    <div class="room-dot" id="dot-1" style="left:72%; top:38%;"></div>
+    <div class="room-dot-label" style="left:72%; top:46%;">Suíte</div>
+
+    <div class="room-dot" id="dot-2" style="left:25%; top:38%;"></div>
+    <div class="room-dot-label" style="left:25%; top:46%;">Cozinha</div>
+
+    <div class="room-dot" id="dot-3" style="left:60%; top:78%;"></div>
+    <div class="room-dot-label" style="left:60%; top:86%;">Varanda</div>
+  </div>
+</div>
 
 <div id="loadScreen">
   <img src="assets/images/logo-lumitria.png" alt="Lumitria">
@@ -387,6 +447,9 @@ function goTo(idx) {
 function updateNav(idx) {
   document.querySelectorAll('.sbtn').forEach(function (b, i) {
     b.classList.toggle('on', i === idx);
+  });
+  document.querySelectorAll('.room-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
   });
 }
 
