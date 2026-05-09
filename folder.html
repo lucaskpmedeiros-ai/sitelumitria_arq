@@ -635,10 +635,13 @@
 
     <!-- CTA 3D imersivo -->
     <div style="position:relative; overflow:hidden; background:#08090F; padding: 100px 40px; text-align:center;">
-      <!-- Glow de fundo -->
-      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;
-                  background:radial-gradient(circle, rgba(201,169,110,0.10) 0%, transparent 70%);
-                  pointer-events:none;"></div>
+      <!-- Panorama girando como fundo -->
+      <div id="pnlm-cta-bg" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></div>
+      <!-- Overlay escuro para legibilidade -->
+      <div style="position:absolute;inset:0;background:rgba(8,9,15,0.72);z-index:1;pointer-events:none;"></div>
+
+      <!-- Conteúdo sobre o panorama -->
+      <div style="position:relative;z-index:2;">
 
       <!-- Badge -->
       <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,0.10);
@@ -691,6 +694,8 @@
           Agendar visita presencial →
         </a>
       </div>
+
+      </div><!-- fim conteúdo z-index:2 -->
     </div>
   </section>
 
@@ -1125,8 +1130,10 @@
        Slots marcados com ADICIONAR → cole a URL quando tiver a foto
        ============================================================ */
     var PANORAMAS = {
-      /* Decorado — 2 panoramas únicos — atualizado 08/05/2026 */
-      'pnlm-dec-1':      'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778272701/Panorama14_jzprdw.png',
+      /* Fundo CTA — panorama girando */
+      'pnlm-cta-bg':     'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778272802/ChatGPT_Image_8_de_mai._de_2026_17_39_56_enepws.png',
+      /* Decorado */
+      'pnlm-dec-1':      '<!-- ADICIONAR URL -->',
       'pnlm-dec-2':      '<!-- ADICIONAR URL -->',
       /* Ambientes internos — 3 panoramas únicos */
       'pnlm-int1':       '<!-- ADICIONAR URL -->',
