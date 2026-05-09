@@ -633,23 +633,62 @@
       </blockquote>
     </div>
 
-    <!-- CTA -->
-    <div class="dec-cta">
-      <h3>Venha viver esta experiência.</h3>
-      <p>
-        Visite o decorado em pessoa ou explore o tour virtual completo —
-        percorra cada ambiente como se o projeto já fosse seu.
+    <!-- CTA 3D imersivo -->
+    <div style="position:relative; overflow:hidden; background:#08090F; padding: 100px 40px; text-align:center;">
+      <!-- Glow de fundo -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;
+                  background:radial-gradient(circle, rgba(201,169,110,0.10) 0%, transparent 70%);
+                  pointer-events:none;"></div>
+
+      <!-- Badge -->
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,0.10);
+                  border:1px solid rgba(201,169,110,0.30);border-radius:100px;padding:6px 18px;
+                  font-size:0.70rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+                  color:var(--ouro);margin-bottom:32px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--ouro);animation:pulse 2s infinite;flex-shrink:0;display:inline-block;"></span>
+        Experiência imersiva 360°
+      </div>
+
+      <!-- Título -->
+      <h3 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);
+                 font-weight:700;color:var(--text);line-height:1.15;margin-bottom:20px;">
+        Ande pelo seu<br>futuro investimento <em style="color:var(--ouro);font-style:italic;">em 3D.</em>
+      </h3>
+
+      <!-- Subtítulo -->
+      <p style="color:var(--text-2);font-size:1.05rem;line-height:1.80;max-width:520px;
+                margin:0 auto 48px;">
+        Percorra cada ambiente do apartamento como se já fosse seu —
+        antes mesmo da primeira pedra ser assentada.
       </p>
-      <div class="dec-cta-btns">
-        <a href="tour.html" class="dec-btn-primary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/>
+
+      <!-- Botões -->
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="tour.html" style="display:inline-flex;align-items:center;gap:10px;
+           background:var(--ouro);color:#08090F;
+           font-size:1rem;font-weight:700;letter-spacing:0.02em;
+           padding:16px 36px;border-radius:10px;text-decoration:none;
+           box-shadow:0 0 32px rgba(201,169,110,0.35),0 8px 24px rgba(0,0,0,0.4);
+           transition:transform 0.2s,box-shadow 0.2s;"
+           onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 48px rgba(201,169,110,0.5),0 12px 32px rgba(0,0,0,0.45)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 0 32px rgba(201,169,110,0.35),0 8px 24px rgba(0,0,0,0.4)'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
+            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
           </svg>
-          Tour virtual 360°
+          Iniciar tour 3D agora
         </a>
         <a href="https://wa.me/5519998949137?text=Olá!%20Quero%20agendar%20uma%20visita%20ao%20decorado."
-           class="dec-btn-secondary" target="_blank" rel="noopener">
-          Agendar visita ao decorado →
+           target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:10px;
+           background:transparent;color:var(--text);
+           border:1px solid rgba(201,169,110,0.35);
+           font-size:1rem;font-weight:500;
+           padding:16px 36px;border-radius:10px;text-decoration:none;
+           transition:border-color 0.2s,color 0.2s;"
+           onmouseover="this.style.borderColor='rgba(201,169,110,0.7)';this.style.color='var(--ouro)'"
+           onmouseout="this.style.borderColor='rgba(201,169,110,0.35)';this.style.color='var(--text)'">
+          Agendar visita presencial →
         </a>
       </div>
     </div>
