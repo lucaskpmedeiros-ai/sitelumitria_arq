@@ -617,17 +617,21 @@
       <h2 class="section-title">O espaço que você<br>vai <em>viver.</em></h2>
     </div>
 
-    <!-- Panorama 1 -->
-    <div class="panorama panorama--hero" style="position:relative;">
-      <div id="pnlm-dec-1" class="pano-inner"></div>
-      <button class="pano-float-orient" data-pnlm="pnlm-dec-1" onclick="toggleOrient(this)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="7" y="2" width="10" height="20" rx="2"/>
-          <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
-          <path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/>
-        </svg>
-        <span class="orient-lbl">Mover o celular para girar</span>
-      </button>
+    <!-- Panorama 1 — com moldura -->
+    <div style="padding: 0 48px;">
+      <div style="border: 1.5px solid rgba(201,169,110,0.45); box-shadow: 0 0 32px rgba(201,169,110,0.08); overflow:hidden; position:relative;">
+        <div class="panorama panorama--hero" style="position:relative; margin:0;">
+          <div id="pnlm-dec-1" class="pano-inner"></div>
+          <button class="pano-float-orient" data-pnlm="pnlm-dec-1" onclick="toggleOrient(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="7" y="2" width="10" height="20" rx="2"/>
+              <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>
+              <path d="M2 9a10 10 0 000 6" opacity=".6"/><path d="M22 9a10 10 0 010 6" opacity=".6"/>
+            </svg>
+            <span class="orient-lbl">Mover o celular para girar</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Imagem flat abaixo do primeiro panorama -->
