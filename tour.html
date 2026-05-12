@@ -283,7 +283,7 @@
     <div class="room-dot" id="dot-3" style="left:50%; top:50%;"></div>
     <div class="room-dot" id="dot-4" style="left:50%; top:50%;"></div>
     <div class="room-dot" id="dot-5" style="left:50%; top:50%;"></div>
-    <div class="room-dot" id="dot-6" style="left:18%; top:32%;"></div>
+    <div class="room-dot" id="dot-6" style="left:18%; top:42%;"></div>
   </div>
 </div>
 
@@ -321,31 +321,31 @@
 
 <nav id="sceneNav">
   <div class="nav-inner">
-    <button class="sbtn on" onclick="goTo(0)">
+    <button class="sbtn on" data-scene="0" onclick="goTo(0)">
       <div class="pip"></div><span class="plbl">Sala</span>
     </button>
     <div class="ndiv"></div>
-    <button class="sbtn" onclick="goTo(1)">
+    <button class="sbtn" data-scene="1" onclick="goTo(1)">
       <div class="pip"></div><span class="plbl">Suíte</span>
     </button>
     <div class="ndiv"></div>
-    <button class="sbtn" onclick="goTo(6)">
+    <button class="sbtn" data-scene="6" onclick="goTo(6)">
       <div class="pip"></div><span class="plbl">Suíte II</span>
     </button>
     <div class="ndiv"></div>
-    <button class="sbtn" onclick="goTo(2)">
+    <button class="sbtn" data-scene="2" onclick="goTo(2)">
       <div class="pip"></div><span class="plbl">Cozinha</span>
     </button>
     <div class="ndiv"></div>
-    <button class="sbtn" onclick="goTo(3)">
+    <button class="sbtn" data-scene="3" onclick="goTo(3)">
       <div class="pip"></div><span class="plbl">Varanda</span>
     </button>
     <div class="ndiv"></div>
-    <button class="sbtn" onclick="goTo(4)">
+    <button class="sbtn" data-scene="4" onclick="goTo(4)">
       <div class="pip"></div><span class="plbl">Hall</span>
     </button>
     <div class="ndiv"></div>
-    <button class="sbtn" onclick="goTo(5)">
+    <button class="sbtn" data-scene="5" onclick="goTo(5)">
       <div class="pip"></div><span class="plbl">Escritório</span>
     </button>
   </div>
@@ -493,11 +493,11 @@ function goTo(idx) {
 }
 
 function updateNav(idx) {
-  document.querySelectorAll('.sbtn').forEach(function (b, i) {
-    b.classList.toggle('on', i === idx);
+  document.querySelectorAll('.sbtn').forEach(function (b) {
+    b.classList.toggle('on', parseInt(b.dataset.scene) === idx);
   });
-  document.querySelectorAll('.room-dot').forEach(function (d, i) {
-    d.classList.toggle('active', i === idx);
+  document.querySelectorAll('.room-dot').forEach(function (d) {
+    d.classList.toggle('active', d.id === 'dot-' + idx);
   });
 }
 
