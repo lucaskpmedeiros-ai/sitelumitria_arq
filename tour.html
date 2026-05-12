@@ -283,6 +283,7 @@
     <div class="room-dot" id="dot-3" style="left:50%; top:50%;"></div>
     <div class="room-dot" id="dot-4" style="left:50%; top:50%;"></div>
     <div class="room-dot" id="dot-5" style="left:50%; top:50%;"></div>
+    <div class="room-dot" id="dot-6" style="left:18%; top:32%;"></div>
   </div>
 </div>
 
@@ -343,6 +344,10 @@
     <button class="sbtn" onclick="goTo(5)">
       <div class="pip"></div><span class="plbl">Escritório</span>
     </button>
+    <div class="ndiv"></div>
+    <button class="sbtn" onclick="goTo(6)">
+      <div class="pip"></div><span class="plbl">Suíte II</span>
+    </button>
   </div>
 </nav>
 
@@ -377,7 +382,7 @@ var SCENES = [
     name: 'Suíte Master',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622880/Panorama19_j8vkzb.png',
     hotspots: [
-      { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
+      { pitch: 0, yaw: 0, to: 6, label: 'Suíte II' }
     ]
   },
   {
@@ -406,6 +411,13 @@ var SCENES = [
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama16_rtbrgr.png',
     hotspots: [
       { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
+    ]
+  },
+  {
+    name: 'Suíte II',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622879/Panorama20_iyt8tj.png',
+    hotspots: [
+      { pitch: 0, yaw: 0, to: 1, label: 'Suíte' }
     ]
   }
 ];
