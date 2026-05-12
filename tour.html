@@ -264,14 +264,12 @@
   </div>
   <div class="planta-wrap" id="plantaWrap">
     <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778362145/vamos_tentat_essa-removebg-preview_an8cmw.png" alt="Planta Baixa">
-    <!-- dot-0: Sala — posição conforme print -->
     <div class="room-dot active" id="dot-0" style="left:52%; top:52%;"></div>
-    <!-- dot-1: Suíte — posição a confirmar -->
     <div class="room-dot" id="dot-1" style="left:50%; top:50%;"></div>
-    <!-- dot-2: Cozinha — posição a confirmar -->
     <div class="room-dot" id="dot-2" style="left:50%; top:50%;"></div>
-    <!-- dot-3: Varanda — posição a confirmar -->
     <div class="room-dot" id="dot-3" style="left:50%; top:50%;"></div>
+    <div class="room-dot" id="dot-4" style="left:50%; top:50%;"></div>
+    <div class="room-dot" id="dot-5" style="left:50%; top:50%;"></div>
   </div>
 </div>
 
@@ -324,6 +322,14 @@
     <button class="sbtn" onclick="goTo(3)">
       <div class="pip"></div><span class="plbl">Varanda</span>
     </button>
+    <div class="ndiv"></div>
+    <button class="sbtn" onclick="goTo(4)">
+      <div class="pip"></div><span class="plbl">Hall</span>
+    </button>
+    <div class="ndiv"></div>
+    <button class="sbtn" onclick="goTo(5)">
+      <div class="pip"></div><span class="plbl">Escritório</span>
+    </button>
   </div>
 </nav>
 
@@ -345,35 +351,48 @@
 var SCENES = [
   {
     name: 'Sala de Estar',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622923/Panorama14_wskz6q.png',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778624798/Panorama14_000_g51d7d.png',
     hotspots: [
-      { pitch: 0, yaw: -160, to: 2, label: 'Cozinha' },
-      { pitch: 0, yaw: -95,  to: 1, label: 'Suíte' },
-      { pitch: 0, yaw: 62,   to: 3, label: 'Varanda' }
+      { pitch: 0, yaw: -155, to: 2, label: 'Cozinha'    },
+      { pitch: 0, yaw: -95,  to: 4, label: 'Hall'       },
+      { pitch: 0, yaw: -15,  to: 1, label: 'Suíte'      },
+      { pitch: 0, yaw:  80,  to: 3, label: 'Varanda'    },
+      { pitch: 0, yaw:  148, to: 5, label: 'Escritório' }
     ]
   },
   {
     name: 'Suíte Master',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama17_qypkhp.png',
     hotspots: [
-      { pitch: 0, yaw: -60, to: 0, label: 'Sala' },
-      { pitch: 0, yaw: 60,  to: 2, label: 'Cozinha' }
+      { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
     ]
   },
   {
     name: 'Cozinha',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama14_u694t4.png',
     hotspots: [
-      { pitch: 0, yaw: -60, to: 1, label: 'Suíte' },
-      { pitch: 0, yaw: 60,  to: 3, label: 'Varanda' }
+      { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
     ]
   },
   {
     name: 'Varanda Gourmet',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama16_rtbrgr.png',
     hotspots: [
-      { pitch: 0, yaw: -60, to: 2, label: 'Cozinha' },
-      { pitch: 0, yaw: 60,  to: 0, label: 'Sala' }
+      { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
+    ]
+  },
+  {
+    name: 'Hall',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama15_csfcsm.png',
+    hotspots: [
+      { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
+    ]
+  },
+  {
+    name: 'Escritório',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama16_rtbrgr.png',
+    hotspots: [
+      { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
     ]
   }
 ];
