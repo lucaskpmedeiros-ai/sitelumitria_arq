@@ -264,7 +264,14 @@
   </div>
   <div class="planta-wrap" id="plantaWrap">
     <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778362145/vamos_tentat_essa-removebg-preview_an8cmw.png" alt="Planta Baixa">
-    <!-- Marcadores serão adicionados após confirmação das posições -->
+    <!-- dot-0: Sala — posição conforme print -->
+    <div class="room-dot active" id="dot-0" style="left:52%; top:52%;"></div>
+    <!-- dot-1: Suíte — posição a confirmar -->
+    <div class="room-dot" id="dot-1" style="left:50%; top:50%;"></div>
+    <!-- dot-2: Cozinha — posição a confirmar -->
+    <div class="room-dot" id="dot-2" style="left:50%; top:50%;"></div>
+    <!-- dot-3: Varanda — posição a confirmar -->
+    <div class="room-dot" id="dot-3" style="left:50%; top:50%;"></div>
   </div>
 </div>
 
@@ -338,10 +345,11 @@
 var SCENES = [
   {
     name: 'Sala de Estar',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778345818/Panorama15_csfcsm.png',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622923/Panorama14_wskz6q.png',
     hotspots: [
-      { pitch: 0, yaw: 60,  to: 1, label: 'Suíte' },
-      { pitch: 0, yaw: -60, to: 3, label: 'Varanda' }
+      { pitch: 0, yaw: -160, to: 2, label: 'Cozinha' },
+      { pitch: 0, yaw: -95,  to: 1, label: 'Suíte' },
+      { pitch: 0, yaw: 62,   to: 3, label: 'Varanda' }
     ]
   },
   {
