@@ -225,24 +225,21 @@
     .planta-wrap { position: relative; padding: 8px; }
     .planta-wrap img { width: 100%; display: block; opacity: 0.90; }
     .room-dot {
-      position: absolute; width: 12px; height: 12px; border-radius: 50%;
-      background: rgba(201,169,110,0.35); border: 2px solid rgba(201,169,110,0.50);
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(201,169,110,0.20); border: 1.5px solid rgba(201,169,110,0.35);
       transform: translate(-50%, -50%);
-      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+      transition: background 0.4s, box-shadow 0.4s;
     }
     .room-dot.active {
-      background: var(--ouro);
-      box-shadow: 0 0 0 4px rgba(201,169,110,0.25), 0 0 12px var(--ouro-glow);
-      transform: translate(-50%, -50%) scale(1.25);
+      background: rgba(74,144,217,0.75);
+      border: 2px solid rgba(74,144,217,0.90);
+      box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
+      animation: dot-pulse 3.5s ease-in-out infinite;
     }
-    .room-dot-label {
-      position: absolute; transform: translateX(-50%);
-      font-size: 0.48rem; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--ouro);
-      white-space: nowrap; margin-top: 2px;
-      opacity: 0; transition: opacity 0.3s;
+    @keyframes dot-pulse {
+      0%,100% { box-shadow: 0 0 0 2px rgba(74,144,217,0.18), 0 0 6px rgba(74,144,217,0.20); }
+      50%      { box-shadow: 0 0 0 6px rgba(74,144,217,0.08), 0 0 12px rgba(74,144,217,0.30); }
     }
-    .room-dot.active + .room-dot-label { opacity: 1; }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     @keyframes hs-pulse {
@@ -264,7 +261,7 @@
   </div>
   <div class="planta-wrap" id="plantaWrap">
     <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778362145/vamos_tentat_essa-removebg-preview_an8cmw.png" alt="Planta Baixa">
-    <div class="room-dot active" id="dot-0" style="left:52%; top:52%;"></div>
+    <div class="room-dot active" id="dot-0" style="left:53%; top:58%;"></div>
     <div class="room-dot" id="dot-1" style="left:50%; top:50%;"></div>
     <div class="room-dot" id="dot-2" style="left:50%; top:50%;"></div>
     <div class="room-dot" id="dot-3" style="left:50%; top:50%;"></div>
