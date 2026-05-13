@@ -101,6 +101,14 @@
       30%, 70%   { opacity: 1; }
       95%, 100%  { opacity: 0; }
     }
+    .sala-night {
+      animation: daynightSlow 20s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    }
+    @keyframes daynightSlow {
+      0%, 8%      { opacity: 0; }
+      35%, 65%    { opacity: 1; }
+      92%, 100%   { opacity: 0; }
+    }
     .hero-overlay {
       position: absolute; inset: 0; z-index: 3;
       background:
@@ -651,7 +659,7 @@
            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
       <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778638233/ChatGPT_Image_12_de_mai._de_2026_23_10_27_ezarry.png"
            alt="Sala noite"
-           class="hero-night"
+           class="sala-night"
            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
     </div>
 
