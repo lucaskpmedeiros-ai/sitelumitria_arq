@@ -557,40 +557,99 @@
        RESPONSIVO
        ============================================================ */
     @media (max-width: 900px) {
-      .container { padding: 0 24px; }
-      .section { padding: 64px 0; }
+      .container { padding: 0 20px; }
+      .section { padding: 56px 0; }
       .pano-pair { grid-template-columns: 1fr; }
       .loc-grid { grid-template-columns: 1fr; }
-      .loc-content { padding: 48px 28px; }
+      .loc-content { padding: 48px 24px; }
       .features-grid { grid-template-columns: 1fr 1fr; }
       .stats-row { grid-template-columns: 1fr 1fr; }
       .mat-grid { grid-template-columns: 1fr 1fr; }
       .mat-grid .mat-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
       .slide { grid-template-columns: 1fr; min-height: unset; }
       .slide--reverse { direction: ltr; }
-      .slide-content { padding: 40px 28px; }
-      .slide-pano { min-height: 300px; aspect-ratio: 16/9; }
+      .slide-content { padding: 36px 24px; }
+      .slide-pano { min-height: 280px; aspect-ratio: 16/9; }
       .vr-cards { grid-template-columns: 1fr; gap: 10px; }
       .vr-cta-box { flex-direction: column; align-items: flex-start; }
       .vr-btn { width: 100%; justify-content: center; }
-      .hero-overlay { padding: 40px 28px; }
+      .hero-overlay { padding: 40px 24px; }
     }
 
     @media (max-width: 600px) {
-      .hero-title { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+      /* Hero */
+      .hero-video { min-height: 100svh; }
+      .hero-title { font-size: clamp(2.6rem, 11vw, 3.6rem); }
+      .hero-sub { font-size: 0.92rem; letter-spacing: 0.04em; max-width: 100%; }
+      .hero-overlay { padding: 32px 20px 48px; }
+      .hero-video-badge { display: none; }
+      .hero-scroll { bottom: 20px; }
+
+      /* Tag apresentação — reposiciona no mobile */
+      .hero-tag-mobile-fix {
+        bottom: 16px !important; right: 16px !important;
+        padding: 10px 16px !important; border-radius: 8px !important;
+        font-size: 0.60rem !important;
+      }
+
+      /* Seções */
+      .section { padding: 44px 0; }
+      .container { padding: 0 16px; }
+      .section-header { margin-bottom: 36px; }
+
+      /* Impact phrase */
+      .impact-phrase { padding: 52px 20px; }
+      .impact-phrase blockquote { font-size: clamp(1.2rem, 5.5vw, 1.8rem); line-height: 1.6; }
+
+      /* Imagens flat */
+      .flat-img-mobile { height: 52vw !important; min-height: 220px !important; }
+
+      /* Galeria */
       .gallery-grid { grid-template-columns: 1fr; gap: 3px; }
       .gallery-grid--3 { grid-template-columns: 1fr; }
-      .gallery-pano { aspect-ratio: 16/9; min-height: 220px; }
-      .gallery-label { padding: 10px 12px 12px; }
-      .gallery-label-name { font-size: 0.80rem; }
-      .gallery-label-desc { font-size: 0.67rem; }
-      .gallery-orient-btn { font-size: 0.65rem; padding: 8px 10px; }
+      .gallery-pano { aspect-ratio: 4/3; min-height: 220px; }
+      .gallery-label { padding: 10px 14px 14px; }
+      .gallery-label-name { font-size: 0.82rem; }
+      .gallery-label-desc { font-size: 0.70rem; }
+
+      /* Revestimentos */
       .mat-grid { grid-template-columns: 1fr; }
-      .mat-pano { height: 240px; }
-      .features-grid { grid-template-columns: 1fr; }
+      .mat-pano { height: 56vw; }
+
+      /* Stats */
       .stats-row { grid-template-columns: 1fr 1fr; }
-      .section { padding: 52px 0; }
-      .hero-video-badge { display: none; }
+      .stat-value { font-size: 1.8rem; }
+      .stat-item { padding: 24px 16px; }
+
+      /* Diferenciais */
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-item { padding: 24px 20px; }
+
+      /* CTA decorado */
+      .dec-cta { padding: 52px 20px; }
+      .dec-cta h3 { font-size: 1.4rem; }
+      .dec-cta-btns { flex-direction: column; gap: 10px; }
+      .dec-btn-primary, .dec-btn-secondary { width: 100%; justify-content: center; padding: 14px 20px; }
+
+      /* VR section */
+      .lumitria-vr { padding: 60px 20px; }
+      .vr-headline { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+      .vr-sub { font-size: 0.92rem; }
+      .vr-cta-box { padding: 20px 18px; }
+      .vr-btn { padding: 13px 18px; font-size: 0.82rem; }
+
+      /* Localização */
+      .loc-content { padding: 40px 20px; }
+      .panorama--mid { height: 56vw !important; min-height: 220px !important; }
+
+      /* Footer */
+      .folder-footer { padding: 40px 0 28px; }
+      .folder-footer-logo { font-size: 1.2rem; }
+      .folder-footer p { font-size: 0.78rem; }
+      .folder-footer-note { font-size: 0.64rem; padding: 0 16px; }
+
+      /* Botões flutuantes de orientação */
+      .pano-float-orient { font-size: 0.60rem; padding: 6px 10px; }
     }
   </style>
 </head>
@@ -622,7 +681,7 @@
     </div>
 
     <!-- Tag repositionada canto inferior direito -->
-    <div style="position:absolute; bottom:48px; right:56px; z-index:4;
+    <div class="hero-tag-mobile-fix" style="position:absolute; bottom:48px; right:56px; z-index:4;
                 display:inline-flex; align-items:center; gap:9px;
                 background:rgba(8,9,15,0.55); backdrop-filter:blur(14px);
                 border:1px solid rgba(201,169,110,0.35); border-radius:12px;
@@ -654,7 +713,7 @@
 
 
     <!-- Imagem flat 2 — transição dia/noite -->
-    <div style="width:100%;height:70vh;min-height:400px;overflow:hidden;position:relative;">
+    <div class="flat-img-mobile" style="width:100%;height:70vh;min-height:400px;overflow:hidden;position:relative;">
       <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778329200/ChatGPT_Image_9_de_mai._de_2026_09_17_17_ebbgj6.png"
            alt="Sala dia"
            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
