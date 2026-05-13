@@ -224,28 +224,36 @@
     }
     #plantaBox.hidden { opacity: 0; pointer-events: none; }
 
-    /* Mobile: recolhido por padrão */
     @media (max-width: 600px) {
+      /* Planta: pequena e visível por padrão */
       #plantaBox {
-        width: 44px; height: 44px; border-radius: 50%;
-        bottom: 90px; left: 14px;
-        overflow: hidden;
-        transition: width 0.35s ease, height 0.35s ease, border-radius 0.35s ease, transform 0.3s ease;
+        width: 130px;
+        bottom: 90px; left: 12px;
+        transform-origin: bottom left;
       }
-      #plantaBox.expanded {
-        width: 190px; height: auto; border-radius: 12px;
-        transform: none !important;
+      #plantaBox.zoomed {
+        transform: scale(1.7);
       }
-      #plantaBox:not(.expanded) .planta-header span:last-child,
-      #plantaBox:not(.expanded) .planta-wrap { display: none; }
-      #plantaBox:not(.expanded) .planta-header {
-        border: none; padding: 0;
-        width: 44px; height: 44px;
-        justify-content: center; align-items: center;
+      .planta-header { padding: 5px 10px; font-size: 0.52rem; }
+      .planta-wrap { padding: 6px; }
+
+      /* Nav: scrollável horizontalmente */
+      #sceneNav {
+        padding-left: 0; padding-right: 0;
       }
-      #plantaBox:not(.expanded) .planta-header .ldot { width: 8px; height: 8px; }
-      #plantaBox.expanded .planta-header { padding: 7px 12px; border-bottom: 1px solid rgba(201,169,110,0.15); }
-      #plantaBox.expanded .planta-wrap { display: block; }
+      .nav-inner {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        border-radius: 0;
+        border-left: none; border-right: none;
+        padding: 10px 16px;
+        gap: 2px;
+        max-width: 100%;
+      }
+      .nav-inner::-webkit-scrollbar { display: none; }
+      .sbtn { min-width: 52px; padding: 6px 10px; flex-shrink: 0; }
+      .ndiv { flex-shrink: 0; }
     }
     .planta-header {
       padding: 7px 12px; border-bottom: 1px solid rgba(201,169,110,0.15);
@@ -544,32 +552,17 @@ function startTour() {
 
 initViewer(0);
 
-/* Planta: comportamento mobile vs desktop */
+/* Planta: zoom no toque (mobile e desktop) */
 (function () {
   var box = document.getElementById('plantaBox');
   if (!box) return;
-  var mobile = window.innerWidth <= 600;
-
-  if (mobile) {
-    /* Mobile: toque abre/fecha */
-    box.addEventListener('touchstart', function (e) {
-      e.stopPropagation();
-      box.classList.toggle('expanded');
-    }, { passive: true });
-    /* Fecha ao tocar fora */
-    document.addEventListener('touchstart', function (e) {
-      if (!box.contains(e.target)) box.classList.remove('expanded');
-    }, { passive: true });
-  } else {
-    /* Desktop: zoom no hover (já feito por CSS), sem JS necessário */
-    box.addEventListener('touchstart', function (e) {
-      e.stopPropagation();
-      box.classList.add('zoomed');
-    }, { passive: true });
-    box.addEventListener('touchend', function () {
-      setTimeout(function () { box.classList.remove('zoomed'); }, 600);
-    });
-  }
+  box.addEventListener('touchstart', function (e) {
+    e.stopPropagation();
+    box.classList.add('zoomed');
+  }, { passive: true });
+  box.addEventListener('touchend', function () {
+    setTimeout(function () { box.classList.remove('zoomed'); }, 800);
+  });
 }());
 </script>
 </body>
