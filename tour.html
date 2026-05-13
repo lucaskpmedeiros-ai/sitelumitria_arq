@@ -225,6 +225,12 @@
     #plantaBox.hidden { opacity: 0; pointer-events: none; }
 
     @media (max-width: 600px) {
+      /* Hotspot menor no mobile */
+      .hs-circle { width: 36px; height: 36px; }
+      .hs-circle::before { width: 52px; height: 52px; }
+      .hs-circle svg { width: 14px; height: 14px; }
+      .hs-label { font-size: 0.55rem; padding: 3px 10px; letter-spacing: 0.10em; }
+
       /* Planta: pequena e visível por padrão */
       #plantaBox {
         width: 130px;
