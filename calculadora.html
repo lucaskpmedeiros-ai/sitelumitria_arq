@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Impacto — Lumitria</title>
+<link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0C0B09;
+  --dark: #141210;
+  --card: #1A1815;
+  --border: rgba(255,255,255,0.08);
+  --border-gold: rgba(201,169,110,0.3);
+  --gold: #C9A96E;
+  --gold-dim: rgba(201,169,110,0.12);
+  --white: #F5F2EC;
+  --gray: #7A7670;
+  --gray-light: #A8A49E;
+  --success: #4CAF7D;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 30%; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(201,169,110,0.06) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+.container { width: 100%; max-width: 680px; position: relative; z-index: 1; }
+
+/* Voltar */
+.back-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--gray); text-decoration: none;
+  margin-bottom: 32px; transition: color .2s;
+}
+.back-link:hover { color: var(--gold); }
+.back-link svg { opacity: 0.6; }
+
+/* Header */
+.header { text-align: center; margin-bottom: 36px; }
+
+.header-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--gold-dim); border: 0.5px solid var(--border-gold);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+}
+.header-tag::before {
+  content: ''; width: 5px; height: 5px;
+  background: var(--gold); border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 5vw, 40px); font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 12px;
+}
+.header h1 em { font-style: italic; color: var(--gold); }
+.header p { font-size: 15px; color: var(--gray-light); line-height: 1.6; max-width: 480px; margin: 0 auto; }
+
+/* Card */
+.calc-card {
+  background: var(--card); border: 0.5px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
+}
+
+/* Input VGV */
+.input-section { padding: 28px 28px 24px; border-bottom: 0.5px solid var(--border); }
+.input-label {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 14px; display: block;
+}
+.vgv-input-wrap {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm); overflow: hidden; transition: border-color .2s;
+}
+.vgv-input-wrap:focus-within { border-color: var(--gold); }
+.vgv-prefix {
+  padding: 0 16px; font-size: 18px; font-weight: 500; color: var(--gold);
+  background: rgba(201,169,110,0.08); height: 56px;
+  display: flex; align-items: center;
+  border-right: 1px solid var(--border-gold); flex-shrink: 0;
+}
+.vgv-input {
+  flex: 1; background: none; border: none; outline: none; padding: 0 16px;
+  font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
+  color: var(--white); height: 56px; width: 100%;
+}
+.vgv-input::placeholder { color: rgba(255,255,255,0.2); }
+.vgv-suffix { padding: 0 16px; font-size: 14px; color: var(--gray); flex-shrink: 0; }
+
+/* Tipologia */
+.tipo-section { padding: 20px 28px; border-bottom: 0.5px solid var(--border); }
+.tipo-label {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 12px; display: block;
+}
+.tipo-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tipo-btn {
+  background: rgba(255,255,255,0.03); border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 6px;
+  font-family: 'Syne', sans-serif; font-size: 12px; color: var(--gray-light);
+  cursor: pointer; text-align: center; transition: all .2s; line-height: 1.3;
+}
+.tipo-btn:hover { border-color: var(--border-gold); color: var(--white); }
+.tipo-btn.ativo { background: var(--gold-dim); border-color: var(--border-gold); color: var(--gold); }
+
+/* Resultados */
+.resultados { padding: 24px 28px; }
+.res-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.res-item {
+  background: rgba(255,255,255,0.03); border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px; transition: all .3s;
+}
+.res-icon { font-size: 16px; margin-bottom: 8px; display: block; }
+.res-label { font-size: 11px; color: var(--gray); line-height: 1.4; margin-bottom: 8px; min-height: 30px; }
+.res-val {
+  font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
+  color: var(--gold); line-height: 1; margin-bottom: 4px; transition: all .3s;
+}
+.res-fonte { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.4; }
+
+/* Total */
+.total-box {
+  background: linear-gradient(135deg, rgba(201,169,110,0.10) 0%, rgba(201,169,110,0.04) 100%);
+  border: 1px solid var(--border-gold); border-radius: var(--radius-sm);
+  padding: 20px; display: flex; justify-content: space-between;
+  align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.total-label {
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 6px;
+}
+.total-val {
+  font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900;
+  color: var(--white); line-height: 1; transition: all .3s;
+}
+.roi-label {
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 6px;
+}
+.roi-val {
+  font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900;
+  color: var(--success); line-height: 1; transition: all .3s;
+}
+.total-right { text-align: right; }
+.roi-sub { font-size: 11px; color: var(--gray); margin-top: 4px; }
+.nota { font-size: 11px; color: rgba(255,255,255,0.2); line-height: 1.6; text-align: center; padding: 0 4px; }
+
+/* CTA */
+.cta-section {
+  background: var(--card); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 24px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.cta-text p:first-child { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+.cta-text p:last-child { font-size: 13px; color: var(--gray-light); }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--gold); color: var(--black);
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 13px 22px; border-radius: var(--radius-sm);
+  text-decoration: none; white-space: nowrap; transition: all .2s; flex-shrink: 0;
+}
+.cta-btn:hover { background: #E0BE84; transform: translateY(-1px); }
+
+.fontes { margin-top: 16px; text-align: center; }
+.fontes p { font-size: 10px; color: rgba(255,255,255,0.15); line-height: 1.7; }
+
+@media (max-width: 540px) {
+  .res-grid { grid-template-columns: 1fr; }
+  .tipo-btns { grid-template-columns: repeat(2, 1fr); }
+  .total-box { flex-direction: column; align-items: flex-start; }
+  .total-right { text-align: left; }
+  .cta-section { flex-direction: column; }
+  .cta-btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Voltar ao site
+  </a>
+
+  <div class="header">
+    <div class="header-tag">Calculadora de impacto</div>
+    <h1>Quanto seu lançamento<br>deixa na mesa <em>sem a Lumitria?</em></h1>
+    <p>Digite o VGV do seu empreendimento e veja o impacto financeiro real baseado em dados globais.</p>
+  </div>
+
+  <div class="calc-card">
+
+    <div class="input-section">
+      <label class="input-label">VGV do empreendimento (R$)</label>
+      <div class="vgv-input-wrap">
+        <span class="vgv-prefix">R$</span>
+        <input class="vgv-input" type="text" id="vgv-input"
+          placeholder="200.000.000" inputmode="numeric" autocomplete="off">
+        <span class="vgv-suffix" id="vgv-suffix">200M</span>
+      </div>
+    </div>
+
+    <div class="tipo-section">
+      <label class="tipo-label">Tipo de empreendimento</label>
+      <div class="tipo-btns">
+        <button class="tipo-btn ativo" data-tipo="loteamento" onclick="setTipo(this)">Loteamento</button>
+        <button class="tipo-btn" data-tipo="condominio" onclick="setTipo(this)">Condomínio de casas</button>
+        <button class="tipo-btn" data-tipo="predio" onclick="setTipo(this)">Prédio residencial</button>
+        <button class="tipo-btn" data-tipo="alto" onclick="setTipo(this)">Alto padrão</button>
+      </div>
+    </div>
+
+    <div class="resultados">
+      <div class="res-grid">
+        <div class="res-item">
+          <span class="res-icon">🚀</span>
+          <p class="res-label">Receita adicional vendendo acima do preço pedido</p>
+          <p class="res-val" id="v1">R$ 18M</p>
+          <p class="res-fonte">Fonte: Matterport / MLS · 143.575 listings EUA</p>
+        </div>
+        <div class="res-item">
+          <span class="res-icon">⚡</span>
+          <p class="res-label">Custo financeiro evitado fechando mais rápido</p>
+          <p class="res-val" id="v2">R$ 4,8M</p>
+          <p class="res-fonte">Fonte: Matterport · 31% mais rápido · 1,2%/mês</p>
+        </div>
+        <div class="res-item">
+          <span class="res-icon">🛡️</span>
+          <p class="res-label">Margem preservada sem desconto por insegurança</p>
+          <p class="res-val" id="v3">R$ 10M</p>
+          <p class="res-fonte">Fonte: REsimpli 2025 · desconto médio 5%</p>
+        </div>
+      </div>
+
+      <div class="total-box">
+        <div class="total-left">
+          <p class="total-label">Impacto financeiro total estimado</p>
+          <p class="total-val" id="total">R$ 32,8M</p>
+        </div>
+        <div class="total-right">
+          <p class="roi-label">Retorno sobre investimento Lumitria</p>
+          <p class="roi-val" id="roi">+410x</p>
+          <p class="roi-sub" id="roi-sub">vs. investimento estimado de R$ 80k</p>
+        </div>
+      </div>
+
+      <p class="nota">Estimativas baseadas em dados globais. O impacto real varia conforme o mercado, estratégia comercial e perfil do empreendimento. Use como base de análise.</p>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-text">
+      <p>Seu próximo lançamento pode ter isso.</p>
+      <p>Fale com a Lumitria e veja como funciona na prática.</p>
+    </div>
+    <a href="https://wa.me/5519998949137?text=Olá!%20Calculei%20o%20impacto%20da%20Lumitria%20no%20meu%20VGV%20e%20quero%20saber%20mais." class="cta-btn" target="_blank">
+      Quero saber mais →
+    </a>
+  </div>
+
+  <div class="fontes">
+    <p>
+      Fontes: Matterport / MLS Transaction Data (143.575 listings, 4 mercados EUA) ·
+      REsimpli Real Estate Marketing Statistics 2025 ·
+      PhotoUp / NAR Virtual Tour Statistics 2025 ·
+      Grand View Research Virtual Tour Market Report 2024
+    </p>
+  </div>
+
+</div>
+<script>
+const config = {
+  loteamento: { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.0, investimento: 35 },
+  condominio:  { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.0, investimento: 55 },
+  predio:      { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.2, investimento: 80 },
+  alto:        { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.5, investimento: 115 },
+};
+
+let tipoAtual = 'loteamento';
+let vgvAtual  = 200000000;
+
+function setTipo(btn) {
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  tipoAtual = btn.dataset.tipo;
+  calcular();
+}
+
+function fmtBRL(n) {
+  if (n >= 1e9) return 'R$ ' + (n / 1e9).toFixed(1).replace('.', ',') + 'B';
+  if (n >= 1e6) return 'R$ ' + Math.round(n / 1e6) + 'M';
+  if (n >= 1e3) return 'R$ ' + Math.round(n / 1e3) + 'k';
+  return 'R$ ' + Math.round(n);
+}
+
+function fmtSuffix(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(1).replace('.', ',') + 'B';
+  if (n >= 1e6) return Math.round(n / 1e6) + 'M';
+  if (n >= 1e3) return Math.round(n / 1e3) + 'k';
+  return String(Math.round(n));
+}
+
+function animateVal(id, newText) {
+  const el = document.getElementById(id);
+  el.style.opacity = '0.3';
+  el.style.transform = 'translateY(4px)';
+  setTimeout(() => {
+    el.textContent = newText;
+    el.style.transition = 'all .25s ease';
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }, 150);
+}
+
+function calcular() {
+  if (vgvAtual <= 0) return;
+  const c = config[tipoAtual];
+  const ganhoPreco    = vgvAtual * c.preco;
+  const custoFinanc   = vgvAtual * 0.012 * c.meses;
+  const margemPreserv = vgvAtual * c.desconto;
+  const totalImpacto  = ganhoPreco + custoFinanc + margemPreserv;
+  const investimento  = c.investimento * 1000;
+  const roiX          = Math.round(totalImpacto / investimento);
+
+  animateVal('v1', fmtBRL(ganhoPreco));
+  animateVal('v2', fmtBRL(custoFinanc));
+  animateVal('v3', fmtBRL(margemPreserv));
+  animateVal('total', fmtBRL(totalImpacto));
+  animateVal('roi', '+' + roiX.toLocaleString('pt-BR') + 'x');
+  document.getElementById('roi-sub').textContent =
+    'vs. investimento estimado de ' + fmtBRL(investimento);
+}
+
+const input = document.getElementById('vgv-input');
+input.addEventListener('input', function () {
+  const raw = this.value.replace(/\D/g, '');
+  if (!raw) { this.value = ''; document.getElementById('vgv-suffix').textContent = '—'; return; }
+  const num = parseInt(raw, 10);
+  this.value = num.toLocaleString('pt-BR');
+  vgvAtual = num;
+  document.getElementById('vgv-suffix').textContent = fmtSuffix(num);
+  calcular();
+});
+
+input.value = (200000000).toLocaleString('pt-BR');
+calcular();
+</script>
+</body>
+</html>

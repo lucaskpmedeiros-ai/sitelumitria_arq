@@ -15,9 +15,486 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Josefin+Sans:wght@100;300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="libs/pannellum/pannellum.css">
+  <style>
+    /* ============================================================
+       TEMA FOLDER — override do design system (teste visual)
+       ============================================================ */
+
+    /* 1. Variáveis — substitui ciano por dourado, fundo escuro por claro */
+    :root {
+      --ouro:       #C9A96E;
+      --ouro-dim:   rgba(201,169,110,0.10);
+
+      --cyan:       #C9A96E;
+      --cyan-dim:   rgba(201,169,110,0.10);
+      --cyan-glow:  rgba(201,169,110,0.18);
+      --sage:       #C9A96E;
+      --sage-dim:   rgba(201,169,110,0.12);
+      --sage-glow:  rgba(201,169,110,0.25);
+      --blue:       #B8924A;
+      --blue-dim:   rgba(184,146,74,0.14);
+
+      --bg:         #FFFFFF;
+      --bg-2:       rgba(245,244,240,0.8);
+      --bg-card:    #EEECE7;
+      --bg-card-h:  #E5E3DC;
+
+      --text:       #1A1A1A;
+      --text-2:     #777777;
+      --text-muted: #AAAAAA;
+
+      --border:     rgba(180,160,120,0.25);
+      --border-h:   rgba(201,169,110,0.45);
+    }
+
+    /* 2. Base — scroll direto, sem animação suave que causa travamento */
+    html { scroll-behavior: auto !important; overflow-y: scroll !important; overscroll-behavior: auto !important; }
+    body { background: #F5F4F0 !important; color: #1A1A1A !important; overscroll-behavior: auto !important; }
+
+    /* 3. Oculta galaxy canvas */
+    #galaxyCanvas { opacity: 0 !important; pointer-events: none !important; }
+
+    /* 4. Tipografia — Josefin Sans fina + Playfair Display para hero */
+    h1, h2, h3, h4 {
+      font-family: 'Josefin Sans', sans-serif !important;
+      font-weight: 100 !important;
+      letter-spacing: 0.02em !important;
+      color: #1A1A1A !important;
+    }
+    em { color: #C9A96E !important; font-style: normal !important; }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.01em !important;
+      color: #1A1A1A !important;
+    }
+    .hero-title em {
+      font-style: italic !important;
+      color: #C9A96E !important;
+      text-shadow: none !important;
+    }
+    .hero-rotate { color: #C9A96E !important; }
+
+    /* 5. Header */
+    #header { background: transparent !important; backdrop-filter: none !important; }
+    #header.scrolled {
+      background: rgba(245,244,240,0.97) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      box-shadow: 0 1px 0 rgba(180,160,120,0.22) !important;
+    }
+    /* Nav links brancos sobre a foto */
+    #header:not(.scrolled) .nav-link { color: rgba(240,237,232,0.75) !important; }
+    #header:not(.scrolled) .nav-link:hover { color: #FFFFFF !important; background: rgba(255,255,255,0.08) !important; }
+    #header:not(.scrolled) .btn-nav {
+      background: rgba(8,9,15,0.35) !important;
+      border-color: rgba(201,169,110,0.40) !important;
+      color: rgba(240,237,232,0.90) !important;
+    }
+    .logo-img {
+      border-color: rgba(201,169,110,0.28) !important;
+      box-shadow: 0 0 18px rgba(201,169,110,0.10) !important;
+    }
+    .logo:hover .logo-img {
+      box-shadow: 0 0 28px rgba(201,169,110,0.28) !important;
+      filter: brightness(1.05) !important;
+    }
+    .nav-link { color: #777777 !important; }
+    .nav-link:hover { color: #1A1A1A !important; background: rgba(0,0,0,0.04) !important; }
+    .nav-link.active { color: #C9A96E !important; }
+    .btn-nav {
+      background: rgba(201,169,110,0.10) !important;
+      border-color: rgba(201,169,110,0.30) !important;
+      color: #1A1A1A !important;
+    }
+    .btn-nav:hover {
+      background: rgba(201,169,110,0.18) !important;
+      border-color: rgba(201,169,110,0.50) !important;
+    }
+    .hamburger span { background: #777777 !important; }
+
+    /* 6. Hero — capa dia/noite estilo folder */
+    #hero.hero {
+      min-height: 100svh !important;
+      height: 100svh !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      background: #000 !important;
+      display: block !important;
+      position: relative !important;
+    }
+    #hero.hero::before { display: none !important; }
+    #galaxyCanvas { display: none !important; }
+    .hero-inner, .hero-content,
+    .hero-scroll-hint, .hero-side { display: none !important; }
+
+    /* Logo visual — reposicionado sobre a foto, lado direito */
+    .hero-visual {
+      display: flex !important;
+      position: absolute !important;
+      top: 50% !important;
+      right: 8vw !important;
+      transform: translateY(-50%) !important;
+      z-index: 5 !important;
+      width: auto !important;
+      height: auto !important;
+    }
+    .vring-1 { border-color: rgba(201,169,110,0.20) !important; }
+    .vring-2 { border-color: rgba(201,169,110,0.14) !important; }
+    .vring-3 { border-color: rgba(201,169,110,0.10) !important; }
+    .visual-core {
+      background: rgba(8,9,15,0.55) !important;
+      border-color: rgba(201,169,110,0.30) !important;
+      box-shadow: 0 0 48px rgba(201,169,110,0.15), 0 0 0 1px rgba(201,169,110,0.15) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
+    .logo-pulse-hint { color: rgba(240,237,232,0.70) !important; }
+    .lph-dot { background: #C9A96E !important; }
+    .logo-options-panel {
+      background: rgba(12,10,8,0.90) !important;
+      border-color: rgba(201,169,110,0.22) !important;
+      backdrop-filter: blur(16px) !important;
+    }
+    .lopt-card { border-color: rgba(201,169,110,0.12) !important; }
+    .lopt-card:hover { background: rgba(201,169,110,0.08) !important; border-color: rgba(201,169,110,0.30) !important; }
+    .lopt-card-icon { background: rgba(201,169,110,0.12) !important; color: #C9A96E !important; }
+    .lopt-card-tag { color: #C9A96E !important; }
+    .lopt-card-title { color: rgba(240,237,232,0.95) !important; }
+    .lopt-card-cta { color: #C9A96E !important; }
+    @media (max-width: 900px) {
+      .hero-visual { display: none !important; }
+    }
+
+    /* Imagens dia/noite */
+    .hero-placeholder-folder {
+      position: absolute; inset: 0; z-index: 1; overflow: hidden;
+    }
+    .hero-placeholder-folder img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+    .hero-night-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      animation: daynight 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+    @keyframes daynight {
+      0%, 5%    { opacity: 0; }
+      30%, 70%  { opacity: 1; }
+      95%, 100% { opacity: 0; }
+    }
+
+    /* Overlay com conteúdo */
+    .hero-folder-overlay {
+      position: absolute; inset: 0; z-index: 3;
+      background:
+        linear-gradient(to right, rgba(8,9,15,0.65) 0%, transparent 62%),
+        linear-gradient(to top, rgba(8,9,15,0.85) 0%, rgba(8,9,15,0.08) 50%, transparent 72%);
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 72px 80px;
+    }
+    .hero-folder-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.70rem; font-weight: 300; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(240,237,232,0.85);
+      border: 1px solid rgba(201,169,110,0.35);
+      padding: 6px 16px; border-radius: 100px;
+      background: rgba(8,9,15,0.35);
+      margin-bottom: 22px; width: fit-content;
+    }
+    .hero-folder-badge-dot {
+      width: 5px; height: 5px; border-radius: 50%; background: #C9A96E;
+      animation: pulse 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+    .hero-folder-title {
+      font-family: 'Playfair Display', serif !important;
+      font-size: clamp(2.8rem, 6.5vw, 5.5rem) !important;
+      font-weight: 700 !important; line-height: 1.05 !important;
+      color: #FFFFFF !important; margin-bottom: 22px !important;
+      letter-spacing: -0.01em !important;
+    }
+    .hero-folder-title em {
+      font-style: italic !important;
+      color: #EFD99A !important;
+      text-shadow: 0 2px 24px rgba(220,190,100,0.30) !important;
+    }
+    .hero-folder-sub {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: clamp(0.92rem, 1.3vw, 1.10rem); font-weight: 100;
+      color: rgba(240,237,232,0.82); max-width: 520px;
+      letter-spacing: 0.05em; line-height: 1.90;
+      margin-bottom: 36px;
+    }
+    .hero-folder-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-folder-actions .btn-ghost {
+      color: rgba(240,237,232,0.75) !important;
+    }
+    .hero-folder-actions .btn-ghost:hover {
+      color: #FFFFFF !important;
+    }
+    .hero-scroll-folder {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%); z-index: 4;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: rgba(240,237,232,0.35); font-size: 0.62rem; letter-spacing: 0.12em;
+      text-transform: uppercase; animation: floatScroll 2.4s ease-in-out infinite;
+      font-family: 'Josefin Sans', sans-serif; font-weight: 300;
+    }
+    @keyframes floatScroll {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+    /* ── TABLET ≤ 768px ── */
+    @media (max-width: 768px) {
+      .hero-folder-overlay  { padding: 48px 28px 56px; }
+      .hero-folder-title    { font-size: clamp(2.2rem, 9vw, 3.5rem) !important; }
+      .hero-folder-sub      { max-width: 100% !important; }
+      .hero-corner-badge    { bottom: 28px !important; right: 20px !important; padding: 10px 16px !important; }
+      .tour-card-body       { padding: 32px 28px !important; }
+      .tour-card-body h2    { font-size: clamp(1.6rem,5vw,2.4rem) !important; max-width: 100% !important; }
+      .gancho-payoff        { font-size: clamp(2.2rem, 8vw, 3.8rem) !important; }
+    }
+
+    /* ── MOBILE ≤ 480px ── */
+    @media (max-width: 480px) {
+      /* Hero capa */
+      .hero-folder-overlay  { padding: 28px 20px 44px !important; }
+      .hero-folder-badge    { font-size: 0.60rem !important; padding: 5px 12px !important; }
+      .hero-folder-title    { font-size: clamp(1.9rem, 10vw, 2.6rem) !important; margin-bottom: 14px !important; }
+      .hero-folder-sub      { font-size: 0.82rem !important; line-height: 1.7 !important; margin-bottom: 22px !important; }
+      .hero-folder-actions  { flex-direction: column !important; gap: 10px !important; }
+      .hero-folder-actions .btn { width: 100% !important; text-align: center !important; justify-content: center !important; }
+      .hero-corner-badge    { display: none !important; }
+      .hero-scroll-folder   { display: none !important; }
+
+      /* Tour preview card */
+      .tour-card-body       { padding: 20px 18px !important; }
+      .tour-card-body h2    { font-size: clamp(1.3rem, 7vw, 1.8rem) !important; margin-bottom: 8px !important; }
+      .tour-card-body p     { display: none !important; }
+      .tour-card-body > div { gap: 14px !important; flex-direction: column !important; align-items: flex-start !important; }
+
+      /* Gancho */
+      .gancho-payoff        { font-size: clamp(1.7rem, 9vw, 2.6rem) !important; }
+      .gancho-setup         { font-size: 0.65rem !important; letter-spacing: 0.22em !important; }
+    }
+
+    /* 7. Botão primário → dourado */
+    .btn-primary {
+      background: linear-gradient(135deg, #D4AF7A 0%, #B8924A 100%) !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 24px rgba(201,169,110,0.28), 0 8px 28px rgba(0,0,0,0.12) !important;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #DDB980 0%, #C09852 100%) !important;
+      box-shadow: 0 0 44px rgba(201,169,110,0.42), 0 12px 36px rgba(0,0,0,0.15) !important;
+    }
+    .btn-ghost { color: #777777 !important; }
+    .btn-ghost:hover { color: #1A1A1A !important; }
+
+    /* 8. Grid dot background → dourado sutil */
+    .section::before {
+      background-image:
+        linear-gradient(rgba(201,169,110,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,110,0.05) 1px, transparent 1px) !important;
+    }
+
+    /* 9. Section tags */
+    .section-tag {
+      font-family: 'Josefin Sans', sans-serif !important;
+      font-weight: 300 !important;
+      letter-spacing: 0.24em !important;
+      color: #C9A96E !important;
+      border-color: rgba(201,169,110,0.28) !important;
+      background: rgba(201,169,110,0.08) !important;
+    }
+    .section-title { color: #1A1A1A !important; }
+    .section-desc { color: #777777 !important; }
+    .section-sub { color: #777777 !important; }
+    .section-sub strong { color: #1A1A1A !important; }
+
+    /* 10. Gancho — mantém escuro para contraste editorial */
+    .section-gancho { background: #1A1A1A !important; }
+    .gancho-setup { color: rgba(255,255,255,0.45) !important; }
+    .gancho-payoff { color: #FFFFFF !important; }
+    .gancho-payoff em { color: #C9A96E !important; }
+
+    /* 11. Sections — fundo claro */
+    .section { background: #F5F4F0; }
+    .section-alt { background: #FFFFFF !important; }
+    .section-dark { background: #EEECE7 !important; }
+
+    /* 12. Cards / showcase */
+    .card, .showcase-card { background: #FFFFFF !important; border-color: rgba(201,169,110,0.15) !important; }
+    .card:hover, .showcase-card:hover { border-color: rgba(201,169,110,0.35) !important; }
+    .card-icon { background: rgba(201,169,110,0.10) !important; color: #C9A96E !important; }
+    .card-title { color: #1A1A1A !important; }
+    .card-desc { color: #777777 !important; }
+    .card-tag { color: #C9A96E !important; border-color: rgba(201,169,110,0.25) !important; }
+    .stat-num { color: #C9A96E !important; }
+
+    /* 13. Tour preview */
+    .tour-preview-overlay {
+      background: linear-gradient(to top, rgba(245,244,240,0.7) 0%, transparent 55%) !important;
+    }
+    .tour-pill {
+      background: rgba(201,169,110,0.15) !important;
+      border-color: rgba(201,169,110,0.30) !important;
+      color: #C9A96E !important;
+    }
+    .tour-preview-bar {
+      background: rgba(245,244,240,0.95) !important;
+      border-top-color: rgba(201,169,110,0.20) !important;
+    }
+    .tour-preview-title { color: #1A1A1A !important; }
+    .live-badge { color: #C9A96E !important; }
+    .live-dot-small { background: #C9A96E !important; }
+    .tour-play-ring { border-color: rgba(201,169,110,0.30) !important; }
+    .tour-play-btn {
+      background: rgba(201,169,110,0.90) !important;
+      color: #FFFFFF !important;
+    }
+    .btn-tour-open {
+      background: rgba(201,169,110,0.12) !important;
+      color: #C9A96E !important;
+      border-color: rgba(201,169,110,0.25) !important;
+    }
+    .tour-preview-label { color: rgba(255,255,255,0.8) !important; }
+
+    /* 14. Depoimentos */
+    .testimonial-card { background: #FFFFFF !important; border-color: rgba(201,169,110,0.15) !important; }
+    .quote-mark { color: rgba(201,169,110,0.20) !important; }
+    .testimonial-text { color: #1A1A1A !important; }
+    .testimonial-name { color: #C9A96E !important; }
+    .testimonial-role { color: #777777 !important; }
+
+    /* 15. Processo */
+    .step-num { color: #C9A96E !important; border-color: rgba(201,169,110,0.25) !important; }
+    .step-line { background: rgba(201,169,110,0.20) !important; }
+
+    /* 16. Contato / form */
+    .section-contact { background: #1A1A1A !important; }
+    .contact-form { background: #FFFFFF !important; border-color: rgba(201,169,110,0.15) !important; }
+    .form-input, .form-textarea {
+      background: #F5F4F0 !important;
+      border-color: rgba(201,169,110,0.20) !important;
+      color: #1A1A1A !important;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: #C9A96E !important;
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.12) !important;
+    }
+    .form-label { color: #777777 !important; }
+    .form-note { color: #AAAAAA !important; }
+
+    /* 17. Footer */
+    .footer { background: #1A1A1A !important; }
+    .footer-divider { background: rgba(201,169,110,0.15) !important; }
+    .footer-copy { color: #777777 !important; }
+    .footer-link:hover { color: #C9A96E !important; }
+
+    /* 18. Hero side stats */
+    .hside-num { color: #C9A96E !important; text-shadow: 0 0 24px rgba(201,169,110,0.35) !important; }
+    .hside-divider { background: rgba(201,169,110,0.25) !important; }
+    .hside-dot { background: #C9A96E !important; }
+    .hside-badge { color: #C9A96E !important; }
+    .hside-quote { border-right-color: rgba(201,169,110,0.20) !important; color: #AAAAAA !important; }
+    .hside-quote em { color: rgba(201,169,110,0.55) !important; }
+
+    /* 19. Trilhas */
+    .trilha-label { color: #C9A96E !important; border-color: rgba(201,169,110,0.25) !important; }
+    .trilha-card { background: #FFFFFF !important; border-color: rgba(201,169,110,0.12) !important; }
+    .trilha-card:hover { border-color: rgba(201,169,110,0.35) !important; }
+    .trilha-icon { color: #C9A96E !important; }
+    .trilha-stat-num { color: #C9A96E !important; }
+    .check-item::before { color: #C9A96E !important; }
+
+    /* 20. Reveal animation */
+    .reveal { opacity: 1 !important; transform: none !important; }
+
+    /* 20b. Gancho — tipografia elegante no tema ouro */
+    .section-gancho { background: #0D0C0A !important; }
+    .section-gancho::before {
+      background: radial-gradient(ellipse at center, rgba(201,169,110,0.07) 0%, transparent 70%) !important;
+    }
+    .gancho-setup {
+      font-family: 'Josefin Sans', sans-serif !important;
+      font-size: clamp(0.72rem, 1.1vw, 0.85rem) !important;
+      font-weight: 300 !important;
+      letter-spacing: 0.30em !important;
+      text-transform: uppercase !important;
+      color: rgba(201,169,110,0.70) !important;
+      line-height: 1.6 !important;
+    }
+    .gancho-payoff {
+      font-family: 'Playfair Display', serif !important;
+      font-size: clamp(2.8rem, 6vw, 5.2rem) !important;
+      font-weight: 700 !important;
+      font-style: italic !important;
+      letter-spacing: -0.01em !important;
+      line-height: 1.05 !important;
+      text-transform: none !important;
+      background: linear-gradient(135deg, #F0E6D0 0%, #C9A96E 55%, #A07840 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+
+    /* Card pano — desativa toda interação do Pannellum (inclusive wheel) */
+    #card-pano,
+    #card-pano * { pointer-events: none !important; }
+    #card-pano .pnlm-ui { display: none !important; }
+    /* Desfaz touch-action:none que Pannellum injeta via JS */
+    #card-pano { touch-action: auto !important; }
+
+    /* 21. #dados responsivo */
+    #dados [style*="grid-template-columns:repeat(3"] {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 900px) {
+      #dados [style*="grid-template-columns:repeat(3"] {
+        grid-template-columns: 1fr 1fr !important;
+      }
+      #dados [style*="justify-content:space-between"] > [style*="width:1px"] {
+        display: none !important;
+      }
+      #dados [style*="justify-content:space-between"] {
+        flex-direction: column !important;
+        gap: 24px !important;
+      }
+    }
+    @media (max-width: 600px) {
+      #dados [style*="grid-template-columns:repeat(3"] {
+        grid-template-columns: 1fr !important;
+      }
+      #dados { padding: 64px 20px !important; }
+    }
+    @media (max-width: 480px) {
+      #dados { padding: 48px 16px !important; }
+      /* cards internos do dados */
+      #dados [style*="padding:36px 32px"] { padding: 24px 20px !important; }
+      /* cabeçalho do dados */
+      #dados [style*="padding:48px 40px"] { padding: 28px 20px !important; flex-direction: column !important; gap: 20px !important; }
+      #dados [style*="max-width:480px"]   { max-width: 100% !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -50,91 +527,95 @@
   </header>
 
   <!-- ====================================================
-       HERO
+       HERO — capa dia/noite (estilo folder)
   ==================================================== -->
   <section id="hero" class="hero">
-    <canvas id="galaxyCanvas" aria-hidden="true"></canvas>
 
-    <div class="container hero-inner">
-
-      <div class="hero-content fade-in">
-        <div class="hero-badge">
-          <span class="badge-dot"></span>
-          Para loteadores, incorporadoras e construtoras
-        </div>
-
-        <h1 class="hero-title">
-          Seu cliente compra<br>o que consegue<br><em><span id="heroRotate" class="hero-rotate">percorrer.</span></em>
-        </h1>
-
-        <p class="hero-subtitle">
-          Não o que imagina. Com a Lumitria, ele caminha pelo empreendimento antes de ser construído e fecha no stand, não em casa com dúvida.
-        </p>
-
-        <div class="hero-actions">
-          <a href="https://wa.me/5519998949137?text=Ol%C3%A1%2C%20quero%20ver%20como%20ficaria%20meu%20projeto%20na%20Lumitria" target="_blank" class="btn btn-primary">Quero ver meu projeto assim</a>
-          <a href="#video-projeto" class="btn btn-ghost">Ver demonstração ao vivo <span class="arrow">→</span></a>
-        </div>
-
-      </div>
-
-      <div class="hero-visual" id="heroVisual">
-        <div class="visual-rings">
-          <div class="vring vring-1"></div>
-          <div class="vring vring-2"></div>
-          <div class="vring vring-3"></div>
-        </div>
-
-        <!-- Logo clicável -->
-        <div class="visual-core" id="logoCore">
-          <img src="assets/images/logo-lumitria.png" alt="Lumitria" class="visual-logo">
-        </div>
-
-        <!-- Pulso de indicação (fora do core) -->
-        <div class="logo-pulse-hint" id="logoHint">
-          <span class="lph-dot"></span>
-          Toque para explorar
-        </div>
-
-
-        <!-- Painel de opções aparece ao clicar/hover -->
-        <div class="logo-options-panel" id="logoPanel">
-          <a href="#contato" class="lopt-card" id="logoOpt1">
-            <div class="lopt-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
-                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="lopt-card-body">
-              <span class="lopt-card-tag">Loteamentos &amp; Incorporadoras</span>
-              <strong class="lopt-card-title">Feche no stand sem "vou pensar"</strong>
-              <span class="lopt-card-cta">Falar com especialista →</span>
-            </div>
-          </a>
-
-          <a href="#contato" class="lopt-card" id="logoOpt2">
-            <div class="lopt-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
-                <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="lopt-card-body">
-              <span class="lopt-card-tag">Construtoras &amp; Venda na Planta</span>
-              <strong class="lopt-card-title">Seu cliente confia no que vai receber</strong>
-              <span class="lopt-card-cta">Falar com especialista →</span>
-            </div>
-          </a>
-        </div>
-
-      </div>
-
+    <!-- Imagem de capa — transição dia/noite -->
+    <div class="hero-placeholder-folder">
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778173958/ChatGPT_Image_7_de_mai._de_2026_14_12_15_yskl7y.png" alt="Capa dia">
+      <img class="hero-night-img" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778637817/ChatGPT_Image_12_de_mai._de_2026_23_03_29_ruc90u.png" alt="Capa noite">
     </div>
 
-<div class="hero-scroll-hint" aria-hidden="true">
-      <div class="scroll-line"></div>
+    <!-- Overlay com texto e CTAs -->
+    <div class="hero-folder-overlay">
+      <div class="hero-folder-badge">
+        <span class="hero-folder-badge-dot"></span>
+        Para loteadores, incorporadoras e construtoras
+      </div>
+
+      <h1 class="hero-folder-title">
+        Seu cliente compra<br>o que consegue<br><em>percorrer.</em>
+      </h1>
+
+      <p class="hero-folder-sub">
+        Não o que imagina. Com a Lumitria, ele caminha pelo empreendimento antes de ser construído e fecha no stand, não em casa com dúvida. Imóveis com tour virtual vendem <strong style="color:#EFD99A;">31% mais rápido</strong> e fecham <strong style="color:#EFD99A;">9% acima do preço pedido.</strong>
+      </p>
+
+      <div class="hero-folder-actions">
+        <a href="https://wa.me/5519998949137?text=Ol%C3%A1%2C%20quero%20ver%20como%20ficaria%20meu%20projeto%20na%20Lumitria" target="_blank" class="btn btn-primary">Quero ver meu projeto assim</a>
+        <a href="#video-projeto" class="btn btn-ghost">Ver demonstração ao vivo <span class="arrow">→</span></a>
+      </div>
     </div>
+
+    <!-- Logo com anéis — lado direito -->
+    <div class="hero-visual" id="heroVisual">
+      <div class="visual-rings">
+        <div class="vring vring-1"></div>
+        <div class="vring vring-2"></div>
+        <div class="vring vring-3"></div>
+      </div>
+      <div class="visual-core" id="logoCore">
+        <img src="assets/images/logo-lumitria.png" alt="Lumitria" class="visual-logo">
+      </div>
+      <div class="logo-pulse-hint" id="logoHint">
+        <span class="lph-dot"></span>
+        Toque para explorar
+      </div>
+      <div class="logo-options-panel" id="logoPanel">
+        <a href="#contato" class="lopt-card" id="logoOpt1">
+          <div class="lopt-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="lopt-card-body">
+            <span class="lopt-card-tag">Loteamentos &amp; Incorporadoras</span>
+            <strong class="lopt-card-title">Feche no stand sem "vou pensar"</strong>
+            <span class="lopt-card-cta">Falar com especialista →</span>
+          </div>
+        </a>
+        <a href="#contato" class="lopt-card" id="logoOpt2">
+          <div class="lopt-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="lopt-card-body">
+            <span class="lopt-card-tag">Construtoras &amp; Venda na Planta</span>
+            <strong class="lopt-card-title">Seu cliente confia no que vai receber</strong>
+            <span class="lopt-card-cta">Falar com especialista →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Badge canto inferior direito -->
+    <div class="hero-corner-badge" style="position:absolute;bottom:48px;right:56px;z-index:4;
+                display:inline-flex;align-items:center;gap:9px;
+                background:rgba(8,9,15,0.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+                border:1px solid rgba(201,169,110,0.35);border-radius:12px;
+                padding:14px 26px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#C9A96E;
+                   animation:pulse 2s ease-in-out infinite;flex-shrink:0;display:inline-block;"></span>
+      <span style="font-family:'Josefin Sans',sans-serif;font-size:0.68rem;font-weight:300;
+                   letter-spacing:0.22em;text-transform:uppercase;color:rgba(240,237,232,0.90);">
+        Tour Virtual 360°
+      </span>
+    </div>
+
+    <!-- Seta de scroll -->
+    <div class="hero-scroll-folder" aria-hidden="true">
+      <span>Rolar</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+
   </section>
 
 <!-- ====================================================
@@ -156,19 +637,60 @@
     <div class="container">
       <div class="section-header reveal">
         <h2 class="section-title">É isso que o cliente vê antes de assinar.</h2>
-        <p class="section-sub">Navegação real pelo empreendimento, no computador, tablet ou celular. Antes de qualquer obra começar.</p>
+        <p class="section-sub">Imóveis com tour 3D recebem <strong>87% mais visualizações</strong> e <strong>403% mais contatos</strong> do que listings tradicionais. Navegação real pelo empreendimento, no computador, tablet ou celular — antes de qualquer obra começar.</p>
       </div>
 
       <div class="video-projeto-wrap reveal">
-        <video
-          class="video-projeto-player"
-          src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1776713639/video_app_funcioando_dqwfkg.mp4"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-        ></video>
+        <a href="tour.html" class="tour-preview-card" style="display:block;text-decoration:none;cursor:pointer;">
+
+          <!-- Viewer Pannellum 360° -->
+          <div id="card-pano" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;"></div>
+
+          <!-- Overlay escuro — igual ao tour -->
+          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(8,9,15,0.55) 0%,transparent 65%),linear-gradient(to top,rgba(8,9,15,0.80) 0%,rgba(8,9,15,0.05) 50%,transparent 72%);z-index:1;pointer-events:none;"></div>
+
+          <!-- Badge topo centro -->
+          <div style="position:absolute;top:24px;left:50%;transform:translateX(-50%);z-index:2;
+                      display:inline-flex;align-items:center;gap:7px;
+                      font-family:'Josefin Sans',sans-serif;font-size:0.62rem;font-weight:300;
+                      letter-spacing:0.22em;text-transform:uppercase;color:rgba(240,237,232,0.80);
+                      border:1px solid rgba(201,169,110,0.35);border-radius:100px;
+                      padding:5px 16px;background:rgba(8,9,15,0.35);backdrop-filter:blur(10px);
+                      white-space:nowrap;">
+            <span style="width:4px;height:4px;border-radius:50%;background:#C9A96E;flex-shrink:0;"></span>
+            Experiência Imersiva 360°
+          </div>
+
+          <!-- Conteúdo principal — inferior esquerdo -->
+          <div class="tour-card-body" style="position:absolute;bottom:0;left:0;right:0;z-index:2;padding:48px 56px;">
+            <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,3.2rem);
+                       font-weight:700;line-height:1.10;color:#FFFFFF;margin-bottom:14px;
+                       letter-spacing:-0.01em;max-width:520px;">
+              Ande pelo seu<br>futuro investimento<br><em style="font-style:italic;color:#EFD99A;">em 3D.</em>
+            </h2>
+            <p style="font-family:'Josefin Sans',sans-serif;font-size:0.88rem;font-weight:100;
+                      color:rgba(240,237,232,0.72);letter-spacing:0.05em;line-height:1.80;
+                      max-width:420px;margin-bottom:30px;">
+              Percorra cada ambiente do apartamento como se já fosse seu — antes mesmo da primeira pedra ser assentada.
+            </p>
+            <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;">
+              <span style="display:inline-flex;align-items:center;gap:9px;
+                           background:#C9A96E;color:#08090F;
+                           font-family:'Josefin Sans',sans-serif;font-size:0.72rem;font-weight:600;
+                           letter-spacing:0.16em;text-transform:uppercase;
+                           padding:13px 28px;border-radius:3px;
+                           box-shadow:0 0 28px rgba(201,169,110,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M5 3l14 9-14 9V3z" fill="currentColor"/></svg>
+                Iniciar tour 3D agora
+              </span>
+              <span style="font-family:'Josefin Sans',sans-serif;font-size:0.68rem;font-weight:300;
+                           letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,237,232,0.65);">
+                Agendar visita presencial →
+              </span>
+            </div>
+          </div>
+
+        </a>
         <div class="video-projeto-glow"></div>
       </div>
     </div>
@@ -309,12 +831,12 @@
             <span class="trilha-badge">Incorporadoras</span>
           </div>
           <h3 class="trilha-title">"Meu lançamento precisa vender rápido para o VGV girar."</h3>
-          <p class="trilha-desc">Planta baixa e render estático não transmitem espaço. O cliente pede tempo, compara, hesita — e você perde a janela de decisão do lançamento. Com a Lumitria, ele entra no apartamento antes da obra existir e fecha no stand.</p>
+          <p class="trilha-desc">Planta baixa e render estático não transmitem espaço. O cliente pede tempo, compara, hesita — e você perde a janela de decisão do lançamento. Imóveis com tour vendem <strong>31% mais rápido e fecham 9% acima do preço pedido</strong> — estudo com 143.575 listings (Matterport/MLS).</p>
           <ul class="trilha-benefits">
-            <li><span class="trilha-check">✔</span> Cliente entra no apartamento antes da obra existir</li>
+            <li><span class="trilha-check">✔</span> 63% dos compradores já fecham sem visitar presencialmente</li>
             <li><span class="trilha-check">✔</span> Decisão no stand — sem "vou pensar" e não voltar</li>
             <li><span class="trilha-check">✔</span> Ciclo de lançamento mais curto, mais caixa entrando</li>
-            <li><span class="trilha-check">✔</span> Cada corretor tem seu link exclusivo para o cliente</li>
+            <li><span class="trilha-check">✔</span> Compradores 18–34 anos: 130% mais chance de agendar visita</li>
           </ul>
           <a href="https://wa.me/5519998949137?text=Quero%20apresentar%20meu%20pr%C3%B3ximo%20projeto%20assim" target="_blank" class="btn btn-trilha">Quero acelerar meu próximo lançamento <span class="arrow">→</span></a>
         </div>
@@ -332,12 +854,12 @@
             <span class="trilha-badge">Construtoras que vendem na planta</span>
           </div>
           <h3 class="trilha-title">"Preciso que meu cliente confie no que vai receber."</h3>
-          <p class="trilha-desc">Sem conseguir visualizar o imóvel real, o cliente pede desconto, negocia demais ou desiste. A incerteza tem custo financeiro direto. Com a Lumitria, ele vê o imóvel real — e decide sem precisar imaginar.</p>
+          <p class="trilha-desc">Sem conseguir visualizar o imóvel real, o cliente pede desconto, negocia demais ou desiste. <strong>Empresas que adotam tour virtual reportam aumento de 16% a 67% em conversão</strong> — e sites com tour têm engajamento 5 a 10× maior (Market.us, 2025).</p>
           <ul class="trilha-benefits">
             <li><span class="trilha-check">✔</span> O cliente vê o imóvel real — não um render genérico</li>
             <li><span class="trilha-check">✔</span> Menos objeções, menos desconto, decisão mais rápida</li>
             <li><span class="trilha-check">✔</span> Valor percebido muito maior — justifica o preço pedido</li>
-            <li><span class="trilha-check">✔</span> Apresentação que separa você de toda a concorrência</li>
+            <li><span class="trilha-check">✔</span> 67% dos listings já incluem tour — ficar fora é ficar para trás</li>
           </ul>
           <a href="https://wa.me/5519998949137?text=Quero%20ver%20como%20a%20Lumitria%20funciona%20para%20meu%20projeto" target="_blank" class="btn btn-trilha">Quero eliminar a incerteza nas minhas vendas <span class="arrow">→</span></a>
         </div>
@@ -347,65 +869,93 @@
   </section>
 
   <!-- ====================================================
-       VÍDEO / DEMO
+       DADOS DE MERCADO — pitch com fontes
   ==================================================== -->
-  <section id="demo" class="section section-video">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Veja ao vivo</span>
-        <h2 class="section-title">O stand cheio não garante<br>a venda fechada.</h2>
-        <p class="section-desc">Interesse alto não é decisão tomada. Cada cliente que sai do stand para "pensar" tem 70% de chance de não voltar. Veja o que muda quando ele percorre o projeto.</p>
+  <section id="dados" style="background:#F5F4F0; padding:96px 5vw; position:relative; overflow:hidden;">
+    <div style="max-width:1100px; margin:0 auto; position:relative; z-index:1;">
+
+      <div style="margin-bottom:60px;">
+        <span style="font-size:0.68rem;font-weight:300;letter-spacing:0.26em;text-transform:uppercase;color:#C9A96E;display:block;margin-bottom:14px;font-family:'Josefin Sans',sans-serif;">Dados de mercado · 2025–2026</span>
+        <h2 style="font-family:'Josefin Sans',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:100;color:#1A1A1A;line-height:1.15;max-width:640px;letter-spacing:0.02em;">Os números que <em style="color:#C9A96E;font-style:normal;">provam</em> o que a experiência faz pelas vendas.</h2>
       </div>
 
-      <div class="tour-preview-wrap">
-        <div class="tour-preview-card">
+      <!-- Grid de dados -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.18);">
 
-          <!-- Imagem de preview da panorama -->
-          <div class="tour-preview-bg" style="background-image: url('assets/images/Panorama1.jpg'); background-position: center 30%; background-size: cover;"></div>
-
-          <!-- Overlay escuro gradiente -->
-          <div class="tour-preview-overlay"></div>
-
-          <!-- Pills flutuantes decorativas -->
-          <div class="tour-pill tour-pill-tl">360° Interativo</div>
-          <div class="tour-pill tour-pill-tr">3 Ambientes</div>
-
-          <!-- CTA central -->
-          <div class="tour-preview-cta">
-            <div class="tour-play-ring">
-              <div class="tour-play-btn" onclick="window.open('https://wa.me/5519998949137?text=Ol%C3%A1%2C%20quero%20liberar%20a%20op%C3%A7%C3%A3o%20de%20percorrer%20o%20projeto%20completo.','_blank')">
-                <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
-                  <path d="M5 3l14 9-14 9V3z" fill="currentColor"/>
-                </svg>
-              </div>
-            </div>
-            <p class="tour-preview-label">Quero ver ao vivo</p>
-          </div>
-
-          <!-- Barra inferior -->
-          <div class="tour-preview-bar">
-            <div class="tour-preview-bar-left">
-              <span class="live-badge">
-                <span class="live-dot-small"></span>
-                Ao vivo
-              </span>
-              <span class="tour-preview-title">Projeto em Demonstração</span>
-            </div>
-            <a href="https://wa.me/5519998949137?text=Ol%C3%A1%2C%20quero%20liberar%20a%20op%C3%A7%C3%A3o%20de%20percorrer%20o%20projeto%20completo." target="_blank" rel="noopener" class="btn-tour-open">
-              Quero percorrer o projeto
-              <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          </div>
-
+        <div style="background:#FFFFFF;padding:36px 32px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:100;color:#C9A96E;line-height:1;letter-spacing:0.05em;">87<span style="font-size:0.5em;opacity:0.8;">%</span></div>
+          <p style="font-size:0.93rem;color:#777777;line-height:1.65;font-weight:300;"><strong style="color:#1A1A1A;">Mais visualizações</strong> em imóveis com tour 3D — e <strong style="color:#1A1A1A;">403% mais contatos</strong> gerados versus listings tradicionais.</p>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(201,169,110,0.18);font-size:0.62rem;color:rgba(140,120,80,0.55);letter-spacing:0.06em;text-transform:uppercase;">REsimpli / WinSavvy, 2025</div>
         </div>
-        <p class="video-caption">
-          Esta é a experiência que o comprador recebe no stand. Mesma qualidade, mesmo cuidado — antes de qualquer obra começar.
-        </p>
+
+        <div style="background:#FFFFFF;padding:36px 32px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:100;color:#C9A96E;line-height:1;letter-spacing:0.05em;">31<span style="font-size:0.5em;opacity:0.8;">%</span></div>
+          <p style="font-size:0.93rem;color:#777777;line-height:1.65;"><strong style="color:#1A1A1A;">Mais rápido de vender</strong> — fechando até <strong style="color:#1A1A1A;">9% acima do preço pedido.</strong> Estudo com 143.575 listings em 4 mercados dos EUA.</p>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(201,169,110,0.18);font-size:0.62rem;color:rgba(140,120,80,0.55);letter-spacing:0.06em;text-transform:uppercase;">Matterport / MLS · Ascendix Tech</div>
+        </div>
+
+        <div style="background:#FFFFFF;padding:36px 32px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:100;color:#C9A96E;line-height:1;letter-spacing:0.05em;">75<span style="font-size:0.5em;opacity:0.8;">%</span></div>
+          <p style="font-size:0.93rem;color:#777777;line-height:1.65;">dos compradores consideram o tour virtual um <strong style="color:#1A1A1A;">fator decisivo.</strong> <strong style="color:#1A1A1A;">54% nem considera</strong> visitar imóvel que não tenha tour.</p>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(201,169,110,0.18);font-size:0.62rem;color:rgba(140,120,80,0.55);letter-spacing:0.06em;text-transform:uppercase;">PhotoUp / NAR, 2025 · Matterport</div>
+        </div>
+
+        <div style="background:#FFFFFF;padding:36px 32px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:100;color:#C9A96E;line-height:1;letter-spacing:0.05em;">63<span style="font-size:0.5em;opacity:0.8;">%</span></div>
+          <p style="font-size:0.93rem;color:#777777;line-height:1.65;">dos compradores já fizeram <strong style="color:#1A1A1A;">oferta sem visitar pessoalmente</strong> — baseando a decisão apenas no tour virtual.</p>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(201,169,110,0.18);font-size:0.62rem;color:rgba(140,120,80,0.55);letter-spacing:0.06em;text-transform:uppercase;">Redfin, 32 mercados · Sphere</div>
+        </div>
+
+        <div style="background:#FFFFFF;padding:36px 32px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:100;color:#C9A96E;line-height:1;letter-spacing:0.05em;">130<span style="font-size:0.5em;opacity:0.8;">%</span></div>
+          <p style="font-size:0.93rem;color:#777777;line-height:1.65;">mais chance de <strong style="color:#1A1A1A;">agendar visita</strong> entre compradores de 18 a 34 anos quando há tour virtual disponível no listing.</p>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(201,169,110,0.18);font-size:0.62rem;color:rgba(140,120,80,0.55);letter-spacing:0.06em;text-transform:uppercase;">PhotoUp / NAR, 2025</div>
+        </div>
+
+        <div style="background:#FFFFFF;padding:36px 32px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(2.6rem,4.5vw,3.8rem);font-weight:100;color:#C9A96E;line-height:1;letter-spacing:0.05em;">67<span style="font-size:0.5em;opacity:0.8;">%</span></div>
+          <p style="font-size:0.93rem;color:#777777;line-height:1.65;">dos listings <strong style="color:#1A1A1A;">já incluem tour virtual.</strong> 63% das interações acontecem pelo celular. Ficar fora é ficar invisível.</p>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(201,169,110,0.18);font-size:0.62rem;color:rgba(140,120,80,0.55);letter-spacing:0.06em;text-transform:uppercase;">Precision Reports, 2026 · Imagtor</div>
+        </div>
+
       </div>
+
+      <!-- Destaque mercado global -->
+      <div style="margin-top:1px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.15);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:100;color:#C9A96E;letter-spacing:0.05em;line-height:1;margin-bottom:8px;">USD 74 bilhões</div>
+          <div style="font-size:0.80rem;color:#777777;line-height:1.6;">Mercado global de tour virtual até 2030 — crescimento de <strong style="color:#1A1A1A;">34% ao ano.</strong> Real estate é o maior segmento. <span style="opacity:0.5;font-size:0.75em;">Grand View Research</span></div>
+        </div>
+        <div style="width:1px;height:48px;background:rgba(201,169,110,0.22);flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:100;color:#C9A96E;letter-spacing:0.05em;line-height:1;margin-bottom:8px;">+67%</div>
+          <div style="font-size:0.80rem;color:#777777;line-height:1.6;">Aumento em conversão e reservas reportado por empresas que adotaram tour virtual. Sites com tour: <strong style="color:#1A1A1A;">5 a 10× mais engajamento.</strong> <span style="opacity:0.5;font-size:0.75em;">Market.us, 2025</span></div>
+        </div>
+        <div style="width:1px;height:48px;background:rgba(201,169,110,0.22);flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Josefin Sans',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:100;color:#C9A96E;letter-spacing:0.05em;line-height:1;margin-bottom:8px;">USD 11bi</div>
+          <div style="font-size:0.80rem;color:#777777;line-height:1.6;">Era o mercado em 2024. Em 6 anos: <strong style="color:#1A1A1A;">×6 de crescimento.</strong> Quem entrar agora ainda pega a curva de adoção. <span style="opacity:0.5;font-size:0.75em;">Grand View Research</span></div>
+        </div>
+      </div>
+
+      <p style="margin-top:16px;font-size:0.62rem;color:rgba(140,120,80,0.40);letter-spacing:0.05em;line-height:1.7;">Fontes: Grand View Research · Matterport · REsimpli · WinSavvy · PhotoUp · NAR · Redfin · Precision Reports · Ascendix Tech · Market.us, 2025–2026.</p>
+
+      <!-- CTA Calculadora -->
+      <div style="margin-top:56px;padding:48px 40px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.20);display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.68rem;font-weight:300;letter-spacing:0.26em;text-transform:uppercase;color:#C9A96E;margin-bottom:12px;font-family:'Josefin Sans',sans-serif;">Calculadora de impacto</div>
+          <h3 style="font-family:'Josefin Sans',sans-serif;font-size:clamp(1.3rem,2.5vw,2rem);font-weight:100;color:#1A1A1A;line-height:1.2;margin:0 0 10px;letter-spacing:0.02em;">Quanto isso vale no seu VGV?</h3>
+          <p style="font-size:0.9rem;color:#777777;line-height:1.65;margin:0;max-width:480px;">Informe o VGV do seu lançamento e veja a estimativa de receita adicional, custo financeiro evitado e margem preservada com tour virtual Lumitria.</p>
+        </div>
+        <a href="calculadora.html" style="display:inline-flex;align-items:center;gap:10px;background:#C9A96E;color:#FFFFFF;font-family:'Josefin Sans',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;padding:16px 32px;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+          Calcular o retorno
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
     </div>
   </section>
+
 
   <!-- ====================================================
        COMO FUNCIONA
@@ -477,7 +1027,7 @@
           </div>
           <div>
             <h3>O cliente decide no stand, na hora</h3>
-            <p>Percorreu o projeto, escolheu o lote, viu o sol entrar no quarto. Não tem mais o que "pensar". A janela de decisão do lançamento não fecha.</p>
+            <p>Percorreu o projeto, escolheu o lote, viu o sol entrar no quarto. <strong>63% dos compradores já fazem oferta sem visitar pessoalmente</strong> — baseando a decisão só no tour virtual (Redfin, 32 mercados). A janela de decisão do lançamento não fecha.</p>
             <div class="tech-tags">
               <span>Menos objeções</span><span>Decisão no stand</span><span>Sem "vou pensar"</span>
             </div>
@@ -826,6 +1376,44 @@
         // warm up a fetch too so the page starts downloading
         fetch(url, { mode: 'no-cors', credentials: 'omit' }).catch(function(){});
       }, { once: true });
+    })();
+  </script>
+
+  <script src="libs/pannellum/pannellum.js"></script>
+  <!-- Pannellum viewer no card de preview -->
+  <script>
+    (function() {
+      function initCardPano() {
+        var el = document.getElementById('card-pano');
+        if (!el || typeof pannellum === 'undefined') return;
+        pannellum.viewer('card-pano', {
+          type: 'equirectangular',
+          panorama: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778624798/Panorama14_000_g51d7d.png',
+          autoLoad: true,
+          autoRotate: -2,
+          autoRotateInactivityDelay: 9999,
+          compass: false,
+          showControls: false,
+          draggable: false,
+          mouseZoom: false,
+          keyboardZoom: false,
+          hfov: 100,
+          pitch: 0,
+          yaw: 20,
+          minPitch: -5,
+          maxPitch: 5
+        });
+        /* Pannellum injeta touch-action:none via JS inline — desfaz para não bloquear scroll */
+        setTimeout(function() {
+          var pano = document.getElementById('card-pano');
+          if (pano) pano.style.touchAction = '';
+        }, 100);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCardPano);
+      } else {
+        initCardPano();
+      }
     })();
   </script>
 </body>

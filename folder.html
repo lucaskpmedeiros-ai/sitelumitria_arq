@@ -447,6 +447,95 @@
     .loc-item-dash { color: var(--ouro); font-weight: 600; flex-shrink: 0; }
 
     /* ============================================================
+       PITCH DATA — seção de dados com fontes
+       ============================================================ */
+    .pitch-data {
+      background: #08090F; padding: 96px 5vw; position: relative; overflow: hidden;
+      background-image: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M24 4L44 24L24 44L4 24Z' fill='none' stroke='rgba(201,169,110,0.04)' stroke-width='0.7'/%3E%3C/svg%3E");
+      background-size: 48px 48px;
+    }
+    .pitch-data-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .pitch-data-header { margin-bottom: 64px; }
+    .pitch-data-header .section-label { color: var(--ouro); }
+    .pitch-data-header h2 {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 100;
+      color: #F5F2EC; line-height: 1.15; letter-spacing: -0.01em;
+      max-width: 680px;
+    }
+    .pitch-data-header h2 em { font-style: normal; font-weight: 300; color: var(--ouro); }
+
+    .pitch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(201,169,110,0.10);
+      border: 1px solid rgba(201,169,110,0.10);
+    }
+    .pitch-card {
+      background: #0C0D12;
+      padding: 40px 36px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: background 0.3s;
+    }
+    .pitch-card:hover { background: #111318; }
+    .pitch-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 600; line-height: 1;
+      color: var(--ouro);
+      letter-spacing: -0.02em;
+    }
+    .pitch-number sup {
+      font-size: 0.45em; vertical-align: super; font-weight: 400; opacity: 0.8;
+    }
+    .pitch-desc {
+      font-size: 0.95rem; color: #C8C4BC; line-height: 1.65; font-weight: 300;
+    }
+    .pitch-desc strong { color: #F0EDE8; font-weight: 500; }
+    .pitch-source {
+      margin-top: auto; padding-top: 16px;
+      border-top: 1px solid rgba(201,169,110,0.10);
+      font-size: 0.65rem; color: rgba(138,138,138,0.55);
+      letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5;
+    }
+
+    .pitch-highlight {
+      margin-top: 1px;
+      background: rgba(201,169,110,0.06);
+      border: 1px solid rgba(201,169,110,0.14);
+      padding: 36px 40px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px; align-items: center;
+    }
+    .pitch-highlight-stat { text-align: center; }
+    .pitch-highlight-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 600; color: var(--ouro); line-height: 1; margin-bottom: 8px;
+    }
+    .pitch-highlight-label {
+      font-size: 0.75rem; color: #7A7670;
+      letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.5;
+    }
+    .pitch-highlight-divider {
+      width: 1px; height: 48px;
+      background: rgba(201,169,110,0.15);
+      justify-self: center;
+    }
+
+    @media (max-width: 900px) {
+      .pitch-grid { grid-template-columns: 1fr 1fr; }
+      .pitch-highlight { grid-template-columns: 1fr; gap: 28px; }
+      .pitch-highlight-divider { display: none; }
+    }
+    @media (max-width: 600px) {
+      .pitch-grid { grid-template-columns: 1fr; }
+      .pitch-card { padding: 28px 24px; }
+      .pitch-data { padding: 64px 24px; }
+    }
+
+    /* ============================================================
        VR SECTION (Lumitria)
        ============================================================ */
     .lumitria-vr {
@@ -1128,6 +1217,101 @@
       <div class="panorama panorama--mid" style="height:100%;min-height:460px;position:relative;">
         <div id="pnlm-loc" class="pano-inner"></div>
       </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PITCH DATA — dados de mercado com fontes
+       ============================================================ -->
+  <section class="pitch-data">
+    <div class="pitch-data-inner">
+
+      <div class="pitch-data-header">
+        <span class="section-label">Dados de mercado · 2025–2026</span>
+        <h2>Por que o tour virtual<br><em>vende mais rápido.</em></h2>
+      </div>
+
+      <div class="pitch-grid">
+
+        <div class="pitch-card">
+          <div class="pitch-number">87<sup>%</sup></div>
+          <p class="pitch-desc">
+            <strong>Mais visualizações</strong> em imóveis com tour 3D — e
+            <strong>403% mais contatos</strong> gerados em comparação a listings tradicionais.
+          </p>
+          <div class="pitch-source">REsimpli / WinSavvy, 2025</div>
+        </div>
+
+        <div class="pitch-card">
+          <div class="pitch-number">31<sup>%</sup></div>
+          <p class="pitch-desc">
+            <strong>Mais rápido de vender</strong> — e fecham até <strong>9% acima do preço pedido</strong>
+            em estudo com 143.575 listings em 4 mercados dos EUA.
+          </p>
+          <div class="pitch-source">Matterport / MLS Transaction Data · Ascendix Tech</div>
+        </div>
+
+        <div class="pitch-card">
+          <div class="pitch-number">75<sup>%</sup></div>
+          <p class="pitch-desc">
+            dos compradores consideram o tour virtual um <strong>fator decisivo</strong> na compra.
+            <strong>54% nem considera</strong> ver um imóvel sem tour virtual.
+          </p>
+          <div class="pitch-source">PhotoUp / NAR, 2025 · Matterport</div>
+        </div>
+
+        <div class="pitch-card">
+          <div class="pitch-number">63<sup>%</sup></div>
+          <p class="pitch-desc">
+            dos compradores já fizeram <strong>oferta em imóvel que nunca visitaram presencialmente</strong>
+            — baseando a decisão apenas no tour virtual.
+          </p>
+          <div class="pitch-source">Redfin, 32 mercados · Sphere</div>
+        </div>
+
+        <div class="pitch-card">
+          <div class="pitch-number">130<sup>%</sup></div>
+          <p class="pitch-desc">
+            mais chance de <strong>agendar visita</strong> entre compradores de 18 a 34 anos
+            quando há tour virtual disponível no listing.
+          </p>
+          <div class="pitch-source">PhotoUp / NAR, 2025 · Matterport</div>
+        </div>
+
+        <div class="pitch-card">
+          <div class="pitch-number">67<sup>%</sup></div>
+          <p class="pitch-desc">
+            <strong>dos listings já incluem tour virtual</strong> — e 63% de todas as interações
+            com tour acontecem pelo <strong>celular.</strong>
+          </p>
+          <div class="pitch-source">Precision Reports, 2026 · Imagtor</div>
+        </div>
+
+      </div>
+
+      <!-- Linha de destaque: mercado global + conversão -->
+      <div class="pitch-highlight">
+        <div class="pitch-highlight-stat">
+          <div class="pitch-highlight-num">USD 74bi</div>
+          <div class="pitch-highlight-label">Mercado global de tour virtual até 2030<br>crescimento de 34% ao ano · real estate é o maior segmento</div>
+        </div>
+        <div class="pitch-highlight-divider"></div>
+        <div class="pitch-highlight-stat">
+          <div class="pitch-highlight-num">+67%</div>
+          <div class="pitch-highlight-label">Aumento em conversão e reservas<br>reportado por empresas que adotaram tour virtual</div>
+        </div>
+        <div class="pitch-highlight-divider"></div>
+        <div class="pitch-highlight-stat">
+          <div class="pitch-highlight-num">10×</div>
+          <div class="pitch-highlight-label">Mais engajamento em sites com tour virtual<br>versus listings tradicionais sem imersão</div>
+        </div>
+      </div>
+
+      <p style="margin-top:20px;font-size:0.65rem;color:rgba(138,138,138,0.40);letter-spacing:0.05em;line-height:1.7;">
+        Fontes: Grand View Research · Matterport · REsimpli · WinSavvy · PhotoUp · NAR · Redfin · Precision Reports · Ascendix Tech · Market.us, 2025–2026.
+      </p>
+
     </div>
   </section>
 
