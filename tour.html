@@ -267,6 +267,16 @@
       text-transform: uppercase; color: var(--ouro);
       display: flex; align-items: center; gap: 6px;
     }
+    @media (max-width: 768px) {
+      .planta-header { display: none !important; }
+      #plantaBox {
+        background: transparent !important;
+        border: none !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
+      }
+      .planta-wrap { padding: 0 !important; }
+    }
     .planta-wrap { position: relative; padding: 8px; }
     .planta-wrap img { width: 100%; display: block; opacity: 0.90; }
     .room-dot {
