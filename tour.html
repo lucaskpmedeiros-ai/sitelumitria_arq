@@ -223,6 +223,30 @@
       border-color: rgba(201,169,110,0.50);
     }
     #plantaBox.hidden { opacity: 0; pointer-events: none; }
+
+    /* Mobile: recolhido por padrão */
+    @media (max-width: 600px) {
+      #plantaBox {
+        width: 44px; height: 44px; border-radius: 50%;
+        bottom: 90px; left: 14px;
+        overflow: hidden;
+        transition: width 0.35s ease, height 0.35s ease, border-radius 0.35s ease, transform 0.3s ease;
+      }
+      #plantaBox.expanded {
+        width: 190px; height: auto; border-radius: 12px;
+        transform: none !important;
+      }
+      #plantaBox:not(.expanded) .planta-header span:last-child,
+      #plantaBox:not(.expanded) .planta-wrap { display: none; }
+      #plantaBox:not(.expanded) .planta-header {
+        border: none; padding: 0;
+        width: 44px; height: 44px;
+        justify-content: center; align-items: center;
+      }
+      #plantaBox:not(.expanded) .planta-header .ldot { width: 8px; height: 8px; }
+      #plantaBox.expanded .planta-header { padding: 7px 12px; border-bottom: 1px solid rgba(201,169,110,0.15); }
+      #plantaBox.expanded .planta-wrap { display: block; }
+    }
     .planta-header {
       padding: 7px 12px; border-bottom: 1px solid rgba(201,169,110,0.15);
       font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em;
@@ -520,17 +544,32 @@ function startTour() {
 
 initViewer(0);
 
-/* Planta: zoom no toque mobile */
+/* Planta: comportamento mobile vs desktop */
 (function () {
   var box = document.getElementById('plantaBox');
   if (!box) return;
-  box.addEventListener('touchstart', function (e) {
-    e.stopPropagation();
-    box.classList.add('zoomed');
-  }, { passive: true });
-  box.addEventListener('touchend', function () {
-    setTimeout(function () { box.classList.remove('zoomed'); }, 600);
-  });
+  var mobile = window.innerWidth <= 600;
+
+  if (mobile) {
+    /* Mobile: toque abre/fecha */
+    box.addEventListener('touchstart', function (e) {
+      e.stopPropagation();
+      box.classList.toggle('expanded');
+    }, { passive: true });
+    /* Fecha ao tocar fora */
+    document.addEventListener('touchstart', function (e) {
+      if (!box.contains(e.target)) box.classList.remove('expanded');
+    }, { passive: true });
+  } else {
+    /* Desktop: zoom no hover (já feito por CSS), sem JS necessário */
+    box.addEventListener('touchstart', function (e) {
+      e.stopPropagation();
+      box.classList.add('zoomed');
+    }, { passive: true });
+    box.addEventListener('touchend', function () {
+      setTimeout(function () { box.classList.remove('zoomed'); }, 600);
+    });
+  }
 }());
 </script>
 </body>
