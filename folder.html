@@ -87,10 +87,20 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      height: 100%;       /* preenche altura total — sem bordas em cima/baixo */
-      width: auto;        /* mantém proporção — corta laterais se necessário */
-      min-width: 100%;    /* garante que nunca fica menor que a tela */
+      height: 100%;
+      width: auto;
+      min-width: 100%;
       max-width: none;
+    }
+    /* Transição dia→noite */
+    .hero-night {
+      animation: daynight 16s ease-in-out infinite;
+    }
+    @keyframes daynight {
+      0%         { opacity: 0; }
+      10%        { opacity: 0; }
+      35%, 65%   { opacity: 1; }
+      90%, 100%  { opacity: 0; }
     }
     .hero-overlay {
       position: absolute; inset: 0; z-index: 3;
@@ -591,9 +601,10 @@
       <!-- <source src="assets/video/capa.mp4" type="video/mp4"> -->
     </video>
 
-    <!-- Imagem de capa -->
+    <!-- Imagem de capa — transição dia/noite -->
     <div class="hero-placeholder" id="heroPlaceholder">
-      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778173958/ChatGPT_Image_7_de_mai._de_2026_14_12_15_yskl7y.png" alt="Capa do empreendimento">
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778173958/ChatGPT_Image_7_de_mai._de_2026_14_12_15_yskl7y.png" alt="Capa dia">
+      <img class="hero-night" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778637817/ChatGPT_Image_12_de_mai._de_2026_23_03_29_ruc90u.png" alt="Capa noite">
     </div>
 
     <div class="hero-overlay">
