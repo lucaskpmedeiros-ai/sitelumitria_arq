@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="para-vriaricone.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="libs/pannellum/pannellum.css">
   <script src="libs/pannellum/pannellum.js"></script>
@@ -17,14 +17,15 @@
     :root {
       --ouro:      #C9A96E;
       --ouro-glow: rgba(201,169,110,0.30);
-      --dark:      #08090F;
-      --text:      #F0EDE8;
-      --text-2:    #8A8A8A;
-      --border:    rgba(201,169,110,0.18);
+      --dark:      #F5F4F0;
+      --ui-bg:     rgba(250,249,246,0.88);
+      --text:      #1A1A1A;
+      --text-2:    #777;
+      --border:    rgba(180,160,120,0.25);
     }
     html, body {
       width: 100%; height: 100%; overflow: hidden;
-      background: var(--dark); font-family: 'Inter', system-ui, sans-serif;
+      background: #F5F4F0; font-family: 'Josefin Sans', 'Inter', system-ui, sans-serif;
       color: var(--text); -webkit-font-smoothing: antialiased; user-select: none;
     }
 
@@ -36,14 +37,14 @@
     /* ── Transição ── */
     #transition {
       position: fixed; inset: 0; z-index: 150;
-      background: var(--dark); opacity: 0; pointer-events: none;
+      background: #F5F4F0; opacity: 0; pointer-events: none;
       transition: opacity 0.35s ease;
     }
     #transition.active { opacity: 1; pointer-events: all; }
 
     /* ── Loading ── */
     #loadScreen {
-      position: fixed; inset: 0; z-index: 500; background: var(--dark);
+      position: fixed; inset: 0; z-index: 500; background: #F5F4F0;
       display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 18px; transition: opacity 0.7s;
     }
@@ -51,78 +52,81 @@
     #loadScreen img { width: 54px; height: 54px; border-radius: 50%;
       border: 1px solid rgba(201,169,110,0.35);
       box-shadow: 0 0 20px rgba(201,169,110,0.15); }
-    .bar-track { width: 190px; height: 2px; background: rgba(255,255,255,0.08);
+    .bar-track { width: 190px; height: 1px; background: rgba(0,0,0,0.10);
       border-radius: 2px; overflow: hidden; }
     #loadBar { height: 100%; width: 0%; border-radius: 2px;
-      background: linear-gradient(90deg, var(--ouro), #A07840);
-      box-shadow: 0 0 8px var(--ouro-glow); transition: width 0.3s; }
-    .load-txt { font-size: 0.76rem; color: var(--text-2); letter-spacing: 0.05em; }
+      background: var(--ouro); transition: width 0.3s; }
+    .load-txt { font-size: 0.70rem; color: var(--text-2); letter-spacing: 0.18em; text-transform: uppercase; }
 
     /* ── Header ── */
     #topBar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
       padding: max(16px, env(safe-area-inset-top)) 28px 16px;
-      background: linear-gradient(to bottom, rgba(8,9,15,0.92) 0%, transparent 100%);
+      background: linear-gradient(to bottom, rgba(245,244,240,0.95) 0%, transparent 100%);
       pointer-events: none;
     }
     #topBar > * { pointer-events: all; }
     .logo-lnk { display: flex; align-items: center; text-decoration: none; }
     .logo-lnk img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
-      border: 1px solid rgba(201,169,110,0.30);
-      box-shadow: 0 0 14px rgba(201,169,110,0.12); }
+      border: 1px solid rgba(201,169,110,0.30); }
     #sceneLabel {
       display: flex; align-items: center; gap: 8px;
-      font-size: 0.76rem; font-weight: 500; color: var(--text-2);
-      background: rgba(8,9,15,0.75); border: 1px solid var(--border);
-      padding: 7px 16px; border-radius: 100px; backdrop-filter: blur(16px);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.70rem; font-weight: 300; color: var(--text-2);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      background: var(--ui-bg); border: 1px solid var(--border);
+      padding: 7px 18px; border-radius: 100px; backdrop-filter: blur(16px);
     }
-    .ldot { width: 6px; height: 6px; border-radius: 50%; background: var(--ouro);
-      box-shadow: 0 0 8px var(--ouro-glow); flex-shrink: 0;
-      animation: blink 2.4s ease-in-out infinite; }
+    .ldot { width: 5px; height: 5px; border-radius: 50%; background: var(--ouro);
+      flex-shrink: 0; animation: blink 2.4s ease-in-out infinite; }
     #backBtn {
       display: flex; align-items: center; gap: 7px;
-      background: rgba(8,9,15,0.75); border: 1px solid var(--border);
-      color: var(--text-2); font-size: 0.78rem; font-weight: 500;
-      padding: 7px 16px; border-radius: 100px; cursor: pointer;
+      background: var(--ui-bg); border: 1px solid var(--border);
+      color: var(--text-2); font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.70rem; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 7px 18px; border-radius: 100px; cursor: pointer;
       backdrop-filter: blur(16px); text-decoration: none;
       transition: color 0.2s, border-color 0.2s;
     }
-    #backBtn:hover { color: var(--text); border-color: rgba(201,169,110,0.45); }
+    #backBtn:hover { color: var(--text); border-color: var(--ouro); }
 
     /* ── Nav de cenas ── */
     #sceneNav {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: center;
       padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-      background: linear-gradient(to top, rgba(8,9,15,0.92) 0%, transparent 100%);
+      background: linear-gradient(to top, rgba(245,244,240,0.95) 0%, transparent 100%);
     }
     .nav-inner {
       display: flex; align-items: center; gap: 4px;
-      background: rgba(8,9,15,0.80); border: 1px solid var(--border);
+      background: var(--ui-bg); border: 1px solid var(--border);
       padding: 10px 20px; border-radius: 100px; backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
     }
     .sbtn {
       display: flex; flex-direction: column; align-items: center; gap: 5px;
-      cursor: pointer; opacity: 0.38; transition: opacity 0.3s;
+      cursor: pointer; opacity: 0.35; transition: opacity 0.3s;
       background: none; border: none; padding: 6px 14px; color: inherit; min-width: 64px;
     }
-    .sbtn:hover { opacity: 0.72; }
+    .sbtn:hover { opacity: 0.65; }
     .sbtn.on  { opacity: 1; }
-    .pip { width: 7px; height: 7px; border-radius: 50%; background: var(--text-2);
-      transition: background 0.3s, box-shadow 0.3s, transform 0.3s; }
-    .sbtn.on .pip { background: var(--ouro); box-shadow: 0 0 10px var(--ouro-glow); transform: scale(1.3); }
-    .plbl { font-size: 0.60rem; font-weight: 600; color: var(--text-2);
-      letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; transition: color 0.3s; }
-    .sbtn.on .plbl { color: var(--ouro); }
-    .ndiv { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
+    .pip { width: 5px; height: 5px; border-radius: 50%; background: #ccc;
+      transition: background 0.3s, transform 0.3s; }
+    .sbtn.on .pip { background: var(--ouro); transform: scale(1.3); }
+    .plbl { font-family: 'Josefin Sans', sans-serif; font-size: 0.58rem; font-weight: 300;
+      letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap;
+      color: var(--text-2); transition: color 0.3s; }
+    .sbtn.on .plbl { color: var(--text); font-weight: 600; }
+    .ndiv { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
 
     /* ── Hint ── */
     #hint {
       position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
       z-index: 200; display: flex; align-items: center; gap: 6px;
-      font-size: 0.70rem; color: var(--text-2); pointer-events: none;
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem; font-weight: 300;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-2); pointer-events: none;
       transition: opacity 1.2s; white-space: nowrap;
     }
     #hint.gone { opacity: 0; }
@@ -131,37 +135,39 @@
     #overlay {
       position: fixed; inset: 0; z-index: 300; display: flex;
       flex-direction: column; align-items: center; justify-content: center;
-      background: rgba(8,9,15,0.94); backdrop-filter: blur(24px);
+      background: rgba(245,244,240,0.97); backdrop-filter: blur(24px);
       transition: opacity 0.9s; padding: 24px; text-align: center;
     }
     #overlay.gone { opacity: 0; pointer-events: none; }
     .ov-tag {
-      display: inline-flex; align-items: center; gap: 7px; font-size: 0.68rem;
-      font-weight: 600; color: var(--ouro); border: 1px solid rgba(201,169,110,0.28);
-      padding: 5px 16px; border-radius: 100px; margin-bottom: 28px;
-      letter-spacing: 0.14em; text-transform: uppercase; background: rgba(201,169,110,0.08);
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem; font-weight: 300; color: var(--ouro);
+      border: 1px solid rgba(201,169,110,0.40);
+      padding: 6px 18px; border-radius: 100px; margin-bottom: 32px;
+      letter-spacing: 0.22em; text-transform: uppercase;
     }
     #overlay h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700;
-      line-height: 1.15; color: var(--text);
-      margin-bottom: 16px; max-width: 560px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 100;
+      line-height: 1.15; color: var(--text); letter-spacing: -0.01em;
+      margin-bottom: 18px; max-width: 560px;
     }
-    #overlay h1 em { font-style: italic; color: var(--ouro); }
-    #overlay p { font-size: 0.98rem; color: var(--text-2); max-width: 440px;
-      line-height: 1.75; margin-bottom: 40px; }
+    #overlay h1 em { font-style: normal; font-weight: 300; color: var(--ouro); }
+    #overlay p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem; color: var(--text-2); max-width: 420px;
+      line-height: 1.80; margin-bottom: 44px; font-weight: 300;
+    }
     #startBtn {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--ouro); color: #08090F;
-      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
-      padding: 16px 36px; border-radius: 10px; border: none; cursor: pointer;
-      box-shadow: 0 0 28px rgba(201,169,110,0.40), 0 8px 28px rgba(0,0,0,0.4);
-      transition: transform 0.22s, box-shadow 0.22s;
+      background: #1A1A1A; color: #F5F4F0;
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.75rem;
+      font-weight: 300; letter-spacing: 0.20em; text-transform: uppercase;
+      padding: 16px 40px; border-radius: 3px; border: none; cursor: pointer;
+      transition: transform 0.22s, background 0.22s;
     }
-    #startBtn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 44px rgba(201,169,110,0.55), 0 12px 36px rgba(0,0,0,0.45);
-    }
+    #startBtn:hover { transform: translateY(-2px); background: #333; }
 
     /* ── Hotspots ── */
     .hs-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
@@ -180,9 +186,10 @@
     .hs-circle svg { color: var(--ouro); filter: drop-shadow(0 0 4px var(--ouro)); }
     .hs-wrap:hover .hs-circle { transform: scale(1.12); background: rgba(201,169,110,0.28); }
     .hs-label {
-      font-size: 0.68rem; font-weight: 600; color: rgba(240,237,232,0.92);
-      letter-spacing: 0.06em; text-transform: uppercase;
-      background: rgba(8,9,15,0.78); border: 1px solid rgba(201,169,110,0.30);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.62rem; font-weight: 300; color: #1A1A1A;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      background: rgba(245,244,240,0.90); border: 1px solid rgba(180,160,120,0.35);
       padding: 5px 14px; border-radius: 100px; white-space: nowrap; backdrop-filter: blur(8px);
     }
 

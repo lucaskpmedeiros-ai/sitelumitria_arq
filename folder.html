@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="libs/pannellum/pannellum.css">
 
   <style>
@@ -16,13 +16,13 @@
        ============================================================ */
     :root {
       --ouro:      #C9A96E;
-      --ouro-dim:  rgba(201,169,110,0.12);
-      --dark:      #08090F;
-      --dark-2:    #0F1118;
-      --dark-card: #13161F;
-      --text:      #F0EDE8;
-      --text-2:    #8A8A8A;
-      --border:    rgba(201,169,110,0.18);
+      --ouro-dim:  rgba(201,169,110,0.10);
+      --dark:      #FFFFFF;
+      --dark-2:    #F5F4F0;
+      --dark-card: #EEECE7;
+      --text:      #1A1A1A;
+      --text-2:    #777777;
+      --border:    rgba(180,160,120,0.25);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,22 +40,24 @@
        TIPOGRAFIA COMPARTILHADA
        ============================================================ */
     .section-label {
-      font-size: 0.70rem; font-weight: 600; letter-spacing: 0.22em;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.26em;
       text-transform: uppercase; color: var(--ouro); margin-bottom: 16px;
       display: block;
     }
     .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 600;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 100;
       line-height: 1.15; color: var(--text); margin-bottom: 16px;
+      letter-spacing: -0.01em;
     }
-    .section-title em { font-style: italic; color: var(--ouro); }
+    .section-title em { font-style: normal; font-weight: 300; color: var(--ouro); }
     .section-desc {
-      color: var(--text-2); font-size: 1rem; line-height: 1.8;
-      max-width: 600px;
+      color: var(--text-2); font-size: 0.98rem; line-height: 1.85;
+      max-width: 600px; font-weight: 300;
     }
     .divider {
-      width: 48px; height: 1px; background: var(--ouro); margin: 24px 0;
+      width: 40px; height: 1px; background: var(--ouro); margin: 24px 0;
     }
 
     /* ============================================================
