@@ -52,8 +52,8 @@
     }
 
     /* 2. Base — scroll direto, sem animação suave que causa travamento */
-    html { scroll-behavior: auto !important; overflow-y: scroll !important; overscroll-behavior: auto !important; }
-    body { background: #F5F4F0 !important; color: #1A1A1A !important; overscroll-behavior: auto !important; }
+    html { scroll-behavior: auto !important; overflow-x: hidden !important; overflow-y: scroll !important; overscroll-behavior: auto !important; }
+    body { background: #F5F4F0 !important; color: #1A1A1A !important; overflow-x: hidden !important; overscroll-behavior: auto !important; max-width: 100vw !important; }
 
     /* 3. Oculta galaxy canvas */
     #galaxyCanvas { opacity: 0 !important; pointer-events: none !important; }
@@ -270,6 +270,55 @@
       .tour-card-body       { padding: 32px 28px !important; }
       .tour-card-body h2    { font-size: clamp(1.6rem,5vw,2.4rem) !important; max-width: 100% !important; }
       .gancho-payoff        { font-size: clamp(2.2rem, 8vw, 3.8rem) !important; }
+    }
+
+    /* ── Renders — mobile ── */
+    @media (max-width: 600px) {
+      #renders { height: clamp(180px, 55vw, 260px) !important; }
+    }
+
+    /* ── Fix trilhas mobile ── */
+    @media (max-width: 768px) {
+      .trilhas-grid {
+        grid-template-columns: 1fr !important;
+        overflow: hidden !important;
+        margin-top: 32px !important;
+      }
+      .trilha-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        padding: 24px 20px !important;
+        text-align: left !important;
+      }
+      .trilha-badge {
+        white-space: normal !important;
+        word-break: break-word !important;
+        font-size: 0.58rem !important;
+        letter-spacing: 0.06em !important;
+      }
+      .trilha-header {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+      }
+      .trilha-title {
+        font-size: 1.05rem !important;
+      }
+      .trilha-desc {
+        font-size: 0.88rem !important;
+      }
+      .trilha-benefits li {
+        font-size: 0.86rem !important;
+      }
+      .btn-trilha {
+        font-size: 0.72rem !important;
+        padding: 12px 18px !important;
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+      }
+      .section { overflow: hidden !important; }
     }
 
     /* ── MOBILE ≤ 480px ── */
@@ -615,6 +664,28 @@
       <span>Rolar</span>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
+
+  </section>
+
+<!-- ====================================================
+       RENDERS DO EMPREENDIMENTO — transição dia/noite
+  ==================================================== -->
+  <section id="renders" style="background:#000;padding:0;overflow:hidden;
+             width:100%;max-width:100%;
+             height:clamp(220px,56vw,620px);position:relative;">
+
+    <!-- Imagem dia (base) -->
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778329200/ChatGPT_Image_9_de_mai._de_2026_09_17_17_ebbgj6.png"
+         alt="Empreendimento — vista diurna"
+         style="position:absolute;inset:0;width:100%;height:100%;
+                object-fit:cover;object-position:center;display:block;">
+
+    <!-- Imagem noite (anima com a mesma keyframe do hero) -->
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778638233/ChatGPT_Image_12_de_mai._de_2026_23_10_27_ezarry.png"
+         alt="Empreendimento — vista noturna"
+         class="hero-night-img"
+         style="position:absolute;inset:0;width:100%;height:100%;
+                object-fit:cover;object-position:center;display:block;">
 
   </section>
 
