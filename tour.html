@@ -63,7 +63,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
       padding: max(16px, env(safe-area-inset-top)) 28px 16px;
-      background: linear-gradient(to bottom, rgba(245,244,240,0.95) 0%, transparent 100%);
+      background: transparent;
       pointer-events: none;
     }
     #topBar > * { pointer-events: all; }
@@ -96,7 +96,7 @@
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: center;
       padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-      background: linear-gradient(to top, rgba(245,244,240,0.95) 0%, transparent 100%);
+      background: transparent;
     }
     .nav-inner {
       display: flex; align-items: center; gap: 4px;
@@ -134,6 +134,7 @@
     /* ── Overlay de entrada ── */
     #overlay {
       position: fixed; inset: 0; z-index: 300;
+      background: #08090F;
       transition: opacity 0.9s;
     }
     #overlay.gone { opacity: 0; pointer-events: none; }
@@ -142,6 +143,7 @@
     .ov-bg {
       position: absolute; inset: 0; z-index: 0;
       overflow: hidden; pointer-events: none;
+      opacity: 0.38;
       transition: opacity 1.5s ease;
     }
     .ov-bg img {
@@ -170,11 +172,12 @@
         linear-gradient(to top, rgba(8,9,15,0.88) 0%, rgba(8,9,15,0.08) 50%, transparent 72%);
     }
 
-    /* Conteúdo — canto inferior esquerdo */
-    .ov-content {
-      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
-      padding: 72px 80px;
-      display: flex; flex-direction: column; align-items: flex-start;
+    /* ── Seleção de tour (overlay central) ── */
+    .ov-select {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px 40px; text-align: center;
     }
     .ov-tag {
       display: inline-flex; align-items: center; gap: 8px;
@@ -184,61 +187,156 @@
       border: 1px solid rgba(201,169,110,0.38);
       padding: 6px 16px; border-radius: 100px;
       background: rgba(8,9,15,0.32);
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
     .ov-dot {
       width: 5px; height: 5px; border-radius: 50%; background: var(--ouro);
       animation: blink 2.4s ease-in-out infinite; flex-shrink: 0;
     }
-    #overlay h1 {
+    .ov-select h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.6rem, 6vw, 5rem); font-weight: 700;
-      line-height: 1.05; color: #FFFFFF;
-      letter-spacing: -0.01em; margin-bottom: 20px; max-width: 640px;
+      font-size: clamp(1.6rem, 2.8vw, 2.6rem); font-weight: 700;
+      line-height: 1.08; color: #fff; letter-spacing: -0.01em;
+      margin-bottom: 24px; white-space: nowrap;
     }
-    #overlay h1 em {
+    .ov-select h1 em {
       font-style: italic; color: #EFD99A;
       text-shadow: 0 2px 24px rgba(220,190,100,0.30);
     }
-    #overlay p {
+
+    /* Grid de cards */
+    .tours-grid {
+      display: flex; gap: 28px; align-items: stretch;
+    }
+
+    /* Card base — agora é div, não button */
+    .tour-card {
+      width: clamp(360px, 44vw, 640px);
+      background: rgba(8,9,15,0.62);
+      border: 1px solid rgba(201,169,110,0.28);
+      border-radius: 20px; overflow: hidden;
+      text-align: left;
+      display: flex; flex-direction: column;
+      backdrop-filter: blur(18px);
+      transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1),
+                  border-color 0.25s, box-shadow 0.32s;
+    }
+    .tour-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(201,169,110,0.70);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.60), 0 0 0 1px rgba(201,169,110,0.15);
+    }
+
+    /* Thumb — área interativa do panorama */
+    .tour-card-thumb {
+      height: min(40vh, 340px); overflow: hidden; position: relative; flex-shrink: 0;
+      cursor: grab;
+    }
+    .tour-card-thumb:active { cursor: grabbing; }
+
+    /* panorama preview dentro do card — totalmente interativo */
+    .card-panorama {
+      width: 100%; height: 100%;
+    }
+    .card-panorama .pnlm-container { border-radius: 0 !important; }
+    .tour-card-grad {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, transparent 55%, rgba(8,9,15,0.70) 100%);
+      pointer-events: none;
+    }
+    .tour-card-rooms {
+      position: absolute; bottom: 10px; right: 12px;
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.58rem;
+      font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(240,237,232,0.80);
+      background: rgba(8,9,15,0.55); border: 1px solid rgba(201,169,110,0.30);
+      padding: 4px 10px; border-radius: 100px; backdrop-filter: blur(8px);
+    }
+    .tour-card-thumb--dark {
+      background: rgba(8,9,15,0.50);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .soon-icon { color: rgba(201,169,110,0.35); }
+
+    /* Info — área clicável para iniciar o tour */
+    .tour-card-info {
+      padding: 18px 22px 22px;
+      display: flex; flex-direction: column; gap: 7px; flex: 1;
+      background: none; border: none; text-align: left; color: inherit;
+      cursor: pointer; width: 100%;
+      border-top: 1px solid rgba(201,169,110,0.12);
+      transition: background 0.2s;
+    }
+    .tour-card-info:hover { background: rgba(201,169,110,0.06); }
+    .tc-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.58rem;
+      font-weight: 300; letter-spacing: 0.20em; text-transform: uppercase;
+      padding: 3px 11px; border-radius: 100px; width: fit-content;
+    }
+    .tc-tag.available {
+      color: var(--ouro); border: 1px solid rgba(201,169,110,0.40);
+      background: rgba(201,169,110,0.10);
+    }
+    .tc-tag.soon {
+      color: rgba(240,237,232,0.40);
+      border: 1px solid rgba(240,237,232,0.14);
+    }
+    .tc-dot {
+      width: 4px; height: 4px; border-radius: 50%; background: var(--ouro);
+      animation: blink 2.4s ease-in-out infinite; flex-shrink: 0;
+    }
+    .tour-card-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: #fff; line-height: 1.2; margin-top: 2px;
+    }
+    .tour-card-info p {
       font-family: 'Josefin Sans', sans-serif;
-      font-size: clamp(0.90rem, 1.3vw, 1.08rem); font-weight: 100;
-      color: rgba(240,237,232,0.80); max-width: 500px;
-      letter-spacing: 0.05em; line-height: 1.90; margin-bottom: 38px;
+      font-size: 0.70rem; font-weight: 300;
+      color: rgba(240,237,232,0.55); letter-spacing: 0.06em; line-height: 1.75;
     }
-    #startBtn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--ouro); color: #08090F;
-      font-family: 'Josefin Sans', sans-serif; font-size: 0.75rem;
+    .tc-cta {
+      margin-top: auto; padding-top: 14px;
+      display: flex; align-items: center; gap: 7px;
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem;
       font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
-      padding: 16px 40px; border-radius: 3px; border: none; cursor: pointer;
-      transition: transform 0.22s, background 0.22s;
-      box-shadow: 0 0 32px rgba(201,169,110,0.35);
+      color: var(--ouro);
     }
-    #startBtn:hover { transform: translateY(-2px); background: #E0BE84; }
+    .tc-cta--muted { color: rgba(240,237,232,0.28); }
 
-    /* Badge canto inferior direito */
-    .ov-badge {
-      position: absolute; bottom: 48px; right: 56px; z-index: 3;
-      display: inline-flex; align-items: center; gap: 9px;
-      background: rgba(8,9,15,0.55); backdrop-filter: blur(14px);
-      border: 1px solid rgba(201,169,110,0.35); border-radius: 12px;
-      padding: 14px 26px;
-      pointer-events: auto;
+    /* Toast "em breve" */
+    #toast {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(16px);
+      z-index: 400; opacity: 0; pointer-events: none;
+      background: rgba(8,9,15,0.88); border: 1px solid rgba(201,169,110,0.40);
+      color: rgba(240,237,232,0.90); backdrop-filter: blur(16px);
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.68rem;
+      font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 12px 28px; border-radius: 100px;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
     }
-    .ov-badge-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--ouro);
-      animation: blink 2s ease-in-out infinite; flex-shrink: 0;
-    }
-    .ov-badge span {
-      font-family: 'Josefin Sans', sans-serif; font-size: 0.68rem; font-weight: 300;
-      letter-spacing: 0.22em; text-transform: uppercase; color: rgba(240,237,232,0.90);
+    #toast.show {
+      opacity: 1; transform: translateX(-50%) translateY(0);
     }
 
-    @media (max-width: 768px) {
-      .ov-content { padding: 48px 32px; }
-      #overlay h1 { font-size: clamp(2rem, 9vw, 3rem); }
-      .ov-badge { display: none; }
+    .tour-card-info {
+      padding: 22px 28px 28px;
+    }
+    .tour-card-info h3 {
+      font-size: 1.5rem;
+    }
+    .tour-card-info p {
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 900px) {
+      .tours-grid { flex-direction: column; gap: 16px; align-items: center; }
+      .tour-card { width: min(560px, 92vw); }
+      .tour-card-thumb { height: min(34vh, 240px); }
+      .ov-select { padding: 20px 20px; justify-content: center; overflow-y: auto; }
+      .ov-select h1 { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: 20px; }
     }
 
     /* ── Hotspots ── */
@@ -490,36 +588,69 @@
 
   <div class="ov-grad"></div>
 
-  <!-- Conteúdo inferior esquerdo -->
-  <div class="ov-content">
+  <!-- Seleção de tour -->
+  <div class="ov-select">
     <div class="ov-tag">
       <span class="ov-dot"></span>
       Tour Interativo 360°
     </div>
-    <h1>Ande pelo seu<br>futuro investimento<br><em>em 3D.</em></h1>
-    <p>Percorra cada ambiente do apartamento como se já fosse seu — antes mesmo da primeira pedra ser assentada.</p>
-    <button id="startBtn" onclick="startTour()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <path d="M5 3l14 9-14 9V3z" fill="currentColor"/>
-      </svg>
-      Iniciar tour 3D agora
-    </button>
-  </div>
+    <h1>Escolha sua <em>experiência</em></h1>
 
-  <!-- Badge canto inferior direito -->
-  <div class="ov-badge">
-    <span class="ov-badge-dot"></span>
-    <span>Experiência imersiva 360°</span>
+    <div class="tours-grid">
+
+      <!-- Card 1 — Apartamento Decorado -->
+      <div class="tour-card">
+        <div class="tour-card-thumb">
+          <div id="preview-decorador" class="card-panorama"></div>
+          <div class="tour-card-grad"></div>
+          <span class="tour-card-rooms">7 ambientes</span>
+        </div>
+        <button class="tour-card-info" onclick="startTour('decorador')">
+          <span class="tc-tag available"><span class="tc-dot"></span>Disponível agora</span>
+          <h3>Apartamento<br>Decorado</h3>
+          <p>Sala, suítes, cozinha, varanda e escritório — experiência completa</p>
+          <span class="tc-cta">
+            Iniciar Tour
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- Card 2 — Áreas Sociais -->
+      <div class="tour-card">
+        <div class="tour-card-thumb">
+          <div id="preview-social" class="card-panorama"></div>
+          <div class="tour-card-grad"></div>
+          <span class="tour-card-rooms">9 ambientes</span>
+        </div>
+        <button class="tour-card-info" onclick="startTour('social')">
+          <span class="tc-tag available"><span class="tc-dot"></span>Disponível agora</span>
+          <h3>Áreas Sociais<br>do Empreendimento</h3>
+          <p>Explore os espaços comuns — piscina, salão e lazer</p>
+          <span class="tc-cta">
+            Iniciar Tour
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+    </div>
   </div>
 
 </div>
+
+<div id="toast">Em breve — aguarde novidades!</div>
 
 <script>
 'use strict';
 
 var SCENES = [
   {
-    name: 'Sala de Estar',
+    name: 'Sala de Estar', navLabel: 'Sala',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778624798/Panorama14_000_g51d7d.png',
     hotspots: [
       { pitch: 0, yaw: -155, to: 2, label: 'Cozinha'    },
@@ -530,7 +661,7 @@ var SCENES = [
     ]
   },
   {
-    name: 'Suíte Master',
+    name: 'Suíte Master', navLabel: 'Suíte',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622880/Panorama19_j8vkzb.png',
     hotspots: [
       { pitch: 0, yaw:  0,  to: 6, label: 'Suíte II' },
@@ -538,7 +669,7 @@ var SCENES = [
     ]
   },
   {
-    name: 'Cozinha',
+    name: 'Cozinha', navLabel: 'Cozinha',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622878/Panorama16_wmnge5.png',
     hotspots: [
       { pitch: -12, yaw: -54, to: 4, label: 'Hall'    },
@@ -547,28 +678,28 @@ var SCENES = [
     ]
   },
   {
-    name: 'Varanda Gourmet',
+    name: 'Varanda Gourmet', navLabel: 'Varanda',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778629788/Panorama17_000_e9dlqw.png',
     hotspots: [
       { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
     ]
   },
   {
-    name: 'Hall',
+    name: 'Hall', navLabel: 'Hall',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778636419/Panorama18_000_oou86z.png',
     hotspots: [
       { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
     ]
   },
   {
-    name: 'Escritório',
+    name: 'Escritório', navLabel: 'Escritório',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778636099/Panorama21_bnwrvg.png',
     hotspots: [
       { pitch: 0, yaw: 0, to: 0, label: 'Sala' }
     ]
   },
   {
-    name: 'Suíte II',
+    name: 'Suíte II', navLabel: 'Suíte II',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778622879/Panorama20_iyt8tj.png',
     hotspots: [
       { pitch: 0, yaw: 0, to: 1, label: 'Suíte' }
@@ -576,7 +707,9 @@ var SCENES = [
   }
 ];
 
+var SCENES_DECORADOR = SCENES; /* referência fixa antes de qualquer reassignment */
 var viewer = null;
+var previewViewers = { decorador: null, social: null };
 var curIdx = 0;
 var transitioning = false;
 var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 600;
@@ -633,11 +766,117 @@ function updateNav(idx) {
   });
 }
 
-function startTour() {
+var SCENES_SOCIAL = [
+  {
+    name: 'Área Social I',   navLabel: 'Social I',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867849/Panorama13_rdfovi.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social II',  navLabel: 'Social II',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867849/Panorama14_qmajfb.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social III', navLabel: 'Social III',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867858/Panorama17_pkvsi3.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social IV',  navLabel: 'Social IV',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867855/Panorama18_dprzeg.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social V',   navLabel: 'Social V',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032256/Panorama14_001_vwidyu.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social VI',  navLabel: 'Social VI',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778938579/Panorama13_vqygzs.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social VII', navLabel: 'Social VII',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032250/Panorama19_j26efs.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social VIII', navLabel: 'Social VIII',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032252/Panorama18_cmazbb.png',
+    hotspots: []
+  },
+  {
+    name: 'Área Social IX', navLabel: 'Social IX',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032254/Panorama17_000_tcde7w.png',
+    hotspots: []
+  },
+];
+
+function initPreviews() {
+  var opts = {
+    type: 'equirectangular', autoLoad: true,
+    autoRotate: -0.5, autoRotateInactivityDelay: 3000,
+    showControls: false, mouseZoom: false, draggable: true,
+    hfov: 100, minHfov: 100, maxHfov: 100, pitch: 0, yaw: 0
+  };
+  previewViewers.decorador = pannellum.viewer('preview-decorador',
+    Object.assign({}, opts, { panorama: SCENES_DECORADOR[0].src }));
+  previewViewers.social = pannellum.viewer('preview-social',
+    Object.assign({}, opts, { panorama: SCENES_SOCIAL[0].src }));
+}
+initPreviews();
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function () { t.classList.remove('show'); }, 2800);
+}
+
+function startTour(type) {
+  /* libera os viewers de preview */
+  ['decorador', 'social'].forEach(function(k) {
+    if (previewViewers[k]) { previewViewers[k].destroy(); previewViewers[k] = null; }
+  });
+  if (type === 'social') {
+    if (!SCENES_SOCIAL.length) {
+      showToast('Em breve — aguarde novidades!');
+      return;
+    }
+    SCENES = SCENES_SOCIAL;
+    curIdx = 0;
+    buildNav();
+    document.getElementById('plantaBox').classList.add('hidden');
+    document.getElementById('sceneName').textContent = SCENES[0].name;
+    initViewer(0);
+  }
   var ov = document.getElementById('overlay');
   ov.classList.add('gone');
   setTimeout(function () { ov.style.display = 'none'; }, 950);
   setTimeout(function () { document.getElementById('hint').classList.add('gone'); }, 7000);
+}
+
+function buildNav() {
+  var inner = document.querySelector('.nav-inner');
+  inner.innerHTML = '';
+  SCENES.forEach(function (scene, i) {
+    if (i > 0) {
+      var sep = document.createElement('div');
+      sep.className = 'ndiv';
+      inner.appendChild(sep);
+    }
+    var btn = document.createElement('button');
+    btn.className = 'sbtn' + (i === 0 ? ' on' : '');
+    btn.dataset.scene = i;
+    var label = scene.navLabel || scene.name.split(' ')[0];
+    btn.innerHTML = '<div class="pip"></div><span class="plbl">' + label + '</span>';
+    btn.addEventListener('click', (function (idx) {
+      return function () { goTo(idx); };
+    }(i)));
+    inner.appendChild(btn);
+  });
 }
 
 /* Quando o panorama termina de carregar, a foto some e o viewer aparece */
@@ -660,17 +899,9 @@ function initViewer(sceneIdx, onLoaded) {
     hotSpots: buildHotspots(sceneIdx)
   });
   viewer.on('load', function () {
-    /* Fade out da foto de fundo quando o panorama estiver pronto */
-    var bg = document.getElementById('ovBg');
-    if (bg) {
-      bg.style.opacity = '0';
-      setTimeout(function () { bg.style.display = 'none'; }, 1600);
-    }
     if (typeof onLoaded === 'function') onLoaded();
   });
   setTimeout(function () {
-    var bg = document.getElementById('ovBg');
-    if (bg && bg.style.opacity !== '0') { bg.style.opacity = '0'; }
     if (typeof onLoaded === 'function') onLoaded();
   }, 9000);
 }
