@@ -29,7 +29,20 @@
       color: var(--text); -webkit-font-smoothing: antialiased; user-select: none;
     }
 
-    #panorama { position: fixed; inset: 0; width: 100%; height: 100%; }
+    #panorama, #panorama-b {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      transform-origin: center center;
+    }
+    #panorama   { z-index: 11; }
+    #panorama-b { z-index: 10; }
+
+    /* Cena saindo: zoom pra frente + fade */
+    .pano-leaving {
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.8, 1),
+                  opacity   0.38s ease !important;
+      transform: scale(1.32) !important;
+      opacity: 0 !important;
+    }
 
     .pnlm-ui .pnlm-about-msg,
     .pnlm-ui .pnlm-zoom-controls { display: none !important; }
@@ -493,6 +506,7 @@
 <body>
 
 <div id="panorama"></div>
+<div id="panorama-b"></div>
 <div id="transition"></div>
 
 <!-- Planta baixa -->
@@ -623,7 +637,7 @@
         <div class="tour-card-thumb">
           <div id="preview-social" class="card-panorama"></div>
           <div class="tour-card-grad"></div>
-          <span class="tour-card-rooms">9 ambientes</span>
+          <span class="tour-card-rooms">7 ambientes</span>
         </div>
         <button class="tour-card-info" onclick="startTour('social')">
           <span class="tc-tag available"><span class="tc-dot"></span>Disponível agora</span>
@@ -708,7 +722,10 @@ var SCENES = [
 ];
 
 var SCENES_DECORADOR = SCENES; /* referência fixa antes de qualquer reassignment */
-var viewer = null;
+var viewer    = null;   /* viewer ativo (front) */
+var viewerBk  = null;   /* viewer carregando (back) */
+var frontPano = 'panorama';
+var backPano  = 'panorama-b';
 var previewViewers = { decorador: null, social: null };
 var curIdx = 0;
 var transitioning = false;
@@ -728,7 +745,7 @@ function buildHotspots(sceneIdx) {
         el.innerHTML =
           '<div class="hs-circle">' +
             '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">' +
-              '<path d="M12 5l7 7-7 7M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+              '<path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
             '</svg>' +
           '</div>' +
           '<span class="hs-label">' + hs.label + '</span>';
@@ -744,17 +761,53 @@ function goTo(idx) {
   curIdx = idx;
   updateNav(idx);
   document.getElementById('sceneName').textContent = SCENES[idx].name;
-  var tr = document.getElementById('transition');
-  tr.classList.add('active');
-  setTimeout(function () {
-    var done = false;
-    function reveal() {
-      if (done) return; done = true;
-      tr.classList.remove('active');
+
+  /* destrói buffer anterior se ainda estava carregando */
+  if (viewerBk) { viewerBk.destroy(); viewerBk = null; }
+
+  /* carrega nova cena no buffer de trás (invisível) */
+  viewerBk = pannellum.viewer(backPano, {
+    type: 'equirectangular',
+    panorama: SCENES[idx].src,
+    autoLoad: true,
+    autoRotate: -2,
+    autoRotateInactivityDelay: 3000,
+    showControls: false,
+    draggable: true, mouseZoom: true, keyboardZoom: true,
+    hfov: BASE_HFOV, minHfov: 60, maxHfov: 130,
+    pitch: 0, yaw: 0,
+    hotSpots: buildHotspots(idx)
+  });
+
+  var switched = false;
+  function switchNow() {
+    if (switched) return;
+    switched = true;
+
+    var frontEl = document.getElementById(frontPano);
+
+    /* zoom pra frente + fade na cena atual */
+    frontEl.classList.add('pano-leaving');
+
+    setTimeout(function () {
+      /* destrói viewer antigo */
+      if (viewer) { viewer.destroy(); viewer = null; }
+      frontEl.classList.remove('pano-leaving');
+
+      /* troca buffers */
+      var tmp = frontPano; frontPano = backPano; backPano = tmp;
+      viewer   = viewerBk;
+      viewerBk = null;
+
+      document.getElementById(frontPano).style.zIndex = '11';
+      document.getElementById(backPano ).style.zIndex = '10';
+
       transitioning = false;
-    }
-    initViewer(idx, reveal);
-  }, 360);
+    }, 460);
+  }
+
+  viewerBk.on('load', switchNow);
+  setTimeout(switchNow, 12000); /* fallback se a imagem demorar */
 }
 
 function updateNav(idx) {
@@ -768,48 +821,38 @@ function updateNav(idx) {
 
 var SCENES_SOCIAL = [
   {
-    name: 'Área Social I',   navLabel: 'Social I',
+    name: 'Fachada 1',     navLabel: 'Fachada 1',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867849/Panorama13_rdfovi.png',
     hotspots: []
   },
   {
-    name: 'Área Social II',  navLabel: 'Social II',
+    name: 'Fachada 2',     navLabel: 'Fachada 2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867849/Panorama14_qmajfb.png',
     hotspots: []
   },
   {
-    name: 'Área Social III', navLabel: 'Social III',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867858/Panorama17_pkvsi3.png',
-    hotspots: []
-  },
-  {
-    name: 'Área Social IV',  navLabel: 'Social IV',
+    name: 'Circulação',    navLabel: 'Circulação',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778867855/Panorama18_dprzeg.png',
     hotspots: []
   },
   {
-    name: 'Área Social V',   navLabel: 'Social V',
+    name: 'Circulação 2',  navLabel: 'Circulação 2',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779145603/Panorama20_tgnfn3.png',
+    hotspots: []
+  },
+  {
+    name: 'Living',        navLabel: 'Living',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779145603/Panorama21_uojuq5.png',
+    hotspots: []
+  },
+  {
+    name: 'Living 2',      navLabel: 'Living 2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032256/Panorama14_001_vwidyu.png',
     hotspots: []
   },
   {
-    name: 'Área Social VI',  navLabel: 'Social VI',
+    name: 'Spa',           navLabel: 'Spa',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1778938579/Panorama13_vqygzs.png',
-    hotspots: []
-  },
-  {
-    name: 'Área Social VII', navLabel: 'Social VII',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032250/Panorama19_j26efs.png',
-    hotspots: []
-  },
-  {
-    name: 'Área Social VIII', navLabel: 'Social VIII',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032252/Panorama18_cmazbb.png',
-    hotspots: []
-  },
-  {
-    name: 'Área Social IX', navLabel: 'Social IX',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1779032254/Panorama17_000_tcde7w.png',
     hotspots: []
   },
 ];
