@@ -333,11 +333,16 @@
       .hero-corner-badge    { display: none !important; }
       .hero-scroll-folder   { display: none !important; }
 
-      /* Tour preview card */
-      .tour-card-body       { padding: 20px 18px !important; }
-      .tour-card-body h2    { font-size: clamp(1.3rem, 7vw, 1.8rem) !important; margin-bottom: 8px !important; }
-      .tour-card-body p     { display: none !important; }
-      .tour-card-body > div { gap: 14px !important; flex-direction: column !important; align-items: flex-start !important; }
+      /* Tour preview card — layout centrado no mobile */
+      .tour-preview-card    { aspect-ratio: 3 / 4 !important; }
+      .tour-card-body       { position: absolute !important; inset: 0 !important; padding: 80px 24px 40px !important;
+                              display: flex !important; flex-direction: column !important;
+                              align-items: center !important; justify-content: center !important;
+                              text-align: center !important; }
+      .tour-card-body h2    { font-size: clamp(1.5rem, 8vw, 2.1rem) !important; margin-bottom: 14px !important; max-width: 100% !important; }
+      .tour-card-body p     { display: block !important; font-size: 0.78rem !important; margin-bottom: 24px !important; max-width: 100% !important; }
+      .tour-card-body > div { gap: 14px !important; flex-direction: column !important; align-items: center !important; width: 100% !important; }
+      .tour-card-body > div > span:first-child { width: 100% !important; justify-content: center !important; border-radius: 100px !important; }
 
       /* Gancho */
       .gancho-payoff        { font-size: clamp(1.7rem, 9vw, 2.6rem) !important; }

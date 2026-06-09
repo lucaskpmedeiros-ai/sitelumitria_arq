@@ -9,19 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black: #0C0B09;
-  --dark: #141210;
-  --card: #1A1815;
-  --border: rgba(255,255,255,0.08);
-  --border-gold: rgba(201,169,110,0.3);
-  --gold: #C9A96E;
-  --gold-dim: rgba(201,169,110,0.12);
-  --white: #F5F2EC;
-  --gray: #7A7670;
-  --gray-light: #A8A49E;
-  --success: #4CAF7D;
-  --radius: 14px;
-  --radius-sm: 8px;
+  --black:       #0C0B09;
+  --dark:        #141210;
+  --card:        #1A1815;
+  --border:      rgba(255,255,255,0.08);
+  --border-gold: rgba(201,169,110,0.30);
+  --gold:        #C9A96E;
+  --gold-dim:    rgba(201,169,110,0.10);
+  --white:       #F5F2EC;
+  --gray:        #7A7670;
+  --gray-light:  #A8A49E;
+  --success:     #4CAF7D;
+  --radius:      14px;
+  --radius-sm:   8px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,20 +48,18 @@ body::before {
   pointer-events: none; z-index: 0;
 }
 
-.container { width: 100%; max-width: 680px; position: relative; z-index: 1; }
+.container { width: 100%; max-width: 700px; position: relative; z-index: 1; }
 
-/* Voltar */
+/* ── Voltar ── */
 .back-link {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 13px; color: var(--gray); text-decoration: none;
   margin-bottom: 32px; transition: color .2s;
 }
 .back-link:hover { color: var(--gold); }
-.back-link svg { opacity: 0.6; }
 
-/* Header */
+/* ── Header ── */
 .header { text-align: center; margin-bottom: 36px; }
-
 .header-tag {
   display: inline-flex; align-items: center; gap: 7px;
   background: var(--gold-dim); border: 0.5px solid var(--border-gold);
@@ -76,24 +74,23 @@ body::before {
 }
 @keyframes pulse {
   0%,100% { opacity:1; transform:scale(1); }
-  50% { opacity:0.4; transform:scale(0.7); }
+  50%      { opacity:0.4; transform:scale(0.7); }
 }
-
 .header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(26px, 5vw, 40px); font-weight: 900;
+  font-size: clamp(24px, 5vw, 40px); font-weight: 900;
   line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 12px;
 }
 .header h1 em { font-style: italic; color: var(--gold); }
 .header p { font-size: 15px; color: var(--gray-light); line-height: 1.6; max-width: 480px; margin: 0 auto; }
 
-/* Card */
+/* ── Card principal ── */
 .calc-card {
   background: var(--card); border: 0.5px solid var(--border);
   border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
 }
 
-/* Input VGV */
+/* ── Input VGV ── */
 .input-section { padding: 28px 28px 24px; border-bottom: 0.5px solid var(--border); }
 .input-label {
   font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
@@ -114,50 +111,134 @@ body::before {
 .vgv-input {
   flex: 1; background: none; border: none; outline: none; padding: 0 16px;
   font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
-  color: var(--white); height: 56px; width: 100%;
+  color: var(--white); height: 56px; width: 100%; min-width: 0;
 }
 .vgv-input::placeholder { color: rgba(255,255,255,0.2); }
-.vgv-suffix { padding: 0 16px; font-size: 14px; color: var(--gray); flex-shrink: 0; }
+.vgv-suffix {
+  padding: 0 16px; font-size: 14px; color: var(--gray);
+  flex-shrink: 0; white-space: nowrap;
+}
 
-/* Tipologia */
+/* ── Tipo de empreendimento ── */
 .tipo-section { padding: 20px 28px; border-bottom: 0.5px solid var(--border); }
 .tipo-label {
   font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--gray); margin-bottom: 12px; display: block;
 }
-.tipo-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tipo-btns { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
 .tipo-btn {
   background: rgba(255,255,255,0.03); border: 0.5px solid var(--border);
   border-radius: var(--radius-sm); padding: 8px 6px;
   font-family: 'Syne', sans-serif; font-size: 12px; color: var(--gray-light);
   cursor: pointer; text-align: center; transition: all .2s; line-height: 1.3;
 }
-.tipo-btn:hover { border-color: var(--border-gold); color: var(--white); }
-.tipo-btn.ativo { background: var(--gold-dim); border-color: var(--border-gold); color: var(--gold); }
+.tipo-btn:hover  { border-color: var(--border-gold); color: var(--white); }
+.tipo-btn.ativo  { background: var(--gold-dim); border-color: var(--border-gold); color: var(--gold); }
 
-/* Resultados */
+/* ── Seção de seleção de impactos ── */
+.impactos-section { padding: 24px 28px; border-bottom: 0.5px solid var(--border); }
+.impactos-label {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 14px; display: block;
+}
+
+/* ── Card de impacto (clicável) ── */
+.impact-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.22s ease;
+  margin-bottom: 8px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.impact-card:last-child { margin-bottom: 0; }
+.impact-card.selected {
+  background: rgba(201,169,110,0.07);
+  border-color: rgba(201,169,110,0.55);
+}
+.impact-card:not(.selected) { opacity: 0.48; }
+.impact-card:hover { opacity: 1 !important; border-color: var(--border-gold); }
+
+.card-left {
+  display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0;
+}
+.card-icon { font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.card-info { min-width: 0; }
+.card-title {
+  font-size: 13px; font-weight: 600; color: var(--white);
+  margin-bottom: 3px; line-height: 1.35;
+}
+.card-pct {
+  font-size: 11px; color: var(--gold); font-weight: 500;
+  margin-bottom: 4px; display: block;
+}
+.card-source { font-size: 10px; color: var(--gray); line-height: 1.45; }
+
+.card-right {
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.card-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: var(--gold);
+  text-align: right; min-width: 72px;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.card-value.empty { color: rgba(255,255,255,0.18); font-size: 16px; }
+
+/* Checkbox do card */
+.card-check {
+  width: 20px; height: 20px; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.20);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.impact-card.selected .card-check {
+  background: var(--gold); border-color: var(--gold);
+}
+.card-check svg { display: none; }
+.impact-card.selected .card-check svg { display: block; }
+
+/* ── Resultados finais ── */
 .resultados { padding: 24px 28px; }
-.res-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.res-item {
-  background: rgba(255,255,255,0.03); border: 0.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px; transition: all .3s;
-}
-.res-icon { font-size: 16px; margin-bottom: 8px; display: block; }
-.res-label { font-size: 11px; color: var(--gray); line-height: 1.4; margin-bottom: 8px; min-height: 30px; }
-.res-val {
-  font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
-  color: var(--gold); line-height: 1; margin-bottom: 4px; transition: all .3s;
-}
-.res-fonte { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.4; }
 
-/* Total */
+/* Investimento Lumitria */
+.inv-box {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.inv-left .inv-label {
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 5px; display: block;
+}
+.inv-val {
+  font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+  color: var(--white); transition: all .25s;
+}
+.inv-nota {
+  font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* Total + ROI */
 .total-box {
   background: linear-gradient(135deg, rgba(201,169,110,0.10) 0%, rgba(201,169,110,0.04) 100%);
   border: 1px solid var(--border-gold); border-radius: var(--radius-sm);
   padding: 20px; display: flex; justify-content: space-between;
-  align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
+  align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 14px;
 }
-.total-label {
+.total-label, .roi-label {
   font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--gray); margin-bottom: 6px;
 }
@@ -165,19 +246,19 @@ body::before {
   font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900;
   color: var(--white); line-height: 1; transition: all .3s;
 }
-.roi-label {
-  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--gray); margin-bottom: 6px;
-}
 .roi-val {
   font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900;
   color: var(--success); line-height: 1; transition: all .3s;
 }
 .total-right { text-align: right; }
 .roi-sub { font-size: 11px; color: var(--gray); margin-top: 4px; }
-.nota { font-size: 11px; color: rgba(255,255,255,0.2); line-height: 1.6; text-align: center; padding: 0 4px; }
 
-/* CTA */
+.nota-calc {
+  font-size: 11px; color: rgba(255,255,255,0.20); line-height: 1.6;
+  text-align: center; padding: 0 4px;
+}
+
+/* ── CTA ── */
 .cta-section {
   background: var(--card); border: 0.5px solid var(--border);
   border-radius: var(--radius); padding: 24px 28px;
@@ -185,26 +266,32 @@ body::before {
   gap: 16px; flex-wrap: wrap;
 }
 .cta-text p:first-child { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
-.cta-text p:last-child { font-size: 13px; color: var(--gray-light); }
+.cta-text p:last-child  { font-size: 13px; color: var(--gray-light); }
 .cta-btn {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--gold); color: var(--black);
   font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600;
   padding: 13px 22px; border-radius: var(--radius-sm);
-  text-decoration: none; white-space: nowrap; transition: all .2s; flex-shrink: 0;
+  text-decoration: none; white-space: nowrap;
+  transition: all .2s; flex-shrink: 0;
 }
 .cta-btn:hover { background: #E0BE84; transform: translateY(-1px); }
 
+/* ── Fontes ── */
 .fontes { margin-top: 16px; text-align: center; }
 .fontes p { font-size: 10px; color: rgba(255,255,255,0.15); line-height: 1.7; }
 
-@media (max-width: 540px) {
-  .res-grid { grid-template-columns: 1fr; }
-  .tipo-btns { grid-template-columns: repeat(2, 1fr); }
-  .total-box { flex-direction: column; align-items: flex-start; }
-  .total-right { text-align: left; }
-  .cta-section { flex-direction: column; }
-  .cta-btn { width: 100%; justify-content: center; }
+/* ── Responsive ── */
+@media (max-width: 560px) {
+  .tipo-btns    { grid-template-columns: repeat(2,1fr); }
+  .card-value   { font-size: 16px; min-width: 56px; }
+  .card-title   { font-size: 12px; }
+  .total-box    { flex-direction: column; align-items: flex-start; }
+  .total-right  { text-align: left; }
+  .cta-section  { flex-direction: column; }
+  .cta-btn      { width: 100%; justify-content: center; }
+  .inv-box      { flex-direction: column; align-items: flex-start; }
+  .input-section, .tipo-section, .impactos-section, .resultados { padding-left: 18px; padding-right: 18px; }
 }
 </style>
 </head>
@@ -219,75 +306,116 @@ body::before {
   <div class="header">
     <div class="header-tag">Calculadora de impacto</div>
     <h1>Quanto seu lançamento<br>deixa na mesa <em>sem a Lumitria?</em></h1>
-    <p>Digite o VGV do seu empreendimento e veja o impacto financeiro real baseado em dados globais.</p>
+    <p>Informe o VGV, escolha os impactos que quer calcular e veja o retorno estimado em tempo real.</p>
   </div>
 
   <div class="calc-card">
 
+    <!-- VGV -->
     <div class="input-section">
       <label class="input-label">VGV do empreendimento (R$)</label>
       <div class="vgv-input-wrap">
         <span class="vgv-prefix">R$</span>
         <input class="vgv-input" type="text" id="vgv-input"
           placeholder="200.000.000" inputmode="numeric" autocomplete="off">
-        <span class="vgv-suffix" id="vgv-suffix">200M</span>
+        <span class="vgv-suffix" id="vgv-suffix">—</span>
       </div>
     </div>
 
-    <div class="tipo-section">
-      <label class="tipo-label">Tipo de empreendimento</label>
-      <div class="tipo-btns">
-        <button class="tipo-btn ativo" data-tipo="loteamento" onclick="setTipo(this)">Loteamento</button>
-        <button class="tipo-btn" data-tipo="condominio" onclick="setTipo(this)">Condomínio de casas</button>
-        <button class="tipo-btn" data-tipo="predio" onclick="setTipo(this)">Prédio residencial</button>
-        <button class="tipo-btn" data-tipo="alto" onclick="setTipo(this)">Alto padrão</button>
+
+    <!-- Impactos selecionáveis -->
+    <div class="impactos-section">
+      <label class="impactos-label">Selecione os impactos a calcular</label>
+
+      <!-- Card 1 -->
+      <div class="impact-card selected" id="card-0" onclick="toggleCard(0)">
+        <div class="card-left">
+          <span class="card-icon">🚀</span>
+          <div class="card-info">
+            <p class="card-title">Receita adicional vendendo acima do preço pedido</p>
+            <span class="card-pct">+9% do VGV</span>
+            <p class="card-source">Fonte: Matterport / MLS · 143.575 listings EUA</p>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="card-value" id="val-0">—</span>
+          <div class="card-check">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#0C0B09" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="impact-card selected" id="card-1" onclick="toggleCard(1)">
+        <div class="card-left">
+          <span class="card-icon">⚡</span>
+          <div class="card-info">
+            <p class="card-title">Custo financeiro evitado fechando mais rápido</p>
+            <span class="card-pct">≈ 2,4% do VGV</span>
+            <p class="card-source">Fonte: Matterport · 31% mais rápido · 1,2%/mês</p>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="card-value" id="val-1">—</span>
+          <div class="card-check">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#0C0B09" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="impact-card selected" id="card-2" onclick="toggleCard(2)">
+        <div class="card-left">
+          <span class="card-icon">🛡️</span>
+          <div class="card-info">
+            <p class="card-title">Margem preservada sem desconto por insegurança</p>
+            <span class="card-pct">+5% do VGV</span>
+            <p class="card-source">Fonte: REsimpli 2025 · desconto médio 5%</p>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="card-value" id="val-2">—</span>
+          <div class="card-check">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#0C0B09" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Resultados -->
     <div class="resultados">
-      <div class="res-grid">
-        <div class="res-item">
-          <span class="res-icon">🚀</span>
-          <p class="res-label">Receita adicional vendendo acima do preço pedido</p>
-          <p class="res-val" id="v1">R$ 18M</p>
-          <p class="res-fonte">Fonte: Matterport / MLS · 143.575 listings EUA</p>
-        </div>
-        <div class="res-item">
-          <span class="res-icon">⚡</span>
-          <p class="res-label">Custo financeiro evitado fechando mais rápido</p>
-          <p class="res-val" id="v2">R$ 4,8M</p>
-          <p class="res-fonte">Fonte: Matterport · 31% mais rápido · 1,2%/mês</p>
-        </div>
-        <div class="res-item">
-          <span class="res-icon">🛡️</span>
-          <p class="res-label">Margem preservada sem desconto por insegurança</p>
-          <p class="res-val" id="v3">R$ 10M</p>
-          <p class="res-fonte">Fonte: REsimpli 2025 · desconto médio 5%</p>
-        </div>
-      </div>
 
+
+      <!-- Total + ROI -->
       <div class="total-box">
         <div class="total-left">
           <p class="total-label">Impacto financeiro total estimado</p>
-          <p class="total-val" id="total">R$ 32,8M</p>
+          <p class="total-val" id="total">—</p>
         </div>
-        <div class="total-right">
-          <p class="roi-label">Retorno sobre investimento Lumitria</p>
-          <p class="roi-val" id="roi">+410x</p>
-          <p class="roi-sub" id="roi-sub">vs. investimento estimado de R$ 80k</p>
+        <div class="total-right" id="roi-block">
+          <p class="roi-label">ROI estimado</p>
+          <p class="roi-val" id="roi">—</p>
         </div>
       </div>
 
-      <p class="nota">Estimativas baseadas em dados globais. O impacto real varia conforme o mercado, estratégia comercial e perfil do empreendimento. Use como base de análise.</p>
+      <p class="nota-calc">Estimativas baseadas em dados globais. O impacto real varia conforme mercado, estratégia comercial e perfil do empreendimento.</p>
     </div>
   </div>
 
+  <!-- CTA -->
   <div class="cta-section">
     <div class="cta-text">
       <p>Seu próximo lançamento pode ter isso.</p>
       <p>Fale com a Lumitria e veja como funciona na prática.</p>
     </div>
-    <a href="https://wa.me/5519998949137?text=Olá!%20Calculei%20o%20impacto%20da%20Lumitria%20no%20meu%20VGV%20e%20quero%20saber%20mais." class="cta-btn" target="_blank">
+    <a href="https://wa.me/5519998949137?text=Ol%C3%A1!%20Calculei%20o%20impacto%20da%20Lumitria%20no%20meu%20VGV%20e%20quero%20saber%20mais."
+       class="cta-btn" target="_blank">
       Quero saber mais →
     </a>
   </div>
@@ -303,16 +431,141 @@ body::before {
 
 </div>
 <script>
-const config = {
-  loteamento: { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.0, investimento: 35 },
-  condominio:  { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.0, investimento: 55 },
-  predio:      { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.2, investimento: 80 },
-  alto:        { preco: 0.09, velocidade: 0.31, desconto: 0.05, meses: 2.5, investimento: 115 },
+'use strict';
+
+/* ── Configuração por tipo ── */
+const TIPO = {
+  loteamento: { meses: 2.0 },
+  condominio:  { meses: 2.0 },
+  predio:      { meses: 2.2 },
+  alto:        { meses: 2.5 },
 };
 
-let tipoAtual = 'loteamento';
-let vgvAtual  = 200000000;
+/* ── Tabela de investimento por VGV ── */
+function getInvestimento(vgv) {
+  if (!vgv || vgv <= 0)    return { label: '—',            sob: false, val: null };
+  if (vgv <= 30e6)         return { label: 'R$ 30.000',    sob: false, val: 30000 };
+  if (vgv <= 70e6)         return { label: 'R$ 45.000',    sob: false, val: 45000 };
+  if (vgv <= 200e6)        return { label: 'R$ 90.000',    sob: false, val: 90000 };
+  if (vgv <= 300e6)        return { label: 'R$ 135.000',   sob: false, val: 135000 };
+  return                          { label: 'Sob consulta — entre em contato', sob: true, val: null };
+}
 
+/* ── Estado ── */
+let tipoAtual   = 'loteamento';
+let vgvAtual    = 0;
+let selecionados = [true, true, true]; /* todos ativos por padrão */
+
+/* ── Tipos de impacto ── */
+const IMPACTOS = [
+  { pct: 0.09,  calcFn: (vgv) => vgv * 0.09 },
+  { pct: 0.024, calcFn: (vgv, tipo) => vgv * 0.012 * TIPO[tipo].meses },
+  { pct: 0.05,  calcFn: (vgv) => vgv * 0.05 },
+];
+
+/* ── Formatação ── */
+function fmtBRL(n) {
+  if (n >= 1e9) return 'R$ ' + (n / 1e9).toFixed(1).replace('.', ',') + 'B';
+  if (n >= 1e6) return 'R$ ' + (n / 1e6 % 1 === 0 ? Math.round(n / 1e6) : (n / 1e6).toFixed(1).replace('.', ',')) + 'M';
+  if (n >= 1e3) return 'R$ ' + Math.round(n / 1e3) + 'k';
+  return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+}
+
+function fmtSuffix(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(1).replace('.', ',') + 'B';
+  if (n >= 1e6) return Math.round(n / 1e6) + 'M';
+  if (n >= 1e3) return Math.round(n / 1e3) + 'k';
+  return n.toLocaleString('pt-BR');
+}
+
+/* ── Animação de valor ── */
+function animateVal(id, newText, isEmpty) {
+  const el = document.getElementById(id);
+  el.style.opacity = '0.2';
+  el.style.transform = 'translateY(4px)';
+  setTimeout(() => {
+    el.textContent = newText;
+    el.className = 'card-value' + (isEmpty ? ' empty' : '');
+    el.style.transition = 'opacity .25s ease, transform .25s ease';
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }, 120);
+}
+
+function animateEl(id, newText) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.transition = 'none';
+  el.style.opacity = '0.2';
+  el.style.transform = 'translateY(4px)';
+  setTimeout(() => {
+    el.textContent = newText;
+    el.style.transition = 'opacity .3s ease, transform .3s ease';
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }, 130);
+}
+
+/* ── Cálculo principal ── */
+function calcular() {
+  const vgv = vgvAtual;
+
+  /* Valores individuais dos cards */
+  IMPACTOS.forEach((imp, i) => {
+    if (!vgv || vgv <= 0 || !selecionados[i]) {
+      animateVal('val-' + i, vgv && selecionados[i] ? fmtBRL(0) : '—', !selecionados[i] || !vgv);
+    } else {
+      animateVal('val-' + i, fmtBRL(imp.calcFn(vgv, tipoAtual)), false);
+    }
+  });
+
+  /* Investimento */
+  const inv = getInvestimento(vgv);
+  animateEl('inv-val', inv.label);
+
+  /* Total e ROI */
+  if (!vgv || vgv <= 0) {
+    animateEl('total', '—');
+    animateEl('roi', '—');
+    document.getElementById('roi-sub').textContent = '';
+    document.getElementById('roi-block').style.visibility = 'visible';
+    return;
+  }
+
+  /* Soma apenas cards selecionados */
+  const total = IMPACTOS.reduce((acc, imp, i) => {
+    return acc + (selecionados[i] ? imp.calcFn(vgv, tipoAtual) : 0);
+  }, 0);
+
+  animateEl('total', total > 0 ? fmtBRL(total) : 'R$ 0');
+
+  /* ROI */
+  if (inv.sob) {
+    /* VGV > 300M: oculta ROI */
+    document.getElementById('roi-block').style.visibility = 'hidden';
+  } else {
+    document.getElementById('roi-block').style.visibility = 'visible';
+    if (!inv.val || total <= 0 || !selecionados.some(Boolean)) {
+      animateEl('roi', '—');
+      document.getElementById('roi-sub').textContent = '';
+    } else {
+      const roiX = Math.round(total / inv.val);
+      animateEl('roi', '+' + roiX.toLocaleString('pt-BR') + 'x');
+      document.getElementById('roi-sub').textContent =
+        'vs. investimento de ' + inv.label;
+    }
+  }
+}
+
+/* ── Toggle card ── */
+function toggleCard(i) {
+  selecionados[i] = !selecionados[i];
+  const card = document.getElementById('card-' + i);
+  card.classList.toggle('selected', selecionados[i]);
+  calcular();
+}
+
+/* ── Tipo de empreendimento ── */
 function setTipo(btn) {
   document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('ativo'));
   btn.classList.add('ativo');
@@ -320,63 +573,26 @@ function setTipo(btn) {
   calcular();
 }
 
-function fmtBRL(n) {
-  if (n >= 1e9) return 'R$ ' + (n / 1e9).toFixed(1).replace('.', ',') + 'B';
-  if (n >= 1e6) return 'R$ ' + Math.round(n / 1e6) + 'M';
-  if (n >= 1e3) return 'R$ ' + Math.round(n / 1e3) + 'k';
-  return 'R$ ' + Math.round(n);
-}
-
-function fmtSuffix(n) {
-  if (n >= 1e9) return (n / 1e9).toFixed(1).replace('.', ',') + 'B';
-  if (n >= 1e6) return Math.round(n / 1e6) + 'M';
-  if (n >= 1e3) return Math.round(n / 1e3) + 'k';
-  return String(Math.round(n));
-}
-
-function animateVal(id, newText) {
-  const el = document.getElementById(id);
-  el.style.opacity = '0.3';
-  el.style.transform = 'translateY(4px)';
-  setTimeout(() => {
-    el.textContent = newText;
-    el.style.transition = 'all .25s ease';
-    el.style.opacity = '1';
-    el.style.transform = 'translateY(0)';
-  }, 150);
-}
-
-function calcular() {
-  if (vgvAtual <= 0) return;
-  const c = config[tipoAtual];
-  const ganhoPreco    = vgvAtual * c.preco;
-  const custoFinanc   = vgvAtual * 0.012 * c.meses;
-  const margemPreserv = vgvAtual * c.desconto;
-  const totalImpacto  = ganhoPreco + custoFinanc + margemPreserv;
-  const investimento  = c.investimento * 1000;
-  const roiX          = Math.round(totalImpacto / investimento);
-
-  animateVal('v1', fmtBRL(ganhoPreco));
-  animateVal('v2', fmtBRL(custoFinanc));
-  animateVal('v3', fmtBRL(margemPreserv));
-  animateVal('total', fmtBRL(totalImpacto));
-  animateVal('roi', '+' + roiX.toLocaleString('pt-BR') + 'x');
-  document.getElementById('roi-sub').textContent =
-    'vs. investimento estimado de ' + fmtBRL(investimento);
-}
-
+/* ── Input VGV ── */
 const input = document.getElementById('vgv-input');
 input.addEventListener('input', function () {
   const raw = this.value.replace(/\D/g, '');
-  if (!raw) { this.value = ''; document.getElementById('vgv-suffix').textContent = '—'; return; }
+  if (!raw) {
+    this.value = '';
+    vgvAtual = 0;
+    document.getElementById('vgv-suffix').textContent = '—';
+    calcular();
+    return;
+  }
   const num = parseInt(raw, 10);
+  /* Formata com pontos como separador de milhar */
   this.value = num.toLocaleString('pt-BR');
   vgvAtual = num;
   document.getElementById('vgv-suffix').textContent = fmtSuffix(num);
   calcular();
 });
 
-input.value = (200000000).toLocaleString('pt-BR');
+/* Inicializa vazio */
 calcular();
 </script>
 </body>
