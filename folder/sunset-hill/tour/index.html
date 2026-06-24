@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- ══════════════════════════════════════════════════════════
+       [EMPREENDIMENTO] Sunset Hill — Tour 360°
+       Para duplicar: ajuste as cenas e textos abaixo.
+       ════════════════════════════════════════════════════════== -->
+  <title>Tour 360° — Sunset Hill | Lumitria</title>
+  <meta name="description" content="Explore o Sunset Hill em uma experiência 360° imersiva, desenvolvida pela Lumitria.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/x-icon" href="../../../para-vriaricone.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../../libs/pannellum/pannellum.css">
+
+  <style>
+    :root {
+      --bege:      #F2E1D3;
+      --marrom:    #2C1B14;
+      --marrom-2:  #1E130E;
+      --terracota: #91431C;
+      --texto-claro: #F2E1D3;
+      --divisor:   rgba(242,225,211,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      background: var(--marrom-2);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--texto-claro);
+    }
+    .logo-escuro { filter: brightness(0) invert(1); opacity: 0.85; display: block; }
+
+    /* ── LOADING ── */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: var(--marrom-2);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #loading.oculto {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loading-sol {
+      animation: pulsa-sol 2s ease-in-out infinite;
+    }
+    .loading-sol-img { animation: none; }
+    @keyframes pulsa-sol {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50%       { transform: scale(1.06); opacity: 1; }
+    }
+    .loading-nome {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--texto-claro);
+    }
+    .loading-tagline {
+      font-family: 'Dancing Script', cursive;
+      font-size: 18px;
+      color: var(--terracota);
+      margin-top: -16px;
+    }
+    .loading-barra {
+      width: 160px;
+      height: 1px;
+      background: rgba(237,227,216,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .loading-barra::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--terracota);
+      animation: carrega 1.8s ease-in-out infinite;
+    }
+    @keyframes carrega {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .loading-label {
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      opacity: 0.35;
+      margin-top: -8px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      background: linear-gradient(to bottom, rgba(44,24,16,0.9) 0%, transparent 100%);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .header-logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .header-logo-nome {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--texto-claro);
+    }
+    .header-logo-sub {
+      font-family: 'Dancing Script', cursive;
+      font-size: 11px;
+      color: var(--terracota);
+    }
+    .header-direita {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--texto-claro);
+      border: 1px solid rgba(237,227,216,0.3);
+      padding: 9px 20px;
+      transition: all 0.25s;
+      background: rgba(44,24,16,0.4);
+      backdrop-filter: blur(4px);
+    }
+    .btn-voltar:hover {
+      background: rgba(196,98,46,0.25);
+      border-color: var(--terracota);
+      color: var(--terracota);
+    }
+    .btn-voltar svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .cena-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--texto-claro);
+      opacity: 0.45;
+    }
+
+    /* ── VIEWER ── */
+    #panorama {
+      width: 100%;
+      height: 100%;
+    }
+    #panorama .pnlm-container { background: var(--marrom-2); }
+
+    /* ── PAINEL DE CENAS ── */
+    .cenas-painel {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 100;
+      background: linear-gradient(to top, rgba(44,24,16,0.95) 0%, transparent 100%);
+      padding: 40px 40px 32px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .cenas-lista {
+      display: flex;
+      gap: 10px;
+      pointer-events: all;
+    }
+    .cena-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .cena-thumb {
+      width: 72px;
+      height: 48px;
+      border: 2px solid rgba(237,227,216,0.2);
+      background: rgba(237,227,216,0.05);
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+    }
+    .cena-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cena-thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cena-thumb-placeholder svg { opacity: 0.3; }
+    .cena-btn.ativa .cena-thumb {
+      border-color: var(--terracota);
+      transform: translateY(-2px);
+    }
+    .cena-nome {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--texto-claro);
+      opacity: 0.45;
+      transition: opacity 0.25s;
+    }
+    .cena-btn.ativa .cena-nome { opacity: 1; color: var(--terracota); }
+    .cenas-info {
+      text-align: right;
+      pointer-events: none;
+    }
+    .cenas-info-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--texto-claro);
+      margin-bottom: 4px;
+    }
+    .cenas-info-sub {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--terracota);
+      opacity: 0.75;
+    }
+    .cenas-dica {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--texto-claro);
+      opacity: 0.25;
+      margin-top: 8px;
+      justify-content: flex-end;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .header { padding: 16px 20px; }
+      .cena-label { display: none; }
+      .cenas-painel { padding: 24px 20px 20px; }
+      .cena-thumb { width: 56px; height: 38px; }
+      .cenas-info { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ LOADING ══ -->
+  <div id="loading">
+    <div class="loading-sol">
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png"
+           alt="Sunset Hill" class="logo-escuro loading-sol-img" style="width:auto;height:120px;">
+    </div>
+    <div class="loading-barra"></div>
+    <div class="loading-label">Carregando tour 360°</div>
+  </div>
+
+  <!-- ══ HEADER ══ -->
+  <header class="header">
+    <a href="../index.html" class="header-logo">
+      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png"
+           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:48px;">
+    </a>
+    <div class="header-direita">
+      <span class="cena-label" id="cena-atual-label">Vista 360°</span>
+      <a href="../index.html" class="btn-voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Voltar ao Folder
+      </a>
+    </div>
+  </header>
+
+  <!-- ══ PANORAMA ══ -->
+  <div id="panorama"></div>
+
+  <!-- ══ PAINEL DE CENAS ══ -->
+  <div class="cenas-painel">
+    <div class="cenas-lista" id="cenas-lista">
+      <!-- [CUSTOMIZAR] Adicione ou remova cenas conforme o empreendimento -->
+      <button class="cena-btn ativa" data-cena="0" onclick="trocarCena(0)">
+        <div class="cena-thumb">
+          <img src="../../../assets/images/Panorama1.jpg" alt="Panorama 1">
+        </div>
+        <span class="cena-nome">Vista 01</span>
+      </button>
+      <button class="cena-btn" data-cena="1" onclick="trocarCena(1)">
+        <div class="cena-thumb">
+          <img src="../../../assets/images/Panorama2.jpg" alt="Panorama 2">
+        </div>
+        <span class="cena-nome">Vista 02</span>
+      </button>
+      <button class="cena-btn" data-cena="2" onclick="trocarCena(2)">
+        <div class="cena-thumb">
+          <img src="../../../assets/images/Panorama3.jpg" alt="Panorama 3">
+        </div>
+        <span class="cena-nome">Vista 03</span>
+      </button>
+    </div>
+    <div class="cenas-info">
+      <div class="cenas-info-titulo" id="cena-nome-atual">Vista 01</div>
+      <div class="cenas-info-sub">Sunset Hill Residence</div>
+      <div class="cenas-dica">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+        </svg>
+        Arraste para explorar
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../libs/pannellum/pannellum.js"></script>
+  <script>
+    /* ── [CUSTOMIZAR] Configuração das cenas ── */
+    const cenas = [
+      {
+        nome: 'Vista 01',
+        imagem: '../../../assets/images/Panorama1.jpg',
+        pitch: 0,
+        yaw: 0
+      },
+      {
+        nome: 'Vista 02',
+        imagem: '../../../assets/images/Panorama2.jpg',
+        pitch: 0,
+        yaw: 0
+      },
+      {
+        nome: 'Vista 03',
+        imagem: '../../../assets/images/Panorama3.jpg',
+        pitch: 0,
+        yaw: 0
+      }
+    ];
+
+    let viewer = null;
+    let cenaAtual = 0;
+
+    function iniciarViewer(indice) {
+      const c = cenas[indice];
+      if (viewer) { viewer.destroy(); }
+      viewer = pannellum.viewer('panorama', {
+        type: 'equirectangular',
+        panorama: c.imagem,
+        autoLoad: true,
+        autoRotate: -1.5,
+        autoRotateInactivityDelay: 3000,
+        compass: false,
+        showZoomCtrl: false,
+        showFullscreenCtrl: false,
+        showControls: false,
+        pitch: c.pitch,
+        yaw: c.yaw,
+        hfov: 100,
+        minHfov: 60,
+        maxHfov: 120,
+        backgroundColor: [30, 19, 14]
+      });
+      viewer.on('load', () => {
+        document.getElementById('loading').classList.add('oculto');
+      });
+    }
+
+    function trocarCena(indice) {
+      if (indice === cenaAtual) return;
+      cenaAtual = indice;
+
+      document.querySelectorAll('.cena-btn').forEach((btn, i) => {
+        btn.classList.toggle('ativa', i === indice);
+      });
+
+      document.getElementById('cena-nome-atual').textContent = cenas[indice].nome;
+      document.getElementById('cena-atual-label').textContent = cenas[indice].nome;
+
+      const c = cenas[indice];
+      viewer.loadScene && viewer.loadScene(indice.toString());
+      viewer.destroy();
+      viewer = pannellum.viewer('panorama', {
+        type: 'equirectangular',
+        panorama: c.imagem,
+        autoLoad: true,
+        autoRotate: -1.5,
+        autoRotateInactivityDelay: 3000,
+        compass: false,
+        showZoomCtrl: false,
+        showFullscreenCtrl: false,
+        showControls: false,
+        pitch: c.pitch,
+        yaw: c.yaw,
+        hfov: 100,
+        minHfov: 60,
+        maxHfov: 120,
+        backgroundColor: [30, 19, 14]
+      });
+    }
+
+    // Inicia
+    iniciarViewer(0);
+  </script>
+</body>
+</html>
