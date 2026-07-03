@@ -1508,73 +1508,66 @@
     buildSelector('compact');
   </script>
 
-  <!-- ── Vídeo hero: loop simples no mobile, crossfade no desktop ── -->
+  <!-- ── Crossfade do vídeo hero (mobile + desktop) ── -->
   <script>
     (function () {
-      const v1 = document.getElementById('hero-v1');
-      const v2 = document.getElementById('hero-v2');
-      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+      const FADE = 1.8;
+      const v1   = document.getElementById('hero-v1');
+      const v2   = document.getElementById('hero-v2');
+      const vids = [v1, v2];
+      let cur = 0, crossing = false;
 
-      function fadeInEl(el, cb) {
-        el.style.opacity = 0;
+      /* Ambos em loop — crossfade só mexe em opacidade, nunca chama play() de novo */
+      v1.loop = true;
+      v2.loop = true;
+
+      function setOp(el, val) { el.style.opacity = val; }
+
+      function cross() {
+        if (crossing) return;
+        crossing = true;
+        const a = vids[cur], b = vids[1 - cur];
         const t0 = performance.now();
         (function step(now) {
-          const t = Math.min((now - t0) / 1400, 1);
-          el.style.opacity = t;
+          const t = Math.min((now - t0) / (FADE * 1000), 1);
+          setOp(a, 1 - t);
+          setOp(b, t);
           if (t < 1) requestAnimationFrame(step);
-          else if (cb) cb();
+          else { cur = 1 - cur; crossing = false; }
         })(t0);
       }
 
-      function tryPlay(el, onSuccess, onFail) {
-        el.play().then(onSuccess).catch(onFail || function () {});
+      function tick() {
+        const v = vids[cur];
+        if (v.duration > 0 && v.currentTime >= v.duration - FADE - 0.1) cross();
+        requestAnimationFrame(tick);
       }
 
-      if (isMobile) {
-        /* ── MOBILE: vídeo único com loop nativo ── */
-        v2.style.display = 'none';
-        v1.loop = true;
-        tryPlay(v1,
-          function () { fadeInEl(v1); },
-          function () {
-            /* fallback: toca no primeiro toque */
-            document.addEventListener('touchstart', function () {
-              tryPlay(v1, function () { fadeInEl(v1); });
-            }, { once: true, passive: true });
-          }
-        );
+      /* Inicia os dois juntos — play() em muted funciona em mobile e desktop */
+      Promise.all([v1.play(), v2.play()]).then(function () {
+        /* Deslocar v2 para meio do vídeo (para o crossfade ter conteúdo) */
+        v1.addEventListener('loadedmetadata', function () {
+          if (v1.duration) v2.currentTime = v1.duration * 0.45;
+        }, { once: true });
+        if (v1.duration) v2.currentTime = v1.duration * 0.45;
 
-      } else {
-        /* ── DESKTOP: crossfade suave entre dois vídeos ── */
-        const FADE = 1.8;
-        const vids = [v1, v2];
-        let cur = 0, crossing = false;
+        /* Fade-in inicial apenas no v1 */
+        setOp(v2, 0);
+        const t0 = performance.now();
+        (function fadeIn(now) {
+          const t = Math.min((now - t0) / 1400, 1);
+          setOp(v1, t);
+          if (t < 1) requestAnimationFrame(fadeIn);
+          else tick();
+        })(t0);
 
-        function setOp(el, val) { el.style.opacity = val; }
-
-        function cross() {
-          if (crossing) return;
-          crossing = true;
-          const a = vids[cur], b = vids[1 - cur];
-          b.currentTime = 0;
-          b.play().catch(() => {});
-          const t0 = performance.now();
-          (function step(now) {
-            const t = Math.min((now - t0) / (FADE * 1000), 1);
-            setOp(a, 1 - t); setOp(b, t);
-            if (t < 1) requestAnimationFrame(step);
-            else { a.pause(); a.currentTime = 0; cur = 1 - cur; crossing = false; }
-          })(t0);
-        }
-
-        function tick() {
-          const v = vids[cur];
-          if (v.duration > 0 && v.currentTime >= v.duration - FADE - 0.1) cross();
-          requestAnimationFrame(tick);
-        }
-
-        tryPlay(v1, function () { fadeInEl(v1, tick); });
-      }
+      }).catch(function () {
+        /* Último recurso: primeiro toque inicia */
+        document.addEventListener('touchstart', function () {
+          Promise.all([v1.play(), v2.play()]).catch(() => {});
+          setOp(v1, 1);
+        }, { once: true, passive: true });
+      });
     })();
   </script>
 </body>
