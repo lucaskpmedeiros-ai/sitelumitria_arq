@@ -127,7 +127,7 @@
       width: 100%;
       min-height: 100vh;
       overflow: hidden;
-      background: var(--bege);
+      background: #c9a98b url('https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama2_woivon.png') center/cover no-repeat;
     }
     /* camada de fundo: vídeo + overlay */
     .hero-bg {
@@ -1065,7 +1065,7 @@
     @media (max-width: 900px) {
       .header { padding: 20px 24px; }
       .header.scrolled { padding: 14px 24px; }
-      .header-nav { display: none; }
+      .header-nav li:not(:last-child) { display: none; }
       .sobre { grid-template-columns: 1fr; }
       .sobre-content { padding: 64px 32px; }
       .sobre-image { min-height: 56vw; }
@@ -1109,10 +1109,10 @@
   <section class="hero" id="inicio">
     <!-- fundo: vídeo em loop cobrindo tudo -->
     <div class="hero-bg">
-      <video id="hero-v1" muted playsinline preload="auto">
+      <video id="hero-v1" muted playsinline autoplay preload="auto">
         <source src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1782485521/InShot_20260626_114837483_plsink.mp4" type="video/mp4">
       </video>
-      <video id="hero-v2" muted playsinline preload="auto">
+      <video id="hero-v2" muted playsinline autoplay preload="auto">
         <source src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1782485521/InShot_20260626_114837483_plsink.mp4" type="video/mp4">
       </video>
       <div class="hero-bg-overlay"></div>
