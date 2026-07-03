@@ -3,437 +3,738 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-  <!-- ══════════════════════════════════════════════════════════
-       [EMPREENDIMENTO] Sunset Hill — Tour 360°
-       Para duplicar: ajuste as cenas e textos abaixo.
-       ════════════════════════════════════════════════════════== -->
   <title>Tour 360° — Sunset Hill | Lumitria</title>
-  <meta name="description" content="Explore o Sunset Hill em uma experiência 360° imersiva, desenvolvida pela Lumitria.">
   <meta name="robots" content="noindex, nofollow">
-
   <link rel="icon" type="image/x-icon" href="../../../para-vriaricone.ico">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="../../../libs/pannellum/pannellum.css">
+  <script src="../../../libs/pannellum/pannellum.js"></script>
 
   <style>
-    :root {
-      --bege:      #F2E1D3;
-      --marrom:    #2C1B14;
-      --marrom-2:  #1E130E;
-      --terracota: #91431C;
-      --texto-claro: #F2E1D3;
-      --divisor:   rgba(242,225,211,0.12);
-    }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; }
-    body {
+    :root {
+      --terra:      #91431C;
+      --terra-glow: rgba(145,67,28,0.30);
+      --bege:       #F2E1D3;
+      --marrom:     #2C1B14;
+      --marrom-2:   #1E130E;
+      --ui-bg:      rgba(30,19,14,0.82);
+      --ui-bg-lt:   rgba(242,225,211,0.88);
+      --border:     rgba(145,67,28,0.30);
+      --border-lt:  rgba(44,27,20,0.18);
+      --text:       #F2E1D3;
+      --text-2:     rgba(242,225,211,0.55);
+    }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
       background: var(--marrom-2);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--texto-claro);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
     }
-    .logo-escuro { filter: brightness(0) invert(1); opacity: 0.85; display: block; }
 
-    /* ── LOADING ── */
-    #loading {
-      position: fixed;
-      inset: 0;
+    /* ── Viewers (frente / trás) ── */
+    #panorama, #panorama-b {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      transform-origin: center center;
+    }
+    #panorama   { z-index: 11; }
+    #panorama-b { z-index: 10; }
+
+    .pano-leaving {
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.8, 1),
+                  opacity   0.38s ease !important;
+      transform: scale(1.32) !important;
+      opacity: 0 !important;
+    }
+    .pnlm-ui .pnlm-about-msg,
+    .pnlm-ui .pnlm-zoom-controls { display: none !important; }
+
+    /* ── Loading ── */
+    #loadScreen {
+      position: fixed; inset: 0; z-index: 500;
       background: var(--marrom-2);
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 20px;
+      transition: opacity 0.7s;
     }
-    #loading.oculto {
-      opacity: 0;
-      visibility: hidden;
+    #loadScreen.gone { opacity: 0; pointer-events: none; }
+    #loadScreen img { width: 100px; height: auto; opacity: 0.9; }
+    .bar-track {
+      width: 160px; height: 1px;
+      background: rgba(242,225,211,0.12);
+      border-radius: 2px; overflow: hidden;
     }
-    .loading-sol {
-      animation: pulsa-sol 2s ease-in-out infinite;
+    #loadBar {
+      height: 100%; width: 0%;
+      background: var(--terra);
+      transition: width 0.3s;
     }
-    .loading-sol-img { animation: none; }
-    @keyframes pulsa-sol {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50%       { transform: scale(1.06); opacity: 1; }
-    }
-    .loading-nome {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: var(--texto-claro);
-    }
-    .loading-tagline {
-      font-family: 'Dancing Script', cursive;
-      font-size: 18px;
-      color: var(--terracota);
-      margin-top: -16px;
-    }
-    .loading-barra {
-      width: 160px;
-      height: 1px;
-      background: rgba(237,227,216,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-    .loading-barra::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--terracota);
-      animation: carrega 1.8s ease-in-out infinite;
-    }
-    @keyframes carrega {
-      0%   { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-    .loading-label {
-      font-size: 10px;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      opacity: 0.35;
-      margin-top: -8px;
+    .load-txt {
+      font-size: 0.68rem; color: var(--text-2);
+      letter-spacing: 0.22em; text-transform: uppercase;
     }
 
-    /* ── HEADER ── */
-    .header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 40px;
-      background: linear-gradient(to bottom, rgba(44,24,16,0.9) 0%, transparent 100%);
-    }
-    .header-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .header-logo-text { display: flex; flex-direction: column; line-height: 1; }
-    .header-logo-nome {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      color: var(--texto-claro);
-    }
-    .header-logo-sub {
-      font-family: 'Dancing Script', cursive;
-      font-size: 11px;
-      color: var(--terracota);
-    }
-    .header-direita {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .btn-voltar {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--texto-claro);
-      border: 1px solid rgba(237,227,216,0.3);
-      padding: 9px 20px;
-      transition: all 0.25s;
-      background: rgba(44,24,16,0.4);
-      backdrop-filter: blur(4px);
-    }
-    .btn-voltar:hover {
-      background: rgba(196,98,46,0.25);
-      border-color: var(--terracota);
-      color: var(--terracota);
-    }
-    .btn-voltar svg { width: 12px; height: 12px; flex-shrink: 0; }
-    .cena-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--texto-claro);
-      opacity: 0.45;
-    }
-
-    /* ── VIEWER ── */
-    #panorama {
-      width: 100%;
-      height: 100%;
-    }
-    #panorama .pnlm-container { background: var(--marrom-2); }
-
-    /* ── PAINEL DE CENAS ── */
-    .cenas-painel {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 100;
-      background: linear-gradient(to top, rgba(44,24,16,0.95) 0%, transparent 100%);
-      padding: 40px 40px 32px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
+    /* ── Header ── */
+    #topBar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: max(18px, env(safe-area-inset-top)) 32px 18px;
       pointer-events: none;
     }
-    .cenas-lista {
-      display: flex;
-      gap: 10px;
-      pointer-events: all;
+    #topBar > * { pointer-events: all; }
+
+    .logo-lnk {
+      display: flex; align-items: center; text-decoration: none;
     }
-    .cena-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
+    .logo-lnk img {
+      height: 48px; width: auto;
+      filter: drop-shadow(0 0 12px rgba(145,67,28,0.25));
     }
-    .cena-thumb {
-      width: 72px;
-      height: 48px;
-      border: 2px solid rgba(237,227,216,0.2);
-      background: rgba(237,227,216,0.05);
-      overflow: hidden;
-      transition: border-color 0.25s, transform 0.25s;
-      position: relative;
+
+    #sceneLabel {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 400;
+      color: var(--text-2); letter-spacing: 0.20em; text-transform: uppercase;
+      background: var(--ui-bg); border: 1px solid var(--border);
+      padding: 7px 18px; border-radius: 100px;
+      backdrop-filter: blur(16px);
     }
-    .cena-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .ldot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--terra); flex-shrink: 0;
+      animation: blink 2.4s ease-in-out infinite;
+    }
+
+    #backBtn {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--ui-bg); border: 1px solid var(--border);
+      color: var(--text-2); font-size: 0.68rem; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 7px 18px; border-radius: 100px;
+      cursor: pointer; backdrop-filter: blur(16px);
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    #backBtn:hover { color: var(--text); border-color: var(--terra); }
+    #backBtn svg { flex-shrink: 0; }
+
+    /* ── Nav de cenas ── */
+    #sceneNav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    }
+    .nav-inner {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--ui-bg); border: 1px solid var(--border);
+      padding: 10px 20px; border-radius: 100px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.30);
+    }
+    .sbtn {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: pointer; opacity: 0.35;
+      transition: opacity 0.3s;
+      background: none; border: none;
+      padding: 6px 14px; color: var(--text);
+      min-width: 64px;
+    }
+    .sbtn:hover { opacity: 0.65; }
+    .sbtn.on  { opacity: 1; }
+    .pip {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(242,225,211,0.4);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .sbtn.on .pip { background: var(--terra); transform: scale(1.3); }
+    .plbl {
+      font-size: 0.58rem; font-weight: 400;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      white-space: nowrap; color: var(--text-2);
+      transition: color 0.3s;
+    }
+    .sbtn.on .plbl { color: var(--text); font-weight: 600; }
+    .ndiv { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
+
+    /* ── Hint ── */
+    #hint {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      z-index: 200; display: flex; align-items: center; gap: 6px;
+      font-size: 0.65rem; font-weight: 300;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-2); pointer-events: none;
+      transition: opacity 1.2s; white-space: nowrap;
+    }
+    #hint.gone { opacity: 0; }
+
+    /* ── Overlay de seleção ── */
+    #overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: var(--marrom-2);
+      transition: opacity 0.9s;
+    }
+    #overlay.gone { opacity: 0; pointer-events: none; }
+
+    .ov-bg {
+      position: absolute; inset: 0; z-index: 0;
+      overflow: hidden; pointer-events: none;
+      opacity: 0.45; transition: opacity 1.5s ease;
+    }
+    .ov-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
       display: block;
     }
-    .cena-thumb-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .cena-thumb-placeholder svg { opacity: 0.3; }
-    .cena-btn.ativa .cena-thumb {
-      border-color: var(--terracota);
-      transform: translateY(-2px);
-    }
-    .cena-nome {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--texto-claro);
-      opacity: 0.45;
-      transition: opacity 0.25s;
-    }
-    .cena-btn.ativa .cena-nome { opacity: 1; color: var(--terracota); }
-    .cenas-info {
-      text-align: right;
-      pointer-events: none;
-    }
-    .cenas-info-titulo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--texto-claro);
-      margin-bottom: 4px;
-    }
-    .cenas-info-sub {
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--terracota);
-      opacity: 0.75;
-    }
-    .cenas-dica {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--texto-claro);
-      opacity: 0.25;
-      margin-top: 8px;
-      justify-content: flex-end;
+    .ov-grad {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(to right, rgba(30,19,14,0.75) 0%, transparent 60%),
+        linear-gradient(to top, rgba(30,19,14,0.95) 0%, rgba(30,19,14,0.10) 50%, transparent 70%);
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 700px) {
-      .header { padding: 16px 20px; }
-      .cena-label { display: none; }
-      .cenas-painel { padding: 24px 20px 20px; }
-      .cena-thumb { width: 56px; height: 38px; }
-      .cenas-info { display: none; }
+    /* ── Seleção central ── */
+    .ov-select {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px 40px; text-align: center;
+    }
+    .ov-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 400; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(242,225,211,0.80);
+      border: 1px solid rgba(145,67,28,0.45);
+      padding: 6px 18px; border-radius: 100px;
+      background: rgba(30,19,14,0.40);
+      margin-bottom: 18px;
+    }
+    .ov-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--terra);
+      animation: blink 2.4s ease-in-out infinite; flex-shrink: 0;
+    }
+    .ov-select h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 400;
+      line-height: 1.1; color: var(--bege);
+      margin-bottom: 28px; white-space: nowrap;
+    }
+    .ov-select h1 em {
+      font-style: italic; color: #D4845A;
+      text-shadow: 0 2px 28px rgba(145,67,28,0.35);
+    }
+
+    /* Grid de cards */
+    .tours-grid { display: flex; gap: 28px; align-items: stretch; }
+
+    /* Card */
+    .tour-card {
+      width: clamp(320px, 40vw, 580px);
+      background: rgba(30,19,14,0.68);
+      border: 1px solid rgba(145,67,28,0.30);
+      border-radius: 20px; overflow: hidden;
+      text-align: left;
+      display: flex; flex-direction: column;
+      backdrop-filter: blur(18px);
+      transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1),
+                  border-color 0.25s, box-shadow 0.32s;
+    }
+    .tour-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(145,67,28,0.70);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(145,67,28,0.15);
+    }
+
+    /* Thumb */
+    .tour-card-thumb {
+      height: min(38vh, 320px); overflow: hidden;
+      position: relative; flex-shrink: 0; cursor: grab;
+    }
+    .tour-card-thumb:active { cursor: grabbing; }
+    .card-panorama { width: 100%; height: 100%; }
+    .card-panorama .pnlm-container { border-radius: 0 !important; }
+
+    .tour-card-grad {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, transparent 50%, rgba(30,19,14,0.75) 100%);
+      pointer-events: none;
+    }
+    .tour-card-rooms {
+      position: absolute; bottom: 10px; right: 12px;
+      font-size: 0.58rem; font-weight: 400; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(242,225,211,0.80);
+      background: rgba(30,19,14,0.60); border: 1px solid rgba(145,67,28,0.35);
+      padding: 4px 10px; border-radius: 100px; backdrop-filter: blur(8px);
+      z-index: 2;
+    }
+    .tour-card-thumb--dark {
+      background: rgba(30,19,14,0.55);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .soon-icon { color: rgba(145,67,28,0.40); }
+
+    /* Info */
+    .tour-card-info {
+      padding: 22px 26px 26px;
+      display: flex; flex-direction: column; gap: 7px; flex: 1;
+      background: none; border: none; text-align: left; color: inherit;
+      cursor: pointer; width: 100%;
+      border-top: 1px solid rgba(145,67,28,0.14);
+      transition: background 0.2s;
+    }
+    .tour-card-info:hover { background: rgba(145,67,28,0.06); }
+
+    .tc-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.58rem; font-weight: 400; letter-spacing: 0.20em;
+      text-transform: uppercase; padding: 3px 11px;
+      border-radius: 100px; width: fit-content;
+    }
+    .tc-tag.available {
+      color: #D4845A; border: 1px solid rgba(145,67,28,0.45);
+      background: rgba(145,67,28,0.12);
+    }
+    .tc-tag.soon {
+      color: rgba(242,225,211,0.35);
+      border: 1px solid rgba(242,225,211,0.12);
+    }
+    .tc-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--terra);
+      animation: blink 2.4s ease-in-out infinite; flex-shrink: 0;
+    }
+    .tour-card-info h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.55rem; font-weight: 400;
+      color: var(--bege); line-height: 1.2; margin-top: 2px;
+    }
+    .tour-card-info p {
+      font-size: 0.75rem; font-weight: 300;
+      color: rgba(242,225,211,0.50);
+      letter-spacing: 0.04em; line-height: 1.75;
+    }
+    .tc-cta {
+      margin-top: auto; padding-top: 14px;
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--terra);
+    }
+    .tc-cta--muted { color: rgba(242,225,211,0.25); }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 100px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      z-index: 400; opacity: 0; pointer-events: none;
+      background: var(--ui-bg); border: 1px solid var(--border);
+      color: rgba(242,225,211,0.90); backdrop-filter: blur(16px);
+      font-size: 0.68rem; font-weight: 300;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 12px 28px; border-radius: 100px;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Hotspots ── */
+    .hs-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px; cursor: pointer;
+    }
+    .hs-circle {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(145,67,28,0.15);
+      border: 2px solid rgba(145,67,28,0.85);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px rgba(145,67,28,0.35);
+      position: relative;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .hs-circle::before {
+      content: ''; position: absolute;
+      width: 68px; height: 68px; border-radius: 50%;
+      border: 2px solid rgba(145,67,28,0.35);
+      animation: hs-pulse 2s ease-in-out infinite;
+    }
+    .hs-circle svg { color: var(--terra); filter: drop-shadow(0 0 4px var(--terra)); }
+    .hs-wrap:hover .hs-circle { transform: scale(1.12); background: rgba(145,67,28,0.28); }
+    .hs-label {
+      font-size: 0.62rem; font-weight: 400;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--marrom);
+      background: rgba(242,225,211,0.92);
+      border: 1px solid rgba(145,67,28,0.30);
+      padding: 5px 14px; border-radius: 100px;
+      white-space: nowrap; backdrop-filter: blur(8px);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .tours-grid { flex-direction: column; gap: 16px; align-items: center; }
+      .tour-card { width: min(520px, 92vw); }
+      .tour-card-thumb { height: min(32vh, 220px); }
+      .ov-select { padding: 20px; justify-content: center; overflow-y: auto; }
+      .ov-select h1 { font-size: clamp(1.6rem, 6vw, 2.2rem); margin-bottom: 20px; white-space: normal; }
+    }
+    @media (max-width: 480px) {
+      #topBar { padding: max(14px, env(safe-area-inset-top)) 16px 14px; }
+      .logo-lnk img { height: 36px; }
+      #backBtn span { display: none; }
+      #hint { bottom: 100px; font-size: 0.66rem; }
+      .nav-inner { padding: 10px 14px; }
+      .sbtn { padding: 6px 10px; min-width: 52px; }
+      #sceneNav { padding-left: 0; padding-right: 0; }
+      .nav-inner {
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; border-radius: 0;
+        border-left: none; border-right: none;
+        padding: 10px 16px; max-width: 100%;
+      }
+      .nav-inner::-webkit-scrollbar { display: none; }
+      .sbtn { flex-shrink: 0; }
+      .ndiv { flex-shrink: 0; }
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes hs-pulse {
+      0%   { transform: scale(1);    opacity: 0.7; }
+      60%  { transform: scale(1.45); opacity: 0; }
+      100% { transform: scale(1);    opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══ LOADING ══ -->
-  <div id="loading">
-    <div class="loading-sol">
-      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png"
-           alt="Sunset Hill" class="logo-escuro loading-sol-img" style="width:auto;height:120px;">
-    </div>
-    <div class="loading-barra"></div>
-    <div class="loading-label">Carregando tour 360°</div>
+<div id="panorama"></div>
+<div id="panorama-b"></div>
+
+<div id="loadScreen">
+  <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
+  <div class="bar-track"><div id="loadBar"></div></div>
+  <span class="load-txt">Carregando Tour 360°…</span>
+</div>
+
+<header id="topBar">
+  <a href="../index.html" class="logo-lnk">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
+  </a>
+  <div id="sceneLabel">
+    <span class="ldot"></span>
+    <span id="sceneName">Tour 360°</span>
   </div>
+  <a href="../index.html" id="backBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+      <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Voltar ao Folder</span>
+  </a>
+</header>
 
-  <!-- ══ HEADER ══ -->
-  <header class="header">
-    <a href="../index.html" class="header-logo">
-      <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png"
-           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:48px;">
-    </a>
-    <div class="header-direita">
-      <span class="cena-label" id="cena-atual-label">Vista 360°</span>
-      <a href="../index.html" class="btn-voltar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        Voltar ao Folder
-      </a>
+<div id="hint">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M12 14v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  Arraste para explorar
+</div>
+
+<nav id="sceneNav">
+  <div class="nav-inner" id="navInner">
+    <!-- gerado por JS -->
+  </div>
+</nav>
+
+<!-- ── Overlay de seleção ── -->
+<div id="overlay">
+
+  <div class="ov-bg">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama2_woivon.png" alt="Sunset Hill">
+  </div>
+  <div class="ov-grad"></div>
+
+  <div class="ov-select">
+    <div class="ov-tag">
+      <span class="ov-dot"></span>
+      Tour Interativo 360°
     </div>
-  </header>
+    <h1>Escolha sua <em>experiência</em></h1>
 
-  <!-- ══ PANORAMA ══ -->
-  <div id="panorama"></div>
+    <div class="tours-grid">
 
-  <!-- ══ PAINEL DE CENAS ══ -->
-  <div class="cenas-painel">
-    <div class="cenas-lista" id="cenas-lista">
-      <!-- [CUSTOMIZAR] Adicione ou remova cenas conforme o empreendimento -->
-      <button class="cena-btn ativa" data-cena="0" onclick="trocarCena(0)">
-        <div class="cena-thumb">
-          <img src="../../../assets/images/Panorama1.jpg" alt="Panorama 1">
+      <!-- Card 1 — Compact 01 -->
+      <div class="tour-card">
+        <div class="tour-card-thumb">
+          <div id="preview-compact" class="card-panorama"></div>
+          <div class="tour-card-grad"></div>
+          <span class="tour-card-rooms">Apartamento</span>
         </div>
-        <span class="cena-nome">Vista 01</span>
-      </button>
-      <button class="cena-btn" data-cena="1" onclick="trocarCena(1)">
-        <div class="cena-thumb">
-          <img src="../../../assets/images/Panorama2.jpg" alt="Panorama 2">
-        </div>
-        <span class="cena-nome">Vista 02</span>
-      </button>
-      <button class="cena-btn" data-cena="2" onclick="trocarCena(2)">
-        <div class="cena-thumb">
-          <img src="../../../assets/images/Panorama3.jpg" alt="Panorama 3">
-        </div>
-        <span class="cena-nome">Vista 03</span>
-      </button>
-    </div>
-    <div class="cenas-info">
-      <div class="cenas-info-titulo" id="cena-nome-atual">Vista 01</div>
-      <div class="cenas-info-sub">Sunset Hill Residence</div>
-      <div class="cenas-dica">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
-        </svg>
-        Arraste para explorar
+        <button class="tour-card-info" onclick="startTour('compact')">
+          <span class="tc-tag available"><span class="tc-dot"></span>Disponível agora</span>
+          <h3>Compact 01<br>Decorado</h3>
+          <p>Sala, dormitório, cozinha e varanda — experiência completa do apartamento</p>
+          <span class="tc-cta">
+            Iniciar Tour
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
       </div>
+
+      <!-- Card 2 — Áreas Comuns -->
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Áreas Comuns<br>do Empreendimento</h3>
+          <p>Piscina, academia, área kids e salão — explore os espaços de lazer</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
     </div>
   </div>
 
-  <script src="../../../libs/pannellum/pannellum.js"></script>
-  <script>
-    /* ── [CUSTOMIZAR] Configuração das cenas ── */
-    const cenas = [
-      {
-        nome: 'Vista 01',
-        imagem: '../../../assets/images/Panorama1.jpg',
-        pitch: 0,
-        yaw: 0
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+/* ── [CUSTOMIZAR] Cenas do Compact 01 ── */
+var SCENES_COMPACT = [
+  {
+    name: 'Sala de Estar 01', navLabel: 'Sala 01',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama2_woivon.png',
+    hotspots: []
+  },
+  {
+    name: 'Sala de Estar 02', navLabel: 'Sala 02',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071808/Panorama3_tribvw.png',
+    hotspots: []
+  },
+  {
+    name: 'Cozinha 01', navLabel: 'Cozinha 1',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071806/Panorama4_zaf8e9.png',
+    hotspots: []
+  },
+  {
+    name: 'Cozinha 02', navLabel: 'Cozinha 2',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama5_wtvhjl.png',
+    hotspots: []
+  },
+  {
+    name: 'Sacada', navLabel: 'Sacada',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama6_vwuxpq.png',
+    hotspots: []
+  },
+  {
+    name: 'Suíte 01', navLabel: 'Suíte 1',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071808/Panorama7_stnbns.png',
+    hotspots: []
+  },
+  {
+    name: 'Suíte 02', navLabel: 'Suíte 2',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama8_yeffnr.png',
+    hotspots: []
+  },
+  {
+    name: 'Banheiro Suíte 02', navLabel: 'Banheiro',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071806/Panorama9_znplfm.png',
+    hotspots: []
+  }
+];
+
+var SCENES_COMUNS = [
+  /* Adicionar quando disponível */
+];
+
+var SCENES = SCENES_COMPACT;
+
+var viewer    = null;
+var viewerBk  = null;
+var frontPano = 'panorama';
+var backPano  = 'panorama-b';
+var previewViewers = {};
+var curIdx    = 0;
+var transitioning = false;
+var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 600;
+var BASE_HFOV = isMobile ? 90 : 100;
+
+/* Esconde loading imediatamente — o overlay cuida da experiência de entrada */
+(function () {
+  var ls = document.getElementById('loadScreen');
+  if (ls) ls.style.display = 'none';
+}());
+
+/* ── Hotspots ── */
+function buildHotspots(sceneIdx) {
+  return (SCENES[sceneIdx].hotspots || []).map(function (hs) {
+    return {
+      pitch: hs.pitch, yaw: hs.yaw, type: 'custom', cssClass: 'hs-wrap',
+      createTooltipFunc: function (el) {
+        el.innerHTML =
+          '<div class="hs-circle">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
+              '<path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>' +
+          '</div>' +
+          '<span class="hs-label">' + hs.label + '</span>';
       },
-      {
-        nome: 'Vista 02',
-        imagem: '../../../assets/images/Panorama2.jpg',
-        pitch: 0,
-        yaw: 0
-      },
-      {
-        nome: 'Vista 03',
-        imagem: '../../../assets/images/Panorama3.jpg',
-        pitch: 0,
-        yaw: 0
-      }
-    ];
+      clickHandlerFunc: function () { goTo(hs.to); }
+    };
+  });
+}
 
-    let viewer = null;
-    let cenaAtual = 0;
+/* ── Navegação entre cenas com transição zoom ── */
+function goTo(idx) {
+  if (idx === curIdx || transitioning) return;
+  transitioning = true;
+  curIdx = idx;
+  updateNav(idx);
+  document.getElementById('sceneName').textContent = SCENES[idx].name;
 
-    function iniciarViewer(indice) {
-      const c = cenas[indice];
-      if (viewer) { viewer.destroy(); }
-      viewer = pannellum.viewer('panorama', {
-        type: 'equirectangular',
-        panorama: c.imagem,
-        autoLoad: true,
-        autoRotate: -1.5,
-        autoRotateInactivityDelay: 3000,
-        compass: false,
-        showZoomCtrl: false,
-        showFullscreenCtrl: false,
-        showControls: false,
-        pitch: c.pitch,
-        yaw: c.yaw,
-        hfov: 100,
-        minHfov: 60,
-        maxHfov: 120,
-        backgroundColor: [30, 19, 14]
-      });
-      viewer.on('load', () => {
-        document.getElementById('loading').classList.add('oculto');
-      });
+  if (viewerBk) { viewerBk.destroy(); viewerBk = null; }
+
+  viewerBk = pannellum.viewer(backPano, {
+    type: 'equirectangular',
+    panorama: SCENES[idx].src,
+    autoLoad: true,
+    autoRotate: -1.5, autoRotateInactivityDelay: 3000,
+    showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
+    hfov: BASE_HFOV, minHfov: 60, maxHfov: 130,
+    pitch: 0, yaw: 0, hotSpots: buildHotspots(idx)
+  });
+
+  var switched = false;
+  function switchNow() {
+    if (switched) return;
+    switched = true;
+    var frontEl = document.getElementById(frontPano);
+    frontEl.classList.add('pano-leaving');
+    setTimeout(function () {
+      if (viewer) { viewer.destroy(); viewer = null; }
+      frontEl.classList.remove('pano-leaving');
+      var tmp = frontPano; frontPano = backPano; backPano = tmp;
+      viewer   = viewerBk; viewerBk = null;
+      document.getElementById(frontPano).style.zIndex = '11';
+      document.getElementById(backPano ).style.zIndex = '10';
+      transitioning = false;
+    }, 460);
+  }
+  viewerBk.on('load', switchNow);
+  setTimeout(switchNow, 12000);
+}
+
+function updateNav(idx) {
+  document.querySelectorAll('.sbtn').forEach(function (b) {
+    b.classList.toggle('on', parseInt(b.dataset.scene) === idx);
+  });
+}
+
+/* ── Constrói nav de cenas dinamicamente ── */
+function buildNav() {
+  var inner = document.getElementById('navInner');
+  inner.innerHTML = '';
+  SCENES.forEach(function (scene, i) {
+    if (i > 0) {
+      var sep = document.createElement('div');
+      sep.className = 'ndiv';
+      inner.appendChild(sep);
     }
+    var btn = document.createElement('button');
+    btn.className = 'sbtn' + (i === 0 ? ' on' : '');
+    btn.dataset.scene = i;
+    btn.innerHTML = '<div class="pip"></div><span class="plbl">' + (scene.navLabel || scene.name) + '</span>';
+    btn.addEventListener('click', (function (idx) {
+      return function () { goTo(idx); };
+    }(i)));
+    inner.appendChild(btn);
+  });
+}
 
-    function trocarCena(indice) {
-      if (indice === cenaAtual) return;
-      cenaAtual = indice;
+/* ── Previews interativos nos cards de seleção ── */
+function initPreviews() {
+  var opts = {
+    type: 'equirectangular', autoLoad: true,
+    autoRotate: -0.4, autoRotateInactivityDelay: 3000,
+    showControls: false, mouseZoom: false, draggable: true,
+    hfov: 100, minHfov: 100, maxHfov: 100, pitch: 0, yaw: 0
+  };
+  if (SCENES_COMPACT.length) {
+    previewViewers.compact = pannellum.viewer('preview-compact',
+      Object.assign({}, opts, { panorama: SCENES_COMPACT[0].src }));
+  }
+}
+initPreviews();
 
-      document.querySelectorAll('.cena-btn').forEach((btn, i) => {
-        btn.classList.toggle('ativa', i === indice);
-      });
+/* ── Toast ── */
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function () { t.classList.remove('show'); }, 2800);
+}
 
-      document.getElementById('cena-nome-atual').textContent = cenas[indice].nome;
-      document.getElementById('cena-atual-label').textContent = cenas[indice].nome;
+/* ── Inicia o tour selecionado ── */
+function startTour(type) {
+  /* destrói previews */
+  Object.keys(previewViewers).forEach(function (k) {
+    if (previewViewers[k]) { previewViewers[k].destroy(); previewViewers[k] = null; }
+  });
 
-      const c = cenas[indice];
-      viewer.loadScene && viewer.loadScene(indice.toString());
-      viewer.destroy();
-      viewer = pannellum.viewer('panorama', {
-        type: 'equirectangular',
-        panorama: c.imagem,
-        autoLoad: true,
-        autoRotate: -1.5,
-        autoRotateInactivityDelay: 3000,
-        compass: false,
-        showZoomCtrl: false,
-        showFullscreenCtrl: false,
-        showControls: false,
-        pitch: c.pitch,
-        yaw: c.yaw,
-        hfov: 100,
-        minHfov: 60,
-        maxHfov: 120,
-        backgroundColor: [30, 19, 14]
-      });
-    }
+  if (type === 'compact') {
+    SCENES = SCENES_COMPACT;
+  } else if (type === 'comuns') {
+    if (!SCENES_COMUNS.length) { showToast('Em breve — aguarde novidades!'); return; }
+    SCENES = SCENES_COMUNS;
+  }
 
-    // Inicia
-    iniciarViewer(0);
-  </script>
+  curIdx = 0;
+  buildNav();
+  document.getElementById('sceneName').textContent = SCENES[0].name;
+
+  var ov = document.getElementById('overlay');
+  ov.classList.add('gone');
+  setTimeout(function () { ov.style.display = 'none'; }, 950);
+  setTimeout(function () { document.getElementById('hint').classList.add('gone'); }, 7000);
+
+  initViewer(0);
+}
+
+/* ── Inicia viewer principal ── */
+function initViewer(sceneIdx) {
+  if (viewer) { viewer.destroy(); viewer = null; }
+  viewer = pannellum.viewer('panorama', {
+    type: 'equirectangular',
+    panorama: SCENES[sceneIdx].src,
+    autoLoad: true,
+    autoRotate: -1.5, autoRotateInactivityDelay: 3000,
+    showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
+    hfov: BASE_HFOV, minHfov: 60, maxHfov: 130,
+    pitch: 0, yaw: 0,
+    hotSpots: buildHotspots(sceneIdx)
+  });
+}
+</script>
 </body>
 </html>
