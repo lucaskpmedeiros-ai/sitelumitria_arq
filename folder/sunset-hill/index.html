@@ -1508,59 +1508,73 @@
     buildSelector('compact');
   </script>
 
-  <!-- ── Crossfade suave no loop do vídeo hero ── -->
+  <!-- ── Vídeo hero: loop simples no mobile, crossfade no desktop ── -->
   <script>
     (function () {
-      const FADE = 1.8;
-      const vids = [document.getElementById('hero-v1'), document.getElementById('hero-v2')];
-      let cur = 0, crossing = false, started = false;
+      const v1 = document.getElementById('hero-v1');
+      const v2 = document.getElementById('hero-v2');
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
 
-      function setOp(el, val) { el.style.opacity = val; }
-
-      function cross() {
-        if (crossing) return;
-        crossing = true;
-        const a = vids[cur], b = vids[1 - cur];
-        b.currentTime = 0;
-        b.play().catch(() => {});
-        const t0 = performance.now();
-        (function step(now) {
-          const t = Math.min((now - t0) / (FADE * 1000), 1);
-          setOp(a, 1 - t); setOp(b, t);
-          if (t < 1) { requestAnimationFrame(step); }
-          else { a.pause(); a.currentTime = 0; cur = 1 - cur; crossing = false; }
-        })(t0);
-      }
-
-      function tick() {
-        const v = vids[cur];
-        if (v.duration > 0 && v.currentTime >= v.duration - FADE - 0.1) cross();
-        requestAnimationFrame(tick);
-      }
-
-      function fadeIn() {
-        if (started) return;
-        started = true;
+      function fadeInEl(el, cb) {
+        el.style.opacity = 0;
         const t0 = performance.now();
         (function step(now) {
           const t = Math.min((now - t0) / 1400, 1);
-          setOp(vids[0], t);
+          el.style.opacity = t;
           if (t < 1) requestAnimationFrame(step);
-          else tick();
+          else if (cb) cb();
         })(t0);
       }
 
-      /* play() em vídeo mutado é permitido em todos os mobiles modernos via JS */
-      vids[0].play().then(fadeIn).catch(function () {
-        /* último recurso: primeira interação do usuário */
-        setOp(vids[0], 0);
-        document.addEventListener('touchstart', function () {
-          vids[0].play().then(fadeIn).catch(() => { setOp(vids[0], 1); tick(); });
-        }, { once: true, passive: true });
-        document.addEventListener('click', function () {
-          vids[0].play().then(fadeIn).catch(() => { setOp(vids[0], 1); tick(); });
-        }, { once: true });
-      });
+      function tryPlay(el, onSuccess, onFail) {
+        el.play().then(onSuccess).catch(onFail || function () {});
+      }
+
+      if (isMobile) {
+        /* ── MOBILE: vídeo único com loop nativo ── */
+        v2.style.display = 'none';
+        v1.loop = true;
+        tryPlay(v1,
+          function () { fadeInEl(v1); },
+          function () {
+            /* fallback: toca no primeiro toque */
+            document.addEventListener('touchstart', function () {
+              tryPlay(v1, function () { fadeInEl(v1); });
+            }, { once: true, passive: true });
+          }
+        );
+
+      } else {
+        /* ── DESKTOP: crossfade suave entre dois vídeos ── */
+        const FADE = 1.8;
+        const vids = [v1, v2];
+        let cur = 0, crossing = false;
+
+        function setOp(el, val) { el.style.opacity = val; }
+
+        function cross() {
+          if (crossing) return;
+          crossing = true;
+          const a = vids[cur], b = vids[1 - cur];
+          b.currentTime = 0;
+          b.play().catch(() => {});
+          const t0 = performance.now();
+          (function step(now) {
+            const t = Math.min((now - t0) / (FADE * 1000), 1);
+            setOp(a, 1 - t); setOp(b, t);
+            if (t < 1) requestAnimationFrame(step);
+            else { a.pause(); a.currentTime = 0; cur = 1 - cur; crossing = false; }
+          })(t0);
+        }
+
+        function tick() {
+          const v = vids[cur];
+          if (v.duration > 0 && v.currentTime >= v.duration - FADE - 0.1) cross();
+          requestAnimationFrame(tick);
+        }
+
+        tryPlay(v1, function () { fadeInEl(v1, tick); });
+      }
     })();
   </script>
 </body>
