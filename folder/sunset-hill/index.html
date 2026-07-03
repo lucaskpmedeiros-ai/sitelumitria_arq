@@ -1545,18 +1545,30 @@
         requestAnimationFrame(tick);
       }
 
-      vids[0].addEventListener('canplay', function () {
+      function startVideo() {
         vids[0].play().then(function () {
-          /* fade-in inicial */
           const t0 = performance.now();
           (function fadeIn(now) {
             const t = Math.min((now - t0) / 1600, 1);
             setOpacity(vids[0], t);
             if (t < 1) requestAnimationFrame(fadeIn);
+            else tick();
           })(t0);
+        }).catch(function () {
+          /* autoplay bloqueado — mostra estático */
+          setOpacity(vids[0], 1);
           tick();
-        }).catch(() => {});
-      }, { once: true });
+        });
+      }
+
+      /* canplay pode ter disparado antes do listener (autoplay+preload) */
+      if (vids[0].readyState >= 2) {
+        startVideo();
+      } else {
+        vids[0].addEventListener('canplay', startVideo, { once: true });
+        /* fallback: se demorar mais de 4s, tenta de qualquer jeito */
+        setTimeout(function () { if (vids[0].style.opacity === '0' || !vids[0].style.opacity) startVideo(); }, 4000);
+      }
     })();
   </script>
 </body>
