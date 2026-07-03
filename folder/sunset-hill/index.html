@@ -1109,10 +1109,10 @@
   <section class="hero" id="inicio">
     <!-- fundo: vídeo em loop cobrindo tudo -->
     <div class="hero-bg">
-      <video id="hero-v1" muted playsinline autoplay preload="auto">
+      <video id="hero-v1" muted playsinline preload="auto">
         <source src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1782485521/InShot_20260626_114837483_plsink.mp4" type="video/mp4">
       </video>
-      <video id="hero-v2" muted playsinline autoplay preload="auto">
+      <video id="hero-v2" muted playsinline preload="auto">
         <source src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1782485521/InShot_20260626_114837483_plsink.mp4" type="video/mp4">
       </video>
       <div class="hero-bg-overlay"></div>
@@ -1512,11 +1512,10 @@
   <script>
     (function () {
       const FADE = 1.8;
-      const SRC  = 'https://res.cloudinary.com/dzn9q1rkt/video/upload/v1782485521/InShot_20260626_114837483_plsink.mp4';
       const vids = [document.getElementById('hero-v1'), document.getElementById('hero-v2')];
-      let cur = 0, crossing = false;
+      let cur = 0, crossing = false, started = false;
 
-      function setOpacity(el, val) { el.style.opacity = val; }
+      function setOp(el, val) { el.style.opacity = val; }
 
       function cross() {
         if (crossing) return;
@@ -1524,19 +1523,13 @@
         const a = vids[cur], b = vids[1 - cur];
         b.currentTime = 0;
         b.play().catch(() => {});
-        const start = performance.now();
+        const t0 = performance.now();
         (function step(now) {
-          const t = Math.min((now - start) / (FADE * 1000), 1);
-          setOpacity(a, 1 - t);
-          setOpacity(b, t);
+          const t = Math.min((now - t0) / (FADE * 1000), 1);
+          setOp(a, 1 - t); setOp(b, t);
           if (t < 1) { requestAnimationFrame(step); }
-          else {
-            a.pause();
-            a.currentTime = 0;
-            cur = 1 - cur;
-            crossing = false;
-          }
-        })(start);
+          else { a.pause(); a.currentTime = 0; cur = 1 - cur; crossing = false; }
+        })(t0);
       }
 
       function tick() {
@@ -1545,30 +1538,29 @@
         requestAnimationFrame(tick);
       }
 
-      function startVideo() {
-        vids[0].play().then(function () {
-          const t0 = performance.now();
-          (function fadeIn(now) {
-            const t = Math.min((now - t0) / 1600, 1);
-            setOpacity(vids[0], t);
-            if (t < 1) requestAnimationFrame(fadeIn);
-            else tick();
-          })(t0);
-        }).catch(function () {
-          /* autoplay bloqueado — mostra estático */
-          setOpacity(vids[0], 1);
-          tick();
-        });
+      function fadeIn() {
+        if (started) return;
+        started = true;
+        const t0 = performance.now();
+        (function step(now) {
+          const t = Math.min((now - t0) / 1400, 1);
+          setOp(vids[0], t);
+          if (t < 1) requestAnimationFrame(step);
+          else tick();
+        })(t0);
       }
 
-      /* canplay pode ter disparado antes do listener (autoplay+preload) */
-      if (vids[0].readyState >= 2) {
-        startVideo();
-      } else {
-        vids[0].addEventListener('canplay', startVideo, { once: true });
-        /* fallback: se demorar mais de 4s, tenta de qualquer jeito */
-        setTimeout(function () { if (vids[0].style.opacity === '0' || !vids[0].style.opacity) startVideo(); }, 4000);
-      }
+      /* play() em vídeo mutado é permitido em todos os mobiles modernos via JS */
+      vids[0].play().then(fadeIn).catch(function () {
+        /* último recurso: primeira interação do usuário */
+        setOp(vids[0], 0);
+        document.addEventListener('touchstart', function () {
+          vids[0].play().then(fadeIn).catch(() => { setOp(vids[0], 1); tick(); });
+        }, { once: true, passive: true });
+        document.addEventListener('click', function () {
+          vids[0].play().then(fadeIn).catch(() => { setOp(vids[0], 1); tick(); });
+        }, { once: true });
+      });
     })();
   </script>
 </body>
