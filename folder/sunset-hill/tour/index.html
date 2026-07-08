@@ -578,7 +578,7 @@ var previewViewers = {};
 var curIdx    = 0;
 var transitioning = false;
 var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 600;
-var BASE_HFOV = isMobile ? 90 : 100;
+var BASE_HFOV = 130; /* inicia no zoom mínimo (máximo campo de visão) */
 
 /* Esconde loading imediatamente — o overlay cuida da experiência de entrada */
 (function () {

@@ -79,6 +79,17 @@
       gap: 12px;
       text-decoration: none;
     }
+    /* Header transparente → logo branco; header bege → logo escuro */
+    .header:not(.scrolled) .header-logo img {
+      filter: brightness(0) invert(1);
+      opacity: 0.92;
+      transition: filter 0.4s, opacity 0.4s;
+    }
+    .header.scrolled .header-logo img {
+      filter: none;
+      opacity: 1;
+      transition: filter 0.4s, opacity 0.4s;
+    }
     .header-logo-text { display: flex; flex-direction: column; line-height: 1; }
     .header-logo-name {
       font-family: 'DM Serif Display', serif;
