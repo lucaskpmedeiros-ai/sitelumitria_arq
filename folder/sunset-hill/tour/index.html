@@ -52,6 +52,11 @@
       transform: scale(1.32) !important;
       opacity: 0 !important;
     }
+    /* Transição suave para toggle dia/noite — só opacidade, sem escala */
+    .pano-leaving-soft {
+      transition: opacity 1.1s ease !important;
+      opacity: 0 !important;
+    }
     .pnlm-ui .pnlm-about-msg,
     .pnlm-ui .pnlm-zoom-controls { display: none !important; }
 
@@ -88,6 +93,15 @@
       pointer-events: none;
     }
     #topBar > * { pointer-events: all; }
+
+    /* Coluna central: nome da cena + toggle empilhados e verdadeiramente centrados */
+    #topCenter {
+      position: absolute;
+      left: 50%; top: max(18px, env(safe-area-inset-top));
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 9px;
+      pointer-events: all;
+    }
 
     .logo-lnk {
       display: flex; align-items: center; text-decoration: none;
@@ -408,6 +422,67 @@
       60%  { transform: scale(1.45); opacity: 0; }
       100% { transform: scale(1);    opacity: 0; }
     }
+
+    /* ── Toggle Dia / Noite ── */
+    #dayNightBtn {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--ui-bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 13px;
+      cursor: pointer;
+      color: var(--text-2);
+      font-family: inherit;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.45s, color 0.45s, box-shadow 0.45s;
+    }
+    #dayNightBtn.visible { display: flex; }
+    #dayNightBtn.night {
+      border-color: rgba(90,110,200,0.5);
+      color: var(--text);
+      box-shadow: 0 0 14px rgba(90,110,200,0.15);
+    }
+    .dn-icon { width: 14px; height: 14px; flex-shrink: 0; transition: opacity 0.4s; }
+    .dn-icon svg { width: 14px; height: 14px; display: block; }
+    #dayNightBtn:not(.night) .dn-sun  { opacity: 1; }
+    #dayNightBtn:not(.night) .dn-moon { opacity: 0.38; }
+    #dayNightBtn.night       .dn-sun  { opacity: 0.38; }
+    #dayNightBtn.night       .dn-moon { opacity: 1; }
+    .dn-pill {
+      width: 36px; height: 18px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      position: relative;
+      transition: background 0.45s;
+      flex-shrink: 0;
+    }
+    .dn-pill::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--terra);
+      transition: transform 0.40s cubic-bezier(0.34,1.56,0.64,1), background 0.40s;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.35);
+    }
+    #dayNightBtn.night .dn-pill { background: rgba(90,110,200,0.18); }
+    #dayNightBtn.night .dn-pill::after {
+      transform: translateX(18px);
+      background: #7b8fd4;
+    }
+    @media (max-width: 480px) {
+      #dayNightBtn { padding: 7px 10px; gap: 6px; }
+      .dn-lbl { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -425,10 +500,35 @@
   <a href="../index.html" class="logo-lnk">
     <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
   </a>
-  <div id="sceneLabel">
-    <span class="ldot"></span>
-    <span id="sceneName">Tour 360°</span>
-  </div>
+  <div id="topCenter">
+    <div id="sceneLabel">
+      <span class="ldot"></span>
+      <span id="sceneName">Tour 360°</span>
+    </div>
+
+    <button id="dayNightBtn" title="Alternar dia / noite" onclick="toggleDayNight()">
+    <span class="dn-icon dn-sun">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"/>
+        <line x1="12" y1="2" x2="12" y2="5"/>
+        <line x1="12" y1="19" x2="12" y2="22"/>
+        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+        <line x1="2" y1="12" x2="5" y2="12"/>
+        <line x1="19" y1="12" x2="22" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+      </svg>
+    </span>
+    <div class="dn-pill"></div>
+    <span class="dn-icon dn-moon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </span>
+  </button>
+  </div><!-- /#topCenter -->
+
   <a href="../index.html" id="backBtn">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
       <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2"
@@ -456,7 +556,7 @@
 <div id="overlay">
 
   <div class="ov-bg">
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama2_woivon.png" alt="Sunset Hill">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama2_ej7bce.png" alt="Sunset Hill">
   </div>
   <div class="ov-grad"></div>
 
@@ -524,12 +624,14 @@
 var SCENES_COMPACT = [
   {
     name: 'Sala de Estar 01', navLabel: 'Sala 01',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama2_woivon.png',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama2_ej7bce.png',
+    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama2_000_qwlmqa.png',
     hotspots: []
   },
   {
     name: 'Sala de Estar 02', navLabel: 'Sala 02',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071808/Panorama3_tribvw.png',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama3_xk4nxc.png',
+    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783700044/Panorama3_000_cfdwf1.png',
     hotspots: []
   },
   {
@@ -576,9 +678,66 @@ var frontPano = 'panorama';
 var backPano  = 'panorama-b';
 var previewViewers = {};
 var curIdx    = 0;
+var isNight   = false;
 var transitioning = false;
 var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 600;
-var BASE_HFOV = 130; /* inicia no zoom mínimo (máximo campo de visão) */
+var BASE_HFOV = 100; /* FOV inicial — bom equilíbrio entre amplitude e distorção em interiores */
+
+/* ── Helpers Dia/Noite ── */
+function currentSrc(idx) {
+  return (isNight && SCENES[idx].night) ? SCENES[idx].night : SCENES[idx].src;
+}
+
+function updateDayNight(idx) {
+  var btn = document.getElementById('dayNightBtn');
+  var hasNight = !!(SCENES[idx] && SCENES[idx].night);
+  if (!hasNight && isNight) isNight = false;
+  btn.classList.toggle('visible', hasNight);
+  btn.classList.toggle('night', isNight);
+}
+
+function toggleDayNight() {
+  if (transitioning) return;
+  transitioning = true;
+  isNight = !isNight;
+  document.getElementById('dayNightBtn').classList.toggle('night', isNight);
+
+  if (viewerBk) { viewerBk.destroy(); viewerBk = null; }
+
+  var curHfov  = viewer ? viewer.getHfov()  : BASE_HFOV;
+  var curPitch = viewer ? viewer.getPitch() : 0;
+  var curYaw   = viewer ? viewer.getYaw()   : 0;
+
+  viewerBk = pannellum.viewer(backPano, {
+    type: 'equirectangular',
+    panorama: currentSrc(curIdx),
+    autoLoad: true,
+    autoRotate: -1.5, autoRotateInactivityDelay: 3000,
+    showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
+    hfov: curHfov, minHfov: 50, maxHfov: 110,
+    pitch: curPitch, yaw: curYaw,
+    hotSpots: buildHotspots(curIdx)
+  });
+
+  var switched = false;
+  function switchNow() {
+    if (switched) return;
+    switched = true;
+    var frontEl = document.getElementById(frontPano);
+    frontEl.classList.add('pano-leaving-soft');
+    setTimeout(function () {
+      if (viewer) { viewer.destroy(); viewer = null; }
+      frontEl.classList.remove('pano-leaving-soft');
+      var tmp = frontPano; frontPano = backPano; backPano = tmp;
+      viewer   = viewerBk; viewerBk = null;
+      document.getElementById(frontPano).style.zIndex = '11';
+      document.getElementById(backPano ).style.zIndex = '10';
+      transitioning = false;
+    }, 1150);
+  }
+  viewerBk.on('load', switchNow);
+  setTimeout(switchNow, 12000);
+}
 
 /* Esconde loading imediatamente — o overlay cuida da experiência de entrada */
 (function () {
@@ -611,17 +770,18 @@ function goTo(idx) {
   transitioning = true;
   curIdx = idx;
   updateNav(idx);
+  updateDayNight(idx);
   document.getElementById('sceneName').textContent = SCENES[idx].name;
 
   if (viewerBk) { viewerBk.destroy(); viewerBk = null; }
 
   viewerBk = pannellum.viewer(backPano, {
     type: 'equirectangular',
-    panorama: SCENES[idx].src,
+    panorama: currentSrc(idx),
     autoLoad: true,
     autoRotate: -1.5, autoRotateInactivityDelay: 3000,
     showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
-    hfov: BASE_HFOV, minHfov: 60, maxHfov: 130,
+    hfov: BASE_HFOV, minHfov: 50, maxHfov: 110,
     pitch: 0, yaw: 0, hotSpots: buildHotspots(idx)
   });
 
@@ -718,7 +878,9 @@ function startTour(type) {
   setTimeout(function () { ov.style.display = 'none'; }, 950);
   setTimeout(function () { document.getElementById('hint').classList.add('gone'); }, 7000);
 
+  isNight = false;
   initViewer(0);
+  updateDayNight(0);
 }
 
 /* ── Inicia viewer principal ── */
@@ -726,11 +888,11 @@ function initViewer(sceneIdx) {
   if (viewer) { viewer.destroy(); viewer = null; }
   viewer = pannellum.viewer('panorama', {
     type: 'equirectangular',
-    panorama: SCENES[sceneIdx].src,
+    panorama: currentSrc(sceneIdx),
     autoLoad: true,
     autoRotate: -1.5, autoRotateInactivityDelay: 3000,
     showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
-    hfov: BASE_HFOV, minHfov: 60, maxHfov: 130,
+    hfov: BASE_HFOV, minHfov: 50, maxHfov: 110,
     pitch: 0, yaw: 0,
     hotSpots: buildHotspots(sceneIdx)
   });
