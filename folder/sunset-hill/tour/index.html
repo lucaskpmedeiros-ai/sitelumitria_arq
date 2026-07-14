@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="../../../libs/pannellum/pannellum.css">
   <script src="../../../libs/pannellum/pannellum.js"></script>
@@ -32,7 +32,7 @@
     html, body {
       width: 100%; height: 100%; overflow: hidden;
       background: var(--marrom-2);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Urbanist', sans-serif;
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       user-select: none;
@@ -426,6 +426,10 @@
     /* ── Toggle Dia / Noite ── */
     #dayNightBtn {
       display: none;
+      position: fixed;
+      right: 32px;
+      bottom: calc(104px + env(safe-area-inset-bottom));
+      z-index: 200;
       align-items: center;
       gap: 8px;
       background: var(--ui-bg);
@@ -480,8 +484,60 @@
       background: #7b8fd4;
     }
     @media (max-width: 480px) {
-      #dayNightBtn { padding: 7px 10px; gap: 6px; }
+      #dayNightBtn {
+        padding: 7px 10px; gap: 6px;
+        right: 12px;
+        bottom: calc(96px + env(safe-area-inset-bottom));
+      }
       .dn-lbl { display: none; }
+    }
+
+    /* ── Minimapa (planta baixa) ── */
+    #mapCard {
+      display: none;
+      position: fixed;
+      left: 28px;
+      bottom: calc(104px + env(safe-area-inset-bottom));
+      z-index: 200;
+      width: 320px;
+      transform-origin: bottom left;
+      transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      cursor: pointer;
+    }
+    #mapCard.visible { display: block; }
+    @media (hover: hover) {
+      #mapCard:hover { width: 440px; }
+    }
+    #mapCard.expanded { width: 440px; }
+    .map-frame { position: relative; width: 100%; }
+    .map-frame img {
+      display: block; width: 100%; height: auto;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.55));
+    }
+    #mapDot {
+      position: absolute;
+      width: 12px; height: 12px;
+      background: var(--terra);
+      border: 2px solid var(--bege);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: left 0.45s ease, top 0.45s ease;
+      box-shadow: 0 0 10px var(--terra-glow);
+    }
+    .map-dot-pulse {
+      position: absolute; inset: -7px;
+      border-radius: 50%;
+      background: var(--terra);
+      opacity: 0.5;
+      animation: hs-pulse 2s ease-in-out infinite;
+    }
+    @media (max-width: 480px) {
+      #mapCard {
+        left: 14px;
+        bottom: calc(96px + env(safe-area-inset-bottom));
+        width: 200px;
+      }
+      #mapCard.expanded { width: 320px; }
     }
   </style>
 </head>
@@ -491,42 +547,20 @@
 <div id="panorama-b"></div>
 
 <div id="loadScreen">
-  <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
+  <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
   <div class="bar-track"><div id="loadBar"></div></div>
   <span class="load-txt">Carregando Tour 360°…</span>
 </div>
 
 <header id="topBar">
   <a href="../index.html" class="logo-lnk">
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png" alt="Sunset Hill">
   </a>
   <div id="topCenter">
     <div id="sceneLabel">
       <span class="ldot"></span>
       <span id="sceneName">Tour 360°</span>
     </div>
-
-    <button id="dayNightBtn" title="Alternar dia / noite" onclick="toggleDayNight()">
-    <span class="dn-icon dn-sun">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="4"/>
-        <line x1="12" y1="2" x2="12" y2="5"/>
-        <line x1="12" y1="19" x2="12" y2="22"/>
-        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-        <line x1="2" y1="12" x2="5" y2="12"/>
-        <line x1="19" y1="12" x2="22" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
-        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
-      </svg>
-    </span>
-    <div class="dn-pill"></div>
-    <span class="dn-icon dn-moon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-    </span>
-  </button>
   </div><!-- /#topCenter -->
 
   <a href="../index.html" id="backBtn">
@@ -537,6 +571,35 @@
     <span>Voltar ao Folder</span>
   </a>
 </header>
+
+<button id="dayNightBtn" title="Alternar dia / noite" onclick="toggleDayNight()">
+  <span class="dn-icon dn-sun">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4"/>
+      <line x1="12" y1="2" x2="12" y2="5"/>
+      <line x1="12" y1="19" x2="12" y2="22"/>
+      <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+      <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+      <line x1="2" y1="12" x2="5" y2="12"/>
+      <line x1="19" y1="12" x2="22" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+      <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+    </svg>
+  </span>
+  <div class="dn-pill"></div>
+  <span class="dn-icon dn-moon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </span>
+</button>
+
+<div id="mapCard">
+  <div class="map-frame">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1784037757/Captura_de_tela_2026-07-14_110139-removebg-preview_q8fjsr.png" alt="Planta baixa" id="mapImg">
+    <div id="mapDot"><span class="map-dot-pulse"></span></div>
+  </div>
+</div>
 
 <div id="hint">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
@@ -556,7 +619,7 @@
 <div id="overlay">
 
   <div class="ov-bg">
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama2_ej7bce.png" alt="Sunset Hill">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_ej7bce.png" alt="Sunset Hill">
   </div>
   <div class="ov-grad"></div>
 
@@ -621,49 +684,64 @@
 'use strict';
 
 /* ── [CUSTOMIZAR] Cenas do Compact 01 ── */
+/* mapPos = posição (% da largura/altura da planta) do marcador de cada cena — ajustar conforme a planta real */
 var SCENES_COMPACT = [
   {
     name: 'Sala de Estar 01', navLabel: 'Sala 01',
-    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama2_ej7bce.png',
-    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama2_000_qwlmqa.png',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_ej7bce.png',
+    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_000_qwlmqa.png',
+    mapPos: { x: 55, y: 80 },
     hotspots: []
   },
   {
     name: 'Sala de Estar 02', navLabel: 'Sala 02',
-    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama3_xk4nxc.png',
-    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783700044/Panorama3_000_cfdwf1.png',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama3_xk4nxc.png',
+    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783700044/Panorama3_000_cfdwf1.png',
+    mapPos: { x: 62, y: 68 },
     hotspots: []
   },
   {
     name: 'Cozinha 01', navLabel: 'Cozinha 1',
-    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783697742/Panorama4_zb03vp.png',
-    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783861791/Panorama4_000_wxstvl.png',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama4_zb03vp.png',
+    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861791/Panorama4_000_wxstvl.png',
+    mapPos: { x: 74, y: 22 },
     hotspots: []
   },
   {
     name: 'Cozinha 02', navLabel: 'Cozinha 2',
-    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783861771/Panorama5_nxmri2.png',
-    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783861755/Panorama5_000_isk5m0.png',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861771/Panorama5_nxmri2.png',
+    night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861755/Panorama5_000_isk5m0.png',
+    mapPos: { x: 80, y: 30 },
     hotspots: []
   },
   {
     name: 'Sacada', navLabel: 'Sacada',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama6_vwuxpq.png',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071807/Panorama6_vwuxpq.png',
+    mapPos: { x: 14, y: 22 },
+    hotspots: []
+  },
+  {
+    name: 'Terraço', navLabel: 'Terraço',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783872115/Panorama11_tyghno.png',
+    mapPos: { x: 14, y: 78 },
     hotspots: []
   },
   {
     name: 'Suíte 01', navLabel: 'Suíte 1',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071808/Panorama7_stnbns.png',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071808/Panorama7_stnbns.png',
+    mapPos: { x: 46, y: 26 },
     hotspots: []
   },
   {
     name: 'Suíte 02', navLabel: 'Suíte 2',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071807/Panorama8_yeffnr.png',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071807/Panorama8_yeffnr.png',
+    mapPos: { x: 34, y: 80 },
     hotspots: []
   },
   {
     name: 'Banheiro Suíte 02', navLabel: 'Banheiro',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783071806/Panorama9_znplfm.png',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071806/Panorama9_znplfm.png',
+    mapPos: { x: 88, y: 90 },
     hotspots: []
   }
 ];
@@ -710,16 +788,22 @@ function toggleDayNight() {
   var curPitch = viewer ? viewer.getPitch() : 0;
   var curYaw   = viewer ? viewer.getYaw()   : 0;
 
-  viewerBk = pannellum.viewer(backPano, {
-    type: 'equirectangular',
-    panorama: currentSrc(curIdx),
-    autoLoad: true,
-    autoRotate: -1.5, autoRotateInactivityDelay: 3000,
-    showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
-    hfov: curHfov, minHfov: 50, maxHfov: 110,
-    pitch: curPitch, yaw: curYaw,
-    hotSpots: buildHotspots(curIdx)
-  });
+  try {
+    viewerBk = pannellum.viewer(backPano, {
+      type: 'equirectangular',
+      panorama: currentSrc(curIdx),
+      autoLoad: true,
+      autoRotate: -1.5, autoRotateInactivityDelay: 3000,
+      showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
+      hfov: curHfov, minHfov: 50, maxHfov: 110,
+      pitch: curPitch, yaw: curYaw,
+      hotSpots: buildHotspots(curIdx)
+    });
+  } catch (e) {
+    console.error('toggleDayNight falhou:', e);
+    transitioning = false;
+    return;
+  }
 
   var switched = false;
   function switchNow() {
@@ -738,6 +822,7 @@ function toggleDayNight() {
     }, 1150);
   }
   viewerBk.on('load', switchNow);
+  viewerBk.on('error', switchNow);
   setTimeout(switchNow, 12000);
 }
 
@@ -773,19 +858,26 @@ function goTo(idx) {
   curIdx = idx;
   updateNav(idx);
   updateDayNight(idx);
+  updateMapDot(idx);
   document.getElementById('sceneName').textContent = SCENES[idx].name;
 
   if (viewerBk) { viewerBk.destroy(); viewerBk = null; }
 
-  viewerBk = pannellum.viewer(backPano, {
-    type: 'equirectangular',
-    panorama: currentSrc(idx),
-    autoLoad: true,
-    autoRotate: -1.5, autoRotateInactivityDelay: 3000,
-    showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
-    hfov: BASE_HFOV, minHfov: 50, maxHfov: 110,
-    pitch: 0, yaw: 0, hotSpots: buildHotspots(idx)
-  });
+  try {
+    viewerBk = pannellum.viewer(backPano, {
+      type: 'equirectangular',
+      panorama: currentSrc(idx),
+      autoLoad: true,
+      autoRotate: -1.5, autoRotateInactivityDelay: 3000,
+      showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
+      hfov: BASE_HFOV, minHfov: 50, maxHfov: 110,
+      pitch: 0, yaw: 0, hotSpots: buildHotspots(idx)
+    });
+  } catch (e) {
+    console.error('goTo falhou:', e);
+    transitioning = false;
+    return;
+  }
 
   var switched = false;
   function switchNow() {
@@ -804,6 +896,7 @@ function goTo(idx) {
     }, 460);
   }
   viewerBk.on('load', switchNow);
+  viewerBk.on('error', switchNow);
   setTimeout(switchNow, 12000);
 }
 
@@ -812,6 +905,21 @@ function updateNav(idx) {
     b.classList.toggle('on', parseInt(b.dataset.scene) === idx);
   });
 }
+
+/* ── Minimapa (planta baixa) ── */
+function updateMapDot(idx) {
+  var pos = SCENES[idx] && SCENES[idx].mapPos;
+  var card = document.getElementById('mapCard');
+  var dot  = document.getElementById('mapDot');
+  if (!pos) { card.classList.remove('visible'); return; }
+  card.classList.add('visible');
+  dot.style.left = pos.x + '%';
+  dot.style.top  = pos.y + '%';
+}
+
+document.getElementById('mapCard').addEventListener('click', function () {
+  this.classList.toggle('expanded');
+});
 
 /* ── Constrói nav de cenas dinamicamente ── */
 function buildNav() {
@@ -883,6 +991,7 @@ function startTour(type) {
   isNight = false;
   initViewer(0);
   updateDayNight(0);
+  updateMapDot(0);
 }
 
 /* ── Inicia viewer principal ── */
