@@ -38,13 +38,20 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      overscroll-behavior-x: none;
+      width: 100%;
+    }
     body {
       background: var(--bege);
       color: var(--texto);
       font-family: 'Urbanist', sans-serif;
       font-weight: 300;
       overflow-x: hidden;
+      overscroll-behavior-x: none;
+      width: 100%;
     }
     img { display: block; width: 100%; }
 
@@ -243,6 +250,7 @@
       position: relative;
       overflow: hidden;
       background: rgba(44,27,20,0.06);
+      touch-action: none;
     }
     .hpx-viewer-wrap .pnlm-ui,
     .hpx-viewer-wrap .pnlm-about-msg { display: none !important; }
@@ -260,6 +268,30 @@
     }
     .hpx-viewer-ph svg { width: 36px; }
     .hpx-viewer-ph span { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; font-family: 'Urbanist', sans-serif; }
+    .hpx-info-360-badge {
+      display: block;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(145,67,28,0.3);
+      text-decoration: none;
+      background: var(--marrom);
+      margin: 14px 0;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+    .hpx-info-360-badge:hover { transform: scale(1.03); border-color: var(--terracota); }
+    .hpx-info-360-badge img {
+      width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.55;
+    }
+    .hpx-viewer-360-icon {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+      color: #fff; font-family: 'Urbanist', sans-serif;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
     @media (max-width: 700px) {
       .hpx-container { height: 220px; }
       .hpx-info { width: 118px; padding: 12px 10px; }
@@ -1029,6 +1061,38 @@
       background: radial-gradient(ellipse at 50% 60%, rgba(196,98,46,0.18) 0%, transparent 65%);
     }
     .cta-tour > * { position: relative; }
+    .cta-tour-bg {
+      position: absolute !important;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .cta-tour-bg video,
+    .cta-tour-bg .cta-pano {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cta-tour-bg video {
+      transition: opacity 1.8s ease;
+    }
+    .cta-tour-bg .cta-pano {
+      opacity: 0;
+      transition: opacity 1.8s ease;
+      pointer-events: none;
+    }
+    .cta-tour-bg .cta-pano.visible { opacity: 1; pointer-events: auto; }
+    .cta-pano .pnlm-ui, .cta-pano .pnlm-about-msg { display: none !important; }
+    .cta-pano { touch-action: none; }
+    .cta-tour-bg-overlay {
+      position: absolute !important;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(44,27,20,0.55) 0%, rgba(44,27,20,0.82) 55%, var(--marrom) 100%);
+    }
+    .cta-tour-content { position: relative; z-index: 2; }
     .cta-tour-sol { margin: 0 auto 40px; }
     .cta-tour-sol svg { width: 60px; opacity: 0.45; }
     .cta-tour-label {
@@ -1039,9 +1103,9 @@
       margin-bottom: 20px;
     }
     .cta-tour-title {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Urbanist', sans-serif;
       font-size: clamp(36px, 5vw, 72px);
-      font-weight: 700;
+      font-weight: 800;
       color: var(--texto-claro);
       line-height: 1.05;
       margin-bottom: 16px;
@@ -1081,8 +1145,8 @@
 
     /* ── FOOTER ── */
     .footer {
-      background: var(--marrom-2);
-      padding: 48px 72px;
+      background: var(--marinho);
+      padding: 88px 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1091,6 +1155,8 @@
     .footer-logo {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 12px;
     }
     .footer-logo-nome {
@@ -1108,14 +1174,25 @@
       opacity: 0.28;
       margin-top: 2px;
     }
+    .footer-divisor {
+      width: 1px;
+      height: 28px;
+      background: rgba(237,227,216,0.15);
+    }
     .footer-lumitria {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
       font-size: 10px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--texto-claro);
-      opacity: 0.3;
+      opacity: 0.5;
     }
     .footer-lumitria a { color: inherit; text-decoration: none; }
+    .footer-lumitria img { opacity: 0.85; }
     .footer-lumitria a:hover { opacity: 0.7; }
 
     /* ── REVEAL ── */
@@ -1138,6 +1215,7 @@
       .fachada-building { height: 50vw; }
       .localizacao { padding: 72px 32px; }
       .distancias { grid-template-columns: 1fr; }
+      .distancias-logo { padding: 48px 0 0; }
       .distancias-left { padding: 64px 32px; }
       .distancias-right { padding: 0 32px 64px; }
       .empreendimento { grid-template-columns: 1fr; }
@@ -1150,10 +1228,18 @@
       .plantas-header { grid-template-columns: 1fr; gap: 20px; }
       .cta-tour { padding: 80px 32px; }
       .footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 32px; }
+      .footer-lumitria { gap: 8px; letter-spacing: 0.14em; }
+      .footer-divisor { height: 20px; }
     }
   </style>
 </head>
 <body>
+  <script>
+    /* Sempre abrir no topo — ignora hash/scroll restaurado pelo navegador */
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    window.addEventListener('load', function () { window.scrollTo(0, 0); });
+  </script>
 
   <!-- ══ HEADER ══ -->
   <header class="header" id="header">
@@ -1270,7 +1356,7 @@
   <section class="distancias">
     <div class="distancias-logo">
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1784038981/WhatsApp_Image_2026-07-14_at_11.09.25-removebg-preview_wftjag.png"
-           alt="Sunset Hill" style="width:auto;max-width:420px;height:auto;">
+           alt="Sunset Hill" style="width:auto;max-width:min(420px,78vw);height:auto;">
     </div>
     <div class="distancias-left reveal">
       <div class="distancias-title">A cidade<br>aos seus pés</div>
@@ -1426,27 +1512,36 @@
 
   <!-- ══ CTA TOUR ══ -->
   <section class="cta-tour" id="tour">
-    <div class="cta-tour-sol">
-      <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png"
-           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:100px;margin:0 auto;">
+    <div class="cta-tour-bg">
+      <video id="ctaVideo" autoplay muted playsinline preload="auto">
+        <source src="https://res.cloudinary.com/dzn9q1rkt/video/upload/v1784055500/freepik__camera-slowly-moving-sideways-sunlight-softly-refl__17672_1_akgguh.mp4" type="video/mp4">
+      </video>
+      <div id="ctaPano" class="cta-pano"></div>
     </div>
-    <div class="cta-tour-label">Experiência imersiva</div>
-    <div class="cta-tour-title">Tour Virtual<br>360°</div>
-    <div class="cta-tour-sub">Veja cada detalhe do seu futuro lar</div>
-    <p class="cta-tour-desc">
-      Explore os ambientes do Sunset Hill em uma experiência imersiva e interativa,
-      desenvolvida com tecnologia de ponta pela Lumitria.
-    </p>
-    <a href="tour/index.html" class="btn-tour">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 2c0 0-4 5-4 10s4 10 4 10"/>
-        <path d="M12 2c0 0 4 5 4 10s-4 10-4 10"/>
-        <path d="M2 12h20"/>
-        <path d="M3.5 7h17M3.5 17h17"/>
-      </svg>
-      Acessar Tour 360°
-    </a>
+    <div class="cta-tour-bg-overlay"></div>
+    <div class="cta-tour-content">
+      <div class="cta-tour-sol">
+        <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png"
+             alt="Sunset Hill" class="logo-escuro" style="width:auto;height:100px;margin:0 auto;">
+      </div>
+      <div class="cta-tour-label">Experiência imersiva</div>
+      <div class="cta-tour-title">Tour Virtual<br>360°</div>
+      <div class="cta-tour-sub">Veja cada detalhe do seu futuro lar</div>
+      <p class="cta-tour-desc">
+        Explore os ambientes do Sunset Hill em uma experiência imersiva e interativa,
+        desenvolvida com tecnologia de ponta pela Lumitria.
+      </p>
+      <a href="tour/index.html" class="btn-tour">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2c0 0-4 5-4 10s4 10 4 10"/>
+          <path d="M12 2c0 0 4 5 4 10s-4 10-4 10"/>
+          <path d="M2 12h20"/>
+          <path d="M3.5 7h17M3.5 17h17"/>
+        </svg>
+        Acessar Tour 360°
+      </a>
+    </div>
   </section>
 
   <!-- ══ FOOTER ══ -->
@@ -1454,9 +1549,16 @@
     <div class="footer-logo">
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png"
            alt="Sunset Hill" class="logo-escuro" style="width:auto;height:64px;opacity:0.7;">
+      <div class="footer-divisor"></div>
+      <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto,e_trim/v1784054687/logo-white_2x_z57otx.png"
+           alt="Underfour" style="width:auto;height:22px;opacity:0.7;">
     </div>
     <div class="footer-lumitria">
       Desenvolvido por <a href="../../index.html">Lumitria</a>
+      <div class="footer-divisor"></div>
+      em parceria com
+      <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto,e_trim/v1784054808/logo2_ndzhbu.svg"
+           alt="Amoon" style="width:auto;height:14px;">
     </div>
   </footer>
 
@@ -1496,19 +1598,21 @@
 
   <!-- ── Accordion plantas hero ── -->
   <script>
+    var PLANTA_PISO = 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1784056958/compacto_eqvhxn.png';
+
     var plantasData = {
       compact: [
-        { num:'0 1', nome:'Compact 01', area:'50,16', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_ej7bce.png', panorama:true },
-        { num:'0 2', nome:'Compact 02', area:'46,25', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false },
-        { num:'0 3', nome:'Compact 03', area:'49,19', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false },
-        { num:'0 4', nome:'Compact 04', area:'63,65', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false },
-        { num:'0 5', nome:'Compact 05', area:'51,64', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false }
+        { num:'0 1', nome:'Compact 01', area:'50,16', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_ej7bce.png', panorama:true, planta:PLANTA_PISO },
+        { num:'0 2', nome:'Compact 02', area:'46,25', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO },
+        { num:'0 3', nome:'Compact 03', area:'49,19', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO },
+        { num:'0 4', nome:'Compact 04', area:'63,65', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO },
+        { num:'0 5', nome:'Compact 05', area:'51,64', feat:['Ambientes integrados','Distribuição inteligente'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO }
       ],
       garden: [
-        { num:'0 1', nome:'Garden 01', area:'60,51', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false },
-        { num:'0 2', nome:'Garden 02', area:'85,10', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false },
-        { num:'0 3', nome:'Garden 03', area:'86,40', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false },
-        { num:'0 4', nome:'Garden 04', area:'63,13', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false }
+        { num:'0 1', nome:'Garden 01', area:'60,51', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO },
+        { num:'0 2', nome:'Garden 02', area:'85,10', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO },
+        { num:'0 3', nome:'Garden 03', area:'86,40', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO },
+        { num:'0 4', nome:'Garden 04', area:'63,13', feat:['Área garden privativa','Ar livre integrado'], tour:'tour/index.html', img:'', panorama:false, planta:PLANTA_PISO }
       ]
     };
 
@@ -1519,12 +1623,19 @@
 
     function updateInfo(panel, idx) {
       var d = plantasData[panel][idx];
+      var badgeHTML = d.planta
+        ? '<a href="' + d.tour + '" class="hpx-info-360-badge" title="Ver Tour 360°">' +
+            (d.img ? '<img loading="lazy" decoding="async" src="' + d.img + '" alt="">' : '') +
+            '<span class="hpx-viewer-360-icon">360°</span>' +
+          '</a>'
+        : '';
       document.getElementById('hpx-' + panel + '-info').innerHTML =
         '<span class="hpx-info-num">' + d.num + '</span>' +
         '<span class="hpx-info-nome">' + d.nome + '</span>' +
         '<span class="hpx-info-area">' + d.area + ' <small>m²</small></span>' +
         '<div class="hpx-info-div"></div>' +
         '<ul class="hpx-info-feat">' + d.feat.map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul>' +
+        badgeHTML +
         '<a href="' + d.tour + '" class="hpx-info-tour">Ver Tour 360° ›</a>';
     }
 
@@ -1537,7 +1648,10 @@
       if (!viewerEl) return;
       viewerEl.innerHTML = '';
 
-      if (d.img && d.panorama) {
+      if (d.planta) {
+        viewerEl.innerHTML =
+          '<img loading="lazy" decoding="async" src="' + d.planta + '" style="width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:rgba(44,27,20,0.92);" alt="Planta do piso — ' + d.nome + '">';
+      } else if (d.img && d.panorama) {
         var wrap = document.createElement('div');
         wrap.style.cssText = 'width:100%;height:100%;position:absolute;inset:0;';
         viewerEl.appendChild(wrap);
@@ -1597,6 +1711,36 @@
     buildSelector('compact');
   </script>
 
+  <!-- ── Vídeo "CTA Tour" — fade para panorama navegável ao terminar ── -->
+  <script>
+    (function () {
+      var video  = document.getElementById('ctaVideo');
+      var panoEl = document.getElementById('ctaPano');
+      if (!video || !panoEl) return;
+      var panoViewer = null;
+
+      video.addEventListener('ended', function () {
+        video.style.opacity = 0;
+        panoEl.classList.add('visible');
+        if (!panoViewer) {
+          panoViewer = pannellum.viewer(panoEl, {
+            type: 'equirectangular',
+            panorama: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783872115/Panorama11_tyghno.png',
+            autoLoad: true,
+            autoRotate: -1.2,
+            autoRotateInactivityDelay: 2500,
+            compass: false,
+            showControls: false,
+            draggable: true,
+            mouseZoom: true,
+            hfov: 100,
+            backgroundColor: [44, 27, 20]
+          });
+        }
+      });
+    })();
+  </script>
+
   <!-- ── Vídeo "Sobre" — fade para as fotos dia/noite ao terminar ── -->
   <script>
     (function () {
@@ -1611,15 +1755,17 @@
   <!-- ── Crossfade do vídeo hero (mobile + desktop) ── -->
   <script>
     (function () {
-      const HOLD = 5000;  /* ms — tempo que cada vídeo fica visível */
-      const FADE = 3200;  /* ms — duração da transição */
-      const v1   = document.getElementById('hero-v1');
-      const v2   = document.getElementById('hero-v2');
-      const vids = [v1, v2];
+      const HOLD_MAR    = 3000; /* ms — mar visível */
+      const HOLD_PREDIO = 1000; /* ms — prédio visível */
+      const FADE        = 2200; /* ms — duração da mistura, suave nas duas direções */
+      const v1 = document.getElementById('hero-v1'); /* mar */
+      const v2 = document.getElementById('hero-v2'); /* prédio */
+      const vids  = [v1, v2];
+      const holds = [HOLD_MAR, HOLD_PREDIO];
       let cur = 0;
 
-      /* Sem loop nativo — os vídeos são mais curtos que HOLD+FADE, então deixamos
-         cada um tocar uma vez e congelar no último frame até entrar de novo (via cross) */
+      /* Sem loop nativo — os vídeos são curtos, então se sobrar tempo ele só
+         congela no último frame em vez de reiniciar sozinho no meio da mistura */
       v1.loop = false;
       v2.loop = false;
 
@@ -1640,7 +1786,7 @@
       }
 
       function scheduleNext() {
-        setTimeout(cross, HOLD);
+        setTimeout(cross, holds[cur]);
       }
 
       /* Inicia os dois juntos — play() em muted funciona em mobile e desktop */
