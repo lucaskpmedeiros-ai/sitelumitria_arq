@@ -255,6 +255,49 @@
     .hpx-viewer-wrap .pnlm-ui,
     .hpx-viewer-wrap .pnlm-about-msg { display: none !important; }
     .hpx-viewer-wrap .pnlm-container { background: rgba(44,27,20,0.08); }
+    .hpx-viewer-wrap.is-plan { cursor: zoom-in; }
+    .hpx-viewer-wrap.is-plan img { transition: transform 0.2s ease-out; will-change: transform; }
+    .planta-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      background: rgba(20,12,8,0.94);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+    .planta-lightbox.active { opacity: 1; visibility: visible; }
+    .planta-lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      cursor: zoom-out;
+    }
+    .planta-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 700px) {
+      .planta-lightbox { padding: 16px; }
+    }
     .hpx-viewer-ph {
       position: absolute;
       inset: 0;
@@ -1176,7 +1219,7 @@
     }
     .footer-divisor {
       width: 1px;
-      height: 28px;
+      height: 34px;
       background: rgba(237,227,216,0.15);
     }
     .footer-lumitria {
@@ -1184,9 +1227,9 @@
       align-items: center;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      font-size: 10px;
-      letter-spacing: 0.25em;
+      gap: 12px;
+      font-size: 13px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--texto-claro);
       opacity: 0.5;
@@ -1228,8 +1271,8 @@
       .plantas-header { grid-template-columns: 1fr; gap: 20px; }
       .cta-tour { padding: 80px 32px; }
       .footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 32px; }
-      .footer-lumitria { gap: 8px; letter-spacing: 0.14em; }
-      .footer-divisor { height: 20px; }
+      .footer-lumitria { gap: 8px; letter-spacing: 0.14em; font-size: 11px; }
+      .footer-divisor { height: 24px; }
     }
   </style>
 </head>
@@ -1505,6 +1548,12 @@
     </div>
   </section>
 
+  <!-- ── Lightbox planta baixa ── -->
+  <div class="planta-lightbox" id="plantaLightbox">
+    <button class="planta-lightbox-close" aria-label="Fechar" onclick="closePlantaLightbox()">&times;</button>
+    <img id="plantaLightboxImg" src="" alt="">
+  </div>
+
   <!-- ══ INFORMAÇÕES DO EMPREENDIMENTO ══ -->
   <div class="infoemp">
     <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1784047594/INFORMA%C3%87%C3%95ES_DO_EMPREENDIMENTO_y1osur.png" alt="Sunset Hill — Informações do empreendimento">
@@ -1548,17 +1597,17 @@
   <footer class="footer">
     <div class="footer-logo">
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png"
-           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:64px;opacity:0.7;">
+           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:84px;opacity:0.7;">
       <div class="footer-divisor"></div>
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto,e_trim/v1784054687/logo-white_2x_z57otx.png"
-           alt="Underfour" style="width:auto;height:22px;opacity:0.7;">
+           alt="Underfour" style="width:auto;height:30px;opacity:0.7;">
     </div>
     <div class="footer-lumitria">
       Desenvolvido por <a href="../../index.html">Lumitria</a>
       <div class="footer-divisor"></div>
       em parceria com
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto,e_trim/v1784054808/logo2_ndzhbu.svg"
-           alt="Amoon" style="width:auto;height:14px;">
+           alt="Amoon" style="width:auto;height:20px;">
     </div>
   </footer>
 
@@ -1598,7 +1647,7 @@
 
   <!-- ── Accordion plantas hero ── -->
   <script>
-    var PLANTA_PISO = 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1784056958/compacto_eqvhxn.png';
+    var PLANTA_PISO = 'https://res.cloudinary.com/dzn9q1rkt/image/upload/c_crop,x_650,y_0,w_1780,h_1022/f_auto,q_auto/v1784056958/compacto_eqvhxn.png';
 
     var plantasData = {
       compact: [
@@ -1647,10 +1696,13 @@
       var viewerEl = document.getElementById('hpx-' + panel + '-viewer');
       if (!viewerEl) return;
       viewerEl.innerHTML = '';
+      viewerEl.classList.remove('is-plan');
 
       if (d.planta) {
+        viewerEl.classList.add('is-plan');
         viewerEl.innerHTML =
           '<img loading="lazy" decoding="async" src="' + d.planta + '" style="width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:rgba(44,27,20,0.92);" alt="Planta do piso — ' + d.nome + '">';
+        if (!viewerEl.dataset.zoomInit) { initPlanZoom(viewerEl); viewerEl.dataset.zoomInit = '1'; }
       } else if (d.img && d.panorama) {
         var wrap = document.createElement('div');
         wrap.style.cssText = 'width:100%;height:100%;position:absolute;inset:0;';
@@ -1709,6 +1761,54 @@
 
     plantaBuilt['compact'] = true;
     buildSelector('compact');
+
+    // ── Zoom da planta baixa: hover amplia (desktop), clique/toque abre lightbox (mobile) ──
+    function initPlanZoom(wrap) {
+      function currentImg() { return wrap.querySelector('img'); }
+      wrap.addEventListener('mousemove', function(e) {
+        var img = currentImg();
+        if (!img) return;
+        var r = wrap.getBoundingClientRect();
+        var px = ((e.clientX - r.left) / r.width) * 100;
+        var py = ((e.clientY - r.top) / r.height) * 100;
+        img.style.transformOrigin = px + '% ' + py + '%';
+      });
+      wrap.addEventListener('mouseenter', function() {
+        var img = currentImg();
+        if (img) img.style.transform = 'scale(2.2)';
+      });
+      wrap.addEventListener('mouseleave', function() {
+        var img = currentImg();
+        if (img) img.style.transform = 'scale(1)';
+      });
+      wrap.addEventListener('click', function() {
+        var img = currentImg();
+        if (img) openPlantaLightbox(img.src, img.alt);
+      });
+    }
+
+    function openPlantaLightbox(src, alt) {
+      var lb = document.getElementById('plantaLightbox');
+      var img = document.getElementById('plantaLightboxImg');
+      img.src = src;
+      img.alt = alt || '';
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePlantaLightbox() {
+      var lb = document.getElementById('plantaLightbox');
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    (function () {
+      var lb = document.getElementById('plantaLightbox');
+      lb.addEventListener('click', function(e) {
+        if (e.target === lb || e.target.tagName === 'IMG') closePlantaLightbox();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closePlantaLightbox();
+      });
+    })();
   </script>
 
   <!-- ── Vídeo "CTA Tour" — fade para panorama navegável ao terminar ── -->
