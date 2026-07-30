@@ -216,8 +216,9 @@
     .ov-select {
       position: absolute; inset: 0; z-index: 2;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 24px 40px; text-align: center;
+      align-items: center; justify-content: flex-start;
+      padding: 64px 40px 48px; text-align: center;
+      overflow-y: auto;
     }
     .ov-tag {
       display: inline-flex; align-items: center; gap: 8px;
@@ -244,12 +245,39 @@
       text-shadow: 0 2px 28px rgba(145,67,28,0.35);
     }
 
+    /* Grupos (Compact / Garden / Áreas Comuns) — cada um com seu próprio grid,
+       assim cada linha se centraliza sozinha e não fica desalinhada com as outras */
+    .tours-sections {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 30px; width: 100%; max-width: 1320px;
+    }
+    .tours-section {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 20px; width: 100%;
+    }
+
     /* Grid de cards */
-    .tours-grid { display: flex; gap: 28px; align-items: stretch; }
+    .tours-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* Divisor entre grupos */
+    .tours-divider {
+      display: flex; align-items: center; gap: 16px;
+      width: 100%; max-width: 640px;
+      color: rgba(242,225,211,0.45);
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+    }
+    .tours-divider-line { flex: 1; height: 1px; background: rgba(145,67,28,0.30); }
 
     /* Card */
     .tour-card {
-      width: clamp(320px, 40vw, 580px);
+      width: 100%;
       background: rgba(30,19,14,0.68);
       border: 1px solid rgba(145,67,28,0.30);
       border-radius: 20px; overflow: hidden;
@@ -267,7 +295,7 @@
 
     /* Thumb */
     .tour-card-thumb {
-      height: min(38vh, 320px); overflow: hidden;
+      height: min(22vh, 190px); overflow: hidden;
       position: relative; flex-shrink: 0; cursor: grab;
     }
     .tour-card-thumb:active { cursor: grabbing; }
@@ -391,11 +419,19 @@
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      .tours-grid { flex-direction: column; gap: 16px; align-items: center; }
-      .tour-card { width: min(520px, 92vw); }
-      .tour-card-thumb { height: min(32vh, 220px); }
-      .ov-select { padding: 20px; justify-content: center; overflow-y: auto; }
+      .tours-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 100%; }
+      .tour-card-thumb { height: min(18vh, 150px); }
+      .tour-card-info { padding: 14px 16px 16px; gap: 5px; }
+      .tour-card-info h3 { font-size: 1.05rem; }
+      .tour-card-info p { font-size: 0.66rem; line-height: 1.5; }
+      .tc-tag { font-size: 0.54rem; padding: 3px 9px; }
+      .tc-cta { font-size: 0.58rem; }
+      .tours-divider { font-size: 0.6rem; margin: 10px 0 2px; }
+      .ov-select { padding: 56px 16px 32px; justify-content: flex-start; overflow-y: auto; }
       .ov-select h1 { font-size: clamp(1.6rem, 6vw, 2.2rem); margin-bottom: 20px; white-space: normal; }
+    }
+    @media (max-width: 560px) {
+      .tours-grid { grid-template-columns: 1fr; max-width: min(460px, 92vw); }
     }
     @media (max-width: 480px) {
       #topBar { padding: max(14px, env(safe-area-inset-top)) 16px 14px; }
@@ -414,6 +450,10 @@
       .nav-inner::-webkit-scrollbar { display: none; }
       .sbtn { flex-shrink: 0; }
       .ndiv { flex-shrink: 0; }
+      .hs-circle { width: 34px; height: 34px; }
+      .hs-circle::before { width: 48px; height: 48px; }
+      .hs-circle svg { width: 13px; height: 13px; }
+      .hs-label { display: none; }
     }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -619,7 +659,7 @@
 <div id="overlay">
 
   <div class="ov-bg">
-    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_ej7bce.png" alt="Sunset Hill">
+    <img src="https://res.cloudinary.com/dzn9q1rkt/image/upload/v1782243583/ChatGPT_Image_23_de_jun._de_2026_14_59_48_ssuv8t.png" alt="Sunset Hill">
   </div>
   <div class="ov-grad"></div>
 
@@ -630,7 +670,13 @@
     </div>
     <h1>Escolha sua <em>experiência</em></h1>
 
-    <div class="tours-grid">
+    <div class="tours-sections">
+
+      <div class="tours-section">
+      <div class="tours-divider">
+        <span class="tours-divider-line"></span>Compact<span class="tours-divider-line"></span>
+      </div>
+      <div class="tours-grid">
 
       <!-- Card 1 — Compact 01 -->
       <div class="tour-card">
@@ -652,7 +698,184 @@
         </button>
       </div>
 
-      <!-- Card 2 — Áreas Comuns -->
+      <!-- Cards — demais Compacts (sem tour 360° ainda) -->
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Compact 02</h3>
+          <p>46,25 m² — ambientes integrados e distribuição inteligente</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Compact 03</h3>
+          <p>49,19 m² — ambientes integrados e distribuição inteligente</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Compact 04</h3>
+          <p>63,65 m² — ambientes integrados e distribuição inteligente</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Compact 05</h3>
+          <p>51,64 m² — ambientes integrados e distribuição inteligente</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      </div>
+      </div>
+
+      <div class="tours-section">
+      <div class="tours-divider">
+        <span class="tours-divider-line"></span>Garden<span class="tours-divider-line"></span>
+      </div>
+      <div class="tours-grid">
+
+      <!-- Cards — Gardens (sem tour 360° ainda) -->
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Garden 01</h3>
+          <p>60,51 m² — área garden privativa e ar livre integrado</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Garden 02</h3>
+          <p>85,10 m² — área garden privativa e ar livre integrado</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Garden 03</h3>
+          <p>86,40 m² — área garden privativa e ar livre integrado</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-card-thumb tour-card-thumb--dark">
+          <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
+          <span class="tc-tag soon">Em breve</span>
+          <h3>Garden 04</h3>
+          <p>63,13 m² — área garden privativa e ar livre integrado</p>
+          <span class="tc-cta tc-cta--muted">
+            Em Breve
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      </div>
+      </div>
+
+      <div class="tours-section">
+      <div class="tours-grid">
+
+      <!-- Card — Áreas Comuns -->
       <div class="tour-card">
         <div class="tour-card-thumb tour-card-thumb--dark">
           <svg class="soon-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
@@ -671,6 +894,9 @@
             </svg>
           </span>
         </button>
+      </div>
+
+      </div>
       </div>
 
     </div>
@@ -693,7 +919,7 @@ var SCENES_COMPACT = [
     mapPos: { x: 55, y: 80 },
     hotspots: [
       { pitch: -8, yaw: 1, to: 1, label: 'Sala 02' },
-      { pitch: -4.62, yaw: -160.93, to: 2, label: 'Cozinha 1' }
+      { pitch: -4.62, yaw: -160.93, to: 3, label: 'Cozinha 1' }
     ]
   },
   {
@@ -702,8 +928,14 @@ var SCENES_COMPACT = [
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783700044/Panorama3_000_cfdwf1.png',
     mapPos: { x: 62, y: 68 },
     hotspots: [
-      { pitch: -5.4, yaw: 5.2, to: 2, label: 'Cozinha 1' }
+      { pitch: -5.4, yaw: 5.2, to: 3, label: 'Cozinha 1' }
     ]
+  },
+  {
+    name: 'Sala de Estar 03', navLabel: 'Sala 03',
+    src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372393/Panorama13_nik2o4.png',
+    mapPos: { x: 58, y: 74 },
+    hotspots: []
   },
   {
     name: 'Cozinha 01', navLabel: 'Cozinha 1',
@@ -735,21 +967,33 @@ var SCENES_COMPACT = [
     hotspots: []
   },
   {
-    name: 'Suíte 01', navLabel: 'Suíte 1',
+    name: 'Suíte A 1', navLabel: 'Suíte A 1',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071808/Panorama7_stnbns.png',
     mapPos: { x: 46, y: 26 },
     hotspots: []
   },
   {
-    name: 'Suíte 02', navLabel: 'Suíte 2',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071807/Panorama8_yeffnr.png',
+    name: 'Banheiro Suíte A 1', navLabel: 'Banheiro A1',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785373501/Panorama17_etj70r.png',
+    mapPos: { x: 40, y: 20 },
+    hotspots: []
+  },
+  {
+    name: 'Suíte A 2', navLabel: 'Suíte A 2',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372373/Panorama16_lfolpd.png',
     mapPos: { x: 34, y: 80 },
     hotspots: []
   },
   {
-    name: 'Banheiro Suíte 02', navLabel: 'Banheiro',
+    name: 'Banheiro Suíte A 2', navLabel: 'Banheiro A2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071806/Panorama9_znplfm.png',
     mapPos: { x: 88, y: 90 },
+    hotspots: []
+  },
+  {
+    name: 'Suíte B', navLabel: 'Suíte B',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372402/Panorama14_uwe14j.png',
+    mapPos: { x: 20, y: 50 },
     hotspots: []
   }
 ];
