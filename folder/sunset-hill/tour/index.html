@@ -391,22 +391,27 @@
       align-items: center; gap: 8px; cursor: pointer;
     }
     .hs-circle {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      border: 2px solid rgba(255,255,255,0.9);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 20px rgba(255,255,255,0.35);
+      width: 44px; height: 44px; border-radius: 50%;
       position: relative;
-      transition: transform 0.2s, background 0.2s;
+      background:
+        radial-gradient(circle at 32% 26%, rgba(255,255,255,0.9), rgba(255,255,255,0.18) 38%, rgba(255,255,255,0.04) 62%, rgba(255,255,255,0.14) 100%);
+      border: 1px solid rgba(255,255,255,0.45);
+      box-shadow:
+        inset -6px -8px 14px rgba(0,0,0,0.18),
+        inset 4px 6px 10px rgba(255,255,255,0.55),
+        0 6px 18px rgba(0,0,0,0.30);
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(1px);
+      transition: transform 0.25s;
     }
     .hs-circle::before {
       content: ''; position: absolute;
-      width: 68px; height: 68px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.4);
+      width: 64px; height: 64px; border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      border: 1px solid rgba(255,255,255,0.4);
       animation: hs-pulse 2s ease-in-out infinite;
     }
-    .hs-circle svg { color: #fff; filter: drop-shadow(0 0 4px rgba(0,0,0,0.35)); }
-    .hs-wrap:hover .hs-circle { transform: scale(1.12); background: rgba(255,255,255,0.32); }
+    .hs-wrap:hover .hs-circle { transform: scale(1.14); }
     .hs-label { display: none; }
 
     /* ── Responsive ── */
@@ -444,7 +449,6 @@
       .ndiv { flex-shrink: 0; }
       .hs-circle { width: 34px; height: 34px; }
       .hs-circle::before { width: 48px; height: 48px; }
-      .hs-circle svg { width: 13px; height: 13px; }
     }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -909,8 +913,10 @@ var SCENES_COMPACT = [
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_000_qwlmqa.png',
     mapPos: { x: 55, y: 80 },
     hotspots: [
-      { pitch: -8, yaw: 1, to: 1, label: 'Sala 02' },
-      { pitch: -4.62, yaw: -160.93, to: 3, label: 'Cozinha 1' }
+      { pitch: 0, yaw: 1, to: 1, label: 'Sala 02' },
+      { pitch: 0, yaw: -160.93, to: 3, label: 'Cozinha 1' },
+      { pitch: 0, yaw: 43, to: 2, label: 'Sala 03' },
+      { pitch: 0, yaw: 172, to: 5, label: 'Sacada' }
     ]
   },
   {
@@ -919,14 +925,17 @@ var SCENES_COMPACT = [
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783700044/Panorama3_000_cfdwf1.png',
     mapPos: { x: 62, y: 68 },
     hotspots: [
-      { pitch: -5.4, yaw: 5.2, to: 3, label: 'Cozinha 1' }
+      { pitch: 0, yaw: 5.2, to: 3, label: 'Cozinha 1' },
+      { pitch: 0, yaw: -75, to: 2, label: 'Sala 03' }
     ]
   },
   {
     name: 'Sala de Estar 03', navLabel: 'Sala 03',
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372393/Panorama13_nik2o4.png',
     mapPos: { x: 58, y: 74 },
-    hotspots: []
+    hotspots: [
+      { pitch: 0, yaw: -25, to: 7, label: 'Suíte A 1' }
+    ]
   },
   {
     name: 'Cozinha 01', navLabel: 'Cozinha 1',
@@ -934,7 +943,8 @@ var SCENES_COMPACT = [
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861791/Panorama4_000_wxstvl.png',
     mapPos: { x: 74, y: 22 },
     hotspots: [
-      { pitch: -5.79, yaw: 139.53, to: 0, label: 'Sala 01' }
+      { pitch: 0, yaw: 139.53, to: 0, label: 'Sala 01' },
+      { pitch: 0, yaw: -1, to: 4, label: 'Cozinha 2' }
     ]
   },
   {
@@ -942,7 +952,10 @@ var SCENES_COMPACT = [
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861771/Panorama5_nxmri2.png',
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861755/Panorama5_000_isk5m0.png',
     mapPos: { x: 80, y: 30 },
-    hotspots: []
+    hotspots: [
+      { pitch: 0, yaw: 35, to: 5, label: 'Sacada' },
+      { pitch: 0, yaw: -1, to: 1, label: 'Sala 02' }
+    ]
   },
   {
     name: 'Sacada', navLabel: 'Sacada',
@@ -955,13 +968,17 @@ var SCENES_COMPACT = [
     name: 'Terraço Coberto', navLabel: 'Terraço',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783872115/Panorama11_tyghno.png',
     mapPos: { x: 14, y: 78 },
-    hotspots: []
+    hotspots: [
+      { pitch: 1, yaw: -72, to: 9, label: 'Suíte A 2' }
+    ]
   },
   {
     name: 'Suíte A 1', navLabel: 'Suíte A 1',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071808/Panorama7_stnbns.png',
     mapPos: { x: 46, y: 26 },
-    hotspots: []
+    hotspots: [
+      { pitch: -7.1, yaw: 4, to: 9, label: 'Suíte A 2' }
+    ]
   },
   {
     name: 'Banheiro Suíte A 1', navLabel: 'Banheiro A1',
@@ -973,7 +990,9 @@ var SCENES_COMPACT = [
     name: 'Suíte A 2', navLabel: 'Suíte A 2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372373/Panorama16_lfolpd.png',
     mapPos: { x: 34, y: 80 },
-    hotspots: []
+    hotspots: [
+      { pitch: 0, yaw: 58, to: 6, label: 'Terraço' }
+    ]
   },
   {
     name: 'Banheiro Suíte A 2', navLabel: 'Banheiro A2',
@@ -1094,11 +1113,7 @@ function buildHotspots(sceneIdx) {
       pitch: hs.pitch, yaw: hs.yaw, type: 'custom', cssClass: 'hs-wrap',
       createTooltipFunc: function (el) {
         el.innerHTML =
-          '<div class="hs-circle">' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
-              '<path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-            '</svg>' +
-          '</div>' +
+          '<div class="hs-circle"></div>' +
           '<span class="hs-label">' + hs.label + '</span>';
       },
       clickHandlerFunc: function () { goTo(hs.to); }
