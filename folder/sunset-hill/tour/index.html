@@ -198,7 +198,7 @@
     .ov-bg {
       position: absolute; inset: 0; z-index: 0;
       overflow: hidden; pointer-events: none;
-      opacity: 0.45; transition: opacity 1.5s ease;
+      opacity: 0.35; transition: opacity 1.5s ease;
     }
     .ov-bg img {
       width: 100%; height: 100%;
@@ -238,7 +238,7 @@
       font-family: 'DM Serif Display', serif;
       font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 400;
       line-height: 1.1; color: var(--bege);
-      margin-bottom: 28px; white-space: nowrap;
+      margin-bottom: 28px; max-width: 720px;
     }
     .ov-select h1 em {
       font-style: italic; color: #D4845A;
@@ -260,7 +260,7 @@
     .tours-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
-      justify-content: center;
+      justify-content: start;
       gap: 24px;
       width: 100%;
     }
@@ -663,7 +663,7 @@
       <span class="ov-dot"></span>
       Tour Interativo 360°
     </div>
-    <h1>Escolha sua <em>experiência</em></h1>
+    <h1>Escolha o <em>apartamento</em> que combina com você</h1>
 
     <div class="tours-sections">
 
@@ -685,7 +685,7 @@
           <h3>Compact 01<br>Decorado</h3>
           <p>Sala, dormitório, cozinha e varanda — experiência completa do apartamento</p>
           <span class="tc-cta">
-            Iniciar Tour
+            Explorar apartamento
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -702,7 +702,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Compact 02</h3>
           <p>46,25 m² — ambientes integrados e distribuição inteligente</p>
           <span class="tc-cta tc-cta--muted">
@@ -722,7 +722,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Compact 03</h3>
           <p>49,19 m² — ambientes integrados e distribuição inteligente</p>
           <span class="tc-cta tc-cta--muted">
@@ -742,7 +742,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Compact 04</h3>
           <p>63,65 m² — ambientes integrados e distribuição inteligente</p>
           <span class="tc-cta tc-cta--muted">
@@ -762,7 +762,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Compact 05</h3>
           <p>51,64 m² — ambientes integrados e distribuição inteligente</p>
           <span class="tc-cta tc-cta--muted">
@@ -792,7 +792,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Garden 01</h3>
           <p>60,51 m² — área garden privativa e ar livre integrado</p>
           <span class="tc-cta tc-cta--muted">
@@ -812,7 +812,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Garden 02</h3>
           <p>85,10 m² — área garden privativa e ar livre integrado</p>
           <span class="tc-cta tc-cta--muted">
@@ -832,7 +832,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Garden 03</h3>
           <p>86,40 m² — área garden privativa e ar livre integrado</p>
           <span class="tc-cta tc-cta--muted">
@@ -852,7 +852,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Garden 04</h3>
           <p>63,13 m² — área garden privativa e ar livre integrado</p>
           <span class="tc-cta tc-cta--muted">
@@ -879,7 +879,7 @@
           </svg>
         </div>
         <button class="tour-card-info" onclick="showToast('Em breve — aguarde novidades!')">
-          <span class="tc-tag soon">Em breve</span>
+          <span class="tc-tag soon">Disponível em breve</span>
           <h3>Áreas Comuns<br>do Empreendimento</h3>
           <p>Piscina, academia, área kids e salão — explore os espaços de lazer</p>
           <span class="tc-cta tc-cta--muted">
@@ -911,7 +911,7 @@ var SCENES_COMPACT = [
     name: 'Sala de Estar 01', navLabel: 'Sala 01',
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_ej7bce.png',
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama2_000_qwlmqa.png',
-    mapPos: { x: 55, y: 80 },
+    mapPos: { x: 65, y: 60 },
     hotspots: [
       { pitch: 0, yaw: 1, to: 1, label: 'Sala 02' },
       { pitch: 0, yaw: -160.93, to: 3, label: 'Cozinha 1' },
@@ -932,28 +932,29 @@ var SCENES_COMPACT = [
   {
     name: 'Sala de Estar 03', navLabel: 'Sala 03',
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372393/Panorama13_nik2o4.png',
-    mapPos: { x: 58, y: 74 },
+    mapPos: { x: 52, y: 55 },
     hotspots: [
       { pitch: 0, yaw: -25, to: 7, label: 'Suíte A 1' },
-      { pitch: -9.8, yaw: 37.3, to: 12, label: 'Suíte B' },
-      { pitch: -3.7, yaw: 0, to: 1, label: 'Sala 02' }
+      { pitch: -9.8, yaw: 37.3, to: 11, label: 'Suíte B' },
+      { pitch: -3.7, yaw: -140, to: 1, label: 'Sala 02' }
     ]
   },
   {
     name: 'Cozinha 01', navLabel: 'Cozinha 1',
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783697742/Panorama4_zb03vp.png',
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861791/Panorama4_000_wxstvl.png',
-    mapPos: { x: 74, y: 22 },
+    mapPos: { x: 69, y: 41 },
     hotspots: [
       { pitch: 0, yaw: 139.53, to: 0, label: 'Sala 01' },
-      { pitch: 0, yaw: -1, to: 4, label: 'Cozinha 2' }
+      { pitch: 0, yaw: -1, to: 4, label: 'Cozinha 2' },
+      { pitch: 3, yaw: -78, to: 5, label: 'Sacada' }
     ]
   },
   {
     name: 'Cozinha 02', navLabel: 'Cozinha 2',
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861771/Panorama5_nxmri2.png',
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783861755/Panorama5_000_isk5m0.png',
-    mapPos: { x: 80, y: 30 },
+    mapPos: { x: 77, y: 40 },
     hotspots: [
       { pitch: 0, yaw: 35, to: 5, label: 'Sacada' },
       { pitch: 0, yaw: -1, to: 1, label: 'Sala 02' }
@@ -963,64 +964,79 @@ var SCENES_COMPACT = [
     name: 'Sacada', navLabel: 'Sacada',
     src:   'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783861773/Panorama6_eyigc1.png',
     night: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783861783/Panorama6_000_jatx7t.png',
-    mapPos: { x: 14, y: 22 },
-    hotspots: []
+    mapPos: { x: 78, y: 19 },
+    hotspots: [
+      { pitch: 0, yaw: -53, to: 3, label: 'Cozinha 1' }
+    ]
   },
   {
     name: 'Terraço Coberto', navLabel: 'Terraço',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1783872115/Panorama11_tyghno.png',
-    mapPos: { x: 14, y: 78 },
+    mapPos: { x: 13, y: 50 },
     hotspots: [
-      { pitch: 1, yaw: -72, to: 9, label: 'Suíte A 2' }
+      { pitch: 1, yaw: -72, to: 8, label: 'Suíte A 2' }
     ]
   },
   {
     name: 'Suíte A 1', navLabel: 'Suíte A 1',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071808/Panorama7_stnbns.png',
-    mapPos: { x: 46, y: 26 },
+    mapPos: { x: 46, y: 56 },
     hotspots: [
-      { pitch: -7.1, yaw: 4, to: 9, label: 'Suíte A 2' }
+      { pitch: -7.1, yaw: 4, to: 8, label: 'Suíte A 2' }
     ]
-  },
-  {
-    name: 'Banheiro Suíte A 1', navLabel: 'Banheiro A1',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785373501/Panorama17_etj70r.png',
-    mapPos: { x: 40, y: 20 },
-    hotspots: []
   },
   {
     name: 'Suíte A 2', navLabel: 'Suíte A 2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372373/Panorama16_lfolpd.png',
     mapPos: { x: 34, y: 80 },
+    initYaw: 180,
     hotspots: [
-      { pitch: 0, yaw: 58, to: 6, label: 'Terraço' }
+      { pitch: 0, yaw: 58, to: 6, label: 'Terraço' },
+      { pitch: 4, yaw: -150, to: 9, label: 'Suíte A 3' },
+      { pitch: 0, yaw: -98, to: 2, label: 'Sala 03' }
     ]
-  },
-  {
-    name: 'Banheiro Suíte A 2', navLabel: 'Banheiro A2',
-    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071806/Panorama9_znplfm.png',
-    mapPos: { x: 88, y: 90 },
-    hotspots: []
   },
   {
     name: 'Suíte A 3', navLabel: 'Suíte A 3',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1785407255/Panorama18_hei3ro.png',
-    mapPos: { x: 40, y: 74 },
-    hotspots: []
+    mapPos: { x: 41, y: 53 },
+    hotspots: [
+      { pitch: 0, yaw: 0, to: 10, label: 'Banheiro A1' }
+    ]
+  },
+  {
+    name: 'Banheiro Suíte A 1', navLabel: 'Banheiro A1',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785373501/Panorama17_etj70r.png',
+    mapPos: { x: 34, y: 37 },
+    hotspots: [
+      { pitch: -4, yaw: -140, to: 8, label: 'Suíte A 2' }
+    ]
   },
   {
     name: 'Suíte B', navLabel: 'Suíte B',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/v1785372402/Panorama14_uwe14j.png',
-    mapPos: { x: 20, y: 50 },
+    mapPos: { x: 51, y: 27 },
     hotspots: [
-      { pitch: -5, yaw: -97, to: 2, label: 'Sala 03' }
+      { pitch: -5, yaw: -97, to: 2, label: 'Sala 03' },
+      { pitch: 0, yaw: 46, to: 12, label: 'Suíte B 2' }
     ]
   },
   {
     name: 'Suíte B 2', navLabel: 'Suíte B2',
     src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1785407294/Panorama19_kmup59.png',
-    mapPos: { x: 26, y: 56 },
-    hotspots: []
+    mapPos: { x: 41, y: 18 },
+    hotspots: [
+      { pitch: 0, yaw: 0, to: 13, label: 'Banheiro A2' },
+      { pitch: 0, yaw: -100, to: 11, label: 'Suíte B' }
+    ]
+  },
+  {
+    name: 'Banheiro Suíte A 2', navLabel: 'Banheiro A2',
+    src: 'https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1783071806/Panorama9_znplfm.png',
+    mapPos: { x: 33, y: 20 },
+    hotspots: [
+      { pitch: 0, yaw: -48, to: 12, label: 'Suíte B 2' }
+    ]
   }
 ];
 
@@ -1145,7 +1161,7 @@ function goTo(idx) {
       autoRotate: -1.5, autoRotateInactivityDelay: 3000,
       showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
       hfov: BASE_HFOV, minHfov: 50, maxHfov: 110,
-      pitch: 0, yaw: 0, hotSpots: buildHotspots(idx)
+      pitch: 0, yaw: SCENES[idx].initYaw || 0, hotSpots: buildHotspots(idx)
     });
   } catch (e) {
     console.error('goTo falhou:', e);
@@ -1278,7 +1294,7 @@ function initViewer(sceneIdx) {
     autoRotate: -1.5, autoRotateInactivityDelay: 3000,
     showControls: false, draggable: true, mouseZoom: true, keyboardZoom: true,
     hfov: BASE_HFOV, minHfov: 50, maxHfov: 110,
-    pitch: 0, yaw: 0,
+    pitch: 0, yaw: SCENES[sceneIdx].initYaw || 0,
     hotSpots: buildHotspots(sceneIdx)
   });
 }
