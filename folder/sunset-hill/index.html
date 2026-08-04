@@ -1263,6 +1263,7 @@
       .distancias { grid-template-columns: 1fr; }
       .distancias-logo { padding: 48px 0 0; }
       .distancias-left { padding: 64px 32px; }
+      .distancias-title { text-align: center; }
       .distancias-right { padding: 0 32px 64px; }
       .empreendimento { grid-template-columns: 1fr; }
       .emp-image { min-height: 56vw; }
@@ -1273,9 +1274,10 @@
       .plantas { padding: 64px 32px; }
       .plantas-header { grid-template-columns: 1fr; gap: 20px; }
       .cta-tour { padding: 80px 32px; }
-      .footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 32px; }
-      .footer-lumitria { gap: 8px; letter-spacing: 0.14em; font-size: 11px; }
-      .footer-divisor { height: 24px; }
+      .footer { flex-direction: column; gap: 28px; text-align: center; padding: 40px 24px; }
+      .footer-logo { gap: 16px; }
+      .footer-lumitria { row-gap: 12px; column-gap: 10px; letter-spacing: 0.1em; font-size: 10px; }
+      .footer-divisor { height: 18px; }
     }
   </style>
 </head>
@@ -1600,21 +1602,21 @@
   <footer class="footer">
     <div class="footer-logo">
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto/v1782243706/image-removebg-preview_wacb1w.png"
-           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:110px;opacity:0.7;">
+           alt="Sunset Hill" class="logo-escuro" style="width:auto;height:clamp(56px,14vw,110px);opacity:0.7;">
       <div class="footer-divisor"></div>
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto,e_trim/v1784054687/logo-white_2x_z57otx.png"
-           alt="Underfour" style="width:auto;height:40px;opacity:0.7;">
+           alt="Underfour" style="width:auto;height:clamp(20px,5vw,40px);opacity:0.7;">
     </div>
     <div class="footer-lumitria">
       Desenvolvido por
       <a href="../../index.html">
         <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/c_crop,x_20,y_10,w_430,h_345/e_trim,f_auto,q_auto/v1785843518/logo-lumitria-removebg-preview_wveoua.png"
-             alt="Lumitria" style="width:auto;height:62px;margin-top:-40px;">
+             alt="Lumitria" style="width:auto;height:clamp(34px,8vw,62px);margin-top:clamp(-22px,-5.2vw,-40px);">
       </a>
       <div class="footer-divisor"></div>
       em parceria com
       <img loading="lazy" decoding="async" src="https://res.cloudinary.com/dzn9q1rkt/image/upload/f_auto,q_auto,e_trim/v1784054808/logo2_ndzhbu.svg"
-           alt="Amoon" style="width:auto;height:20px;">
+           alt="Amoon" style="width:auto;height:clamp(14px,3.5vw,20px);">
     </div>
   </footer>
 
